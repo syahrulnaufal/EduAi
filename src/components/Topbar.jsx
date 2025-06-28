@@ -9,7 +9,7 @@ function Topbar({children}) {
     const elements = Children.toArray(children);
 
     return(
-    <div className="flex items-center justify-between bg-surface px-4 h-15 border-b border-my-border 
+    <div className="flex items-center w-full justify-between bg-surface px-4 h-15 border-b border-my-border 
     dark:bg-my-bg-dark dark:text-my-text-dark dark:border-my-border-dark
     ">
         <div className="flex items-center w-fit gap-4">

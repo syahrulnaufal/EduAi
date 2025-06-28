@@ -135,7 +135,7 @@ function Chatbot(){
             </div>
 
             <div className='flex h-full transition-colors duration-300 dark:bg-gray-900 bg-gray-50'>
-                <div className={`asidebar h-screen ${asidebarLeft} transition-all duration-200`} onClick={toggleAsidebar}>
+                <div className={`asidebar h-screen ${asidebarLeft} transition-all duration-200 z-5`} onClick={toggleAsidebar}>
                     <Asidebar onNewChat={handleNewChat} >
                         <div onClick={toggleAsidebar} className="cursor-pointer hidden flexAt768 p-1 rounded-full hover:bg-indigo-50 duration-150">
                             <img className="rotate-90" src='/img/arrowDown.png' width={'20px'}/>

@@ -65,7 +65,7 @@ export default function Asidebar({ onNewChat, children }) {
 					{dummyHistory.map((judul, idx) => (
 						<li
 						key={idx}
-						className='px-5 py-3 shadow truncate cursor-pointer transition-all border
+						className='px-5 py-3 truncate cursor-pointer transition-all border
 						dark:hover:bg-gray-600 dark:text-gray-200 dark:border-gray-600/40
 						hover:bg-indigo-50 border-white/40'
 						title={judul}     
@@ -92,7 +92,7 @@ export default function Asidebar({ onNewChat, children }) {
 					{dummyHistory.map((judul, idx) => (
 						<li
 						key={idx}
-						className='px-5 py-3 shadow truncate cursor-pointer transition-all border
+						className='px-5 py-3 truncate cursor-pointer transition-all border
 						dark:hover:bg-gray-600 dark:text-gray-200 dark:border-gray-600/40
 						hover:bg-indigo-50 border-white/40'
 						title={judul}     
