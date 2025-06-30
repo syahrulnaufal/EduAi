@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+@tailwindcss base;
+@tailwindcss components;
+@tailwindcss utilities;
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -24,6 +27,7 @@
     --color-my-border: #E2E8F0;
     --color-my-blue: #0066FF;
     --color-surface: #F8FAFC;
+    --color-hijau: #0B7077;
 
     /* darkmode */
     --color-my-bg-dark: #1A202C;
