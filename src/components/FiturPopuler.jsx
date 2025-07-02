@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FiturCard from "./FiturCard";
 
 const listFilter = [
@@ -34,7 +34,7 @@ const listFilter = [
     }
 ];
 
-const listKelas = [
+const listSemuaKelas = [
     {
         id: 1,
         gambar: './img/kelas1.png',
@@ -44,6 +44,7 @@ const listKelas = [
         jumlahSiswa: 343,
         tanggal: '2025-06-23',
         diskon: 20,
+        kategori: 'data',
     },
     {
         id: 2,
@@ -54,6 +55,7 @@ const listKelas = [
         jumlahSiswa: 235,
         tanggal: '2025-07-28',
         diskon: 15,
+        kategori: 'essay',
     },
     {
         id: 3,
@@ -64,6 +66,7 @@ const listKelas = [
         jumlahSiswa: 12,
         tanggal: '2025-07-28',
         diskon: 22,
+        kategori: 'infografis',
     },
     {
         id: 4,
@@ -74,16 +77,15 @@ const listKelas = [
         jumlahSiswa: 41,
         tanggal: '2025-06-28',
         diskon: 18,
+        kategori: 'ui/ux',
     },
-]
-// const date = new Date(listKelas[0].tanggal);
-// const tampilkanTanggal = date.toLocaleDateString('id-ID',{day:'numeric', month:'long', year:'numeric'});
-// console.log(date)
+];
 
 // main
 function FiturPopuler () {
 
-    const [selectedFilter, setSelectedFilter] = useState(['all', 'data']);
+    const [selectedFilter, setSelectedFilter] = useState([]);
+    const [listKelas, setListKelas] = useState(listSemuaKelas);
 
     function isSelected(filter){
         let res = false;
@@ -96,11 +98,20 @@ function FiturPopuler () {
         return res;
     }
 
+    // fungsi untuk filter listKelas
+    useEffect(() => {
+        if (selectedFilter.length === 0 || selectedFilter.includes('all')) {
+          setListKelas(listSemuaKelas);
+        } else {
+          setListKelas(listSemuaKelas.filter(e => selectedFilter.includes(e.kategori)));
+        }
+      }, [selectedFilter]);
+
     // fungsi ketika filter kategori dipilih
     function filter(teks){
         if(isSelected(teks)){ // kalo filter udah ter select maka hapus
             setSelectedFilter(selectedFilter.filter(e => e !== teks))
-        }else{
+        }else{ // menambahkan filter
             setSelectedFilter([...selectedFilter, teks])
         }
     }
@@ -115,7 +126,7 @@ function FiturPopuler () {
             {/* filter kategori */}
             <div className="w-screen flex px-2 justify-start overflow-scroll sm:justify-center">
                 <div className="w-max flex gap-2 py-2">
-                    <div onClick={()=> setSelectedFilter(['all'])} className="me-4 w-fit px-2 py-1 rounded-lg cursor-pointer hover:bg-hijau/80 transition-colors duration-200 bg-hijau text-white active:bg-hijau">Clear</div>
+                    <div onClick={()=> setSelectedFilter([])} className="me-4 w-fit px-2 py-1 rounded-lg cursor-pointer hover:bg-hijau/80 transition-colors duration-100 bg-hijau text-white active:bg-hijau">Clear</div>
                     {listFilter.map((item) => {
                         if(isSelected(item.filter)){
                             return <div key={item.id} onClick={()=>filter(item.filter)} className="w-max px-2 py-1 rounded-lg border cursor-pointer bg-hijau border-hijau text-white hover:bg-hijau/90 transition-colors duration-200">{item.label}</div>

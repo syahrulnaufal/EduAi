@@ -36,7 +36,7 @@ function FiturCard({img, className, description, price, student, date, discount 
                 <div className="text-xs md:text-base lg:text-lg mt-2 mb-1 font-semibold text-hijau">{className}</div>
 
                 {/* description */}
-                <div className="text-xs md:text-sm lg:text-base text-grey1 max-h-25 overflow-ellipsis overflow-y-scroll">{description}</div>
+                <div className="text-xs md:text-sm lg:text-base text-grey1 max-h-25 overflow-ellipsis overflow-y-auto">{description}</div>
 
                 {/* harga diskon, harga asli, button */}
                 <div className="flex justify-between mt-5 items-center">
