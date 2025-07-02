@@ -28,6 +28,9 @@
     --color-my-blue: #0066FF;
     --color-surface: #F8FAFC;
     --color-hijau: #0B7077;
+    --color-grey1: #777795;
+    --color-grey2: #4D4D4D;
+    --color-jingga: #FD661F;
 
     /* darkmode */
     --color-my-bg-dark: #1A202C;
@@ -113,7 +116,26 @@ html {
                 
 .animate-fadeIn { animation: fadeIn 0.4s; }
 
+.raleway-base {
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
 
+.raleway-bold {
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.raleway-thin {
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
 
 
 

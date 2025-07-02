@@ -1,4 +1,5 @@
 import { useState } from "react";
+import FiturCard from "./FiturCard";
 
 const listFilter = [
     {
@@ -41,12 +42,43 @@ const listKelas = [
         kelasDeskripsi: 'Product Management Masterclass, you will learn with Sarah Johnson - Head of Product Customer Platform Gojek Indonesia.',
         harga: 300,
         jumlahSiswa: 343,
-        tanggal: '2025-06-23'
-    }
+        tanggal: '2025-06-23',
+        diskon: 20,
+    },
+    {
+        id: 2,
+        gambar: './img/kelas2.png',
+        namaKelas: 'The Science of Well-Being',
+        kelasDeskripsi: 'Product Management Masterclass, you will learn with Sarah Johnson - Head of Product Customer Platform Gojek Indonesia.',
+        harga: 123,
+        jumlahSiswa: 235,
+        tanggal: '2025-07-28',
+        diskon: 15,
+    },
+    {
+        id: 3,
+        gambar: './img/kelas3.png',
+        namaKelas: 'BM Data Science Professional Certificate',
+        kelasDeskripsi: 'Product Management Masterclass, you will learn with Sarah Johnson - Head of Product Customer Platform Gojek Indonesia.',
+        harga: 678,
+        jumlahSiswa: 12,
+        tanggal: '2025-07-28',
+        diskon: 22,
+    },
+    {
+        id: 4,
+        gambar: './img/kelas4.png',
+        namaKelas: 'Product Management Basic - Course',
+        kelasDeskripsi: 'Product Management Masterclass, you will learn with Sarah Johnson - Head of Product Customer Platform Gojek Indonesia.',
+        harga: 380,
+        jumlahSiswa: 41,
+        tanggal: '2025-06-28',
+        diskon: 18,
+    },
 ]
-const date = new Date(listKelas[0].tanggal);
-const tampilkanTanggal = date.toLocaleDateString('id-ID',{day:'numeric', month:'long', year:'numeric'});
-console.log(date)
+// const date = new Date(listKelas[0].tanggal);
+// const tampilkanTanggal = date.toLocaleDateString('id-ID',{day:'numeric', month:'long', year:'numeric'});
+// console.log(date)
 
 // main
 function FiturPopuler () {
@@ -64,6 +96,7 @@ function FiturPopuler () {
         return res;
     }
 
+    // fungsi ketika filter kategori dipilih
     function filter(teks){
         if(isSelected(teks)){ // kalo filter udah ter select maka hapus
             setSelectedFilter(selectedFilter.filter(e => e !== teks))
@@ -75,10 +108,11 @@ function FiturPopuler () {
     return(
         <div className="w-screen flex flex-col items-center">
             
+            {/* title */}
             <div className="text-5xl font-bold text-[#FD661F]">Fitur Populer</div>
-            
             <div className="h-10"></div>
-
+            
+            {/* filter kategori */}
             <div className="w-screen flex px-2 justify-start overflow-scroll sm:justify-center">
                 <div className="w-max flex gap-2 py-2">
                     <div onClick={()=> setSelectedFilter(['all'])} className="me-4 w-fit px-2 py-1 rounded-lg cursor-pointer hover:bg-hijau/80 transition-colors duration-200 bg-hijau text-white active:bg-hijau">Clear</div>
@@ -92,10 +126,25 @@ function FiturPopuler () {
                     })}
                 </div>
             </div>
-
             <div className="h-10"></div>
 
-            
+            {/* Cards */}
+            <div className="w-screen flex justify-center">
+                <div className="max-w-[90vw] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    {listKelas.map((kelas) => 
+                        <FiturCard 
+                            key={kelas.id}
+                            img={kelas.gambar}
+                            className={kelas.namaKelas}
+                            description={kelas.kelasDeskripsi}
+                            student={kelas.jumlahSiswa}
+                            date={kelas.tanggal}
+                            price={kelas.harga}
+                            discount={kelas.diskon}
+                        />
+                    )}
+                </div>
+            </div>
 
         </div>
     );
