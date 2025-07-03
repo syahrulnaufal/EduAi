@@ -124,7 +124,7 @@ function FiturPopuler () {
             <div className="h-10"></div>
             
             {/* filter kategori */}
-            <div className="w-screen flex px-2 justify-start overflow-scroll sm:justify-center">
+            <div className="w-screen flex px-2 justify-start overflow-auto sm:justify-center">
                 <div className="w-max flex gap-2 py-2">
                     <div onClick={()=> setSelectedFilter([])} className="me-4 w-fit px-2 py-1 rounded-lg cursor-pointer hover:bg-hijau/80 transition-colors duration-100 bg-hijau text-white active:bg-hijau">Clear</div>
                     {listFilter.map((item) => {

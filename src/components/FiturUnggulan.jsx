@@ -99,7 +99,7 @@ function FiturUnggulan() {
                             e
                         )} */}
                         {listFitur.map((fitur) => 
-                            <div key={fitur.id} className='w-50 sm:w-60'>
+                            <div key={fitur.id} className='w-50 sm:w-60 py-4'>
                                 <img src={fitur.img} className="w-full" />
                             </div>
                         )}

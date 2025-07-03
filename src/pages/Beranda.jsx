@@ -148,7 +148,7 @@ const listMateri = [
 ]
 const pilihMateri = (
     <div className="max-w-[90%] w-fit px-2 rounded-xl bg-white">
-        <div className="overflow-x-scroll w-full">
+        <div className="overflow-x-auto overflow-y-hidden w-full">
             <div className="w-max p-3 flex flex-wrap gap-2 justify-start">
                 {listMateri.map((materi) => 
                     <NavLink to={materi.link} key={materi.id}>

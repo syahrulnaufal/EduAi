@@ -22,7 +22,7 @@
 
 @theme{
     /* lightmode */
-    --color-my-bg: #f5f5f5;
+    --color-my-bg: #eaeaea;
     --color-my-text: #1E293B;
     --color-my-border: #E2E8F0;
     --color-my-blue: #0066FF;
@@ -30,7 +30,9 @@
     --color-hijau: #0B7077;
     --color-grey1: #777795;
     --color-grey2: #4D4D4D;
+    --color-grey3: #438abc;
     --color-jingga: #FD661F;
+    --color-indoRed: #EA4F57;
 
     /* darkmode */
     --color-my-bg-dark: #1A202C;
