@@ -165,8 +165,9 @@ return(
                 <div className="text-lg font-semibold text-my-text mb-3 ps-2">Semua Bab</div>
                 <div className="w-full h-max grid grid-cols-1 md:grid-cols-2 gap-5">
                     {listSubbab.map((subbab) => 
-                        <div className={` min-h-20 bg-white rounded-lg relative flex items-center ${subbab.isGratis ? 'pt-10' : 'pt-4'} pb-5 pe-4`} key={subbab.id}>
-                            {subbab.isGratis ? <div className="w-fit h-fit text-xs px-2 py-1 text-white bg-indoRed rounded-sm top-0 absolute">Subbab gratis</div> : <div></div> }
+                        <div className={` min-h-20 bg-white rounded-lg relative flex items-center ${subbab.isGratis ? 'pt-10' : 'pt-4'} pb-5 pe-4`} key={subbab.id} 
+                        style={{boxShadow: '0px 8px 16px 0px rgba(60, 71, 103, 0.06)'}}>
+                            {subbab.isGratis ? <div className="w-fit h-fit text-xs px-2 py-1 text-white bg-indoRed rounded-sm rounded-tl-lg top-0 absolute">Subbab gratis</div> : <div></div> }
                             
                             <img src={subbab.ikon} alt='Ikon' className="w-15 h-fit ms-5"/>
                             <div className="flex flex-col items-start ms-4">

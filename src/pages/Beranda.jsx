@@ -220,55 +220,70 @@ function Beranda(){
 
     // html
     return(
-        <div className="bg-my-bg flex flex-col items-center w-screen box-border ">
+        <div className="bg-linear-180 from-white to-my-bg flex flex-col items-center w-screen box-border relative">
+            <img src="./img/bgGradient.webp" alt="Foto background" className="absolute z-1 w-screen" />
+
             <Sidebar 
-                className='absolute'
                 hideSidebar={hideSidebar} 
                 left={left} 
                 bg={bg}
-            >
+                >
                 <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
-            </Sidebar>
+            </Sidebar>    
 
-            <Topbar>
-                <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
-                <div></div>
-            </Topbar>
+            <div className="z-2 w-screen">
+                <Topbar>
+                    <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
+                    <div></div>
+                </Topbar>
+            </div>
             
             <div className="h-20"></div>
 
-            {platformTerbaik}
+            <div className="z-2 w-screen flex flex-col items-center">
+                {platformTerbaik}
 
-            {welcomeText}
-
-            <div className="h-20"></div>
-
-            <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} >
-                <div className="w-65">
-                    <Select
-                        options={dropDownlist}
-                        value={selectedDropdown}
-                        onChange={dropdown}
-                        placeholder={dropDownlist[0].label}
-                        />
-                </div>
-            </Search>
+                {welcomeText}
+            </div>
 
             <div className="h-20"></div>
 
-            {wajahWajah}
+            <div className="z-3 w-screen flex flex-col items-center">
+                <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} >
+                    <div className="w-65">
+                        <Select
+                            options={dropDownlist}
+                            value={selectedDropdown}
+                            onChange={dropdown}
+                            placeholder={dropDownlist[0].label}
+                            />
+                    </div>
+                </Search>
+            </div>
 
             <div className="h-20"></div>
 
-            {ruangBelajarText}
+            <div className="z-2 w-screen">
+                {wajahWajah}
+            </div>
 
             <div className="h-20"></div>
 
-            {pilihMateri}
+            <div className="z-2 w-screen flex flex-col items-center">
+                {ruangBelajarText}
+            </div>
+
+            <div className="h-20"></div>
+
+            <div className="z-2 w-screen flex flex-col items-center">
+                {pilihMateri}
+            </div>
         
             <div className="h-10"></div>
 
-            <FiturUnggulan />
+            <div className="z-2 w-screen flex flex-col items-center">
+                <FiturUnggulan />
+            </div>
 
             <div className="h-20"></div>
 

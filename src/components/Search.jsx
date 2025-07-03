@@ -5,7 +5,7 @@ const Search = ({searchTerm, setSearchTerm, children}) => {
     const elements = Children.toArray(children);
 
     return(
-        <div className="search bg-white rounded-xl p-4 shadow-sm flex flex-col sm:flex-row gap-4 sm:gap-2 w-[80%]">
+        <div className="search bg-white rounded-xl p-4 shadow-sm flex flex-col border border-gray-100 sm:flex-row gap-4 sm:gap-2 w-[80%]" style={{boxShadow: '0px 6px 20px 4px rgba(113, 130, 164, 0.24)'}}>
             <div className="relative flex items-center flex-1">
 
                 <img className="absolute left-2" src="./img/search_icon.png" alt="search" width={'25px'} />
