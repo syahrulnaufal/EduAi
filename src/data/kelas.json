@@ -1,0 +1,126 @@
+{
+    "indo":{
+        "data":[
+        {
+                "id": 1,
+            "title": "Surat Lamaran Pekerjaan dan Daftar Riwayat Hidup ⚡",
+            "progres": 10,
+            "ikon": "/img/ikonSuratLamaranKerja.png",
+            "isGratis": true
+        },
+        {
+            "id": 2,
+            "title": "Teks Cerita Sejarah ⚡",
+            "progres": 15,
+            "ikon": "/img/ikonTeksSejarah.png",
+            "isGratis": true
+        },
+        {
+            "id": 3,
+            "title": "Teks Editorial ⚡",
+            "progres": 0,
+            "ikon": "/img/ikonTeksEditorial.png",
+            "isGratis": false
+        },
+        {
+            "id": 4,
+            "title": "Novel ⚡",
+            "progres": 20,
+            "ikon": "/img/ikonNovel.png",
+            "isGratis": true
+        },
+        {
+            "id": 5,
+            "title": "Teks Iklan ⚡",
+            "progres": 5,
+            "ikon": "/img/ikonTeksIklan.png",
+            "isGratis": true
+        },
+        {
+            "id": 6,
+            "title": "Teks Artikel ⚡",
+            "progres": 90,
+            "ikon": "/img/ikonTeksArtikel.png",
+            "isGratis": false
+        },
+        {
+            "id": 7,
+            "title": "Kritik Sastra dan Esai ⚡",
+            "progres": 30,
+            "ikon": "/img/ikonKritikSastra.png",
+            "isGratis": true
+        },
+        {
+            "id": 8,
+            "title": "Buku Pengayaan (Nonfiksi) dan Buku Drama (Fiksi) ⚡",
+            "progres": 60,
+            "ikon": "/img/ikonPengayaan.png",
+            "isGratis": true
+        }
+        ],
+        "tema": "indoRed",
+        "ikon": "/img/indonesia.png" 
+    },
+    "mtk":{
+        "data":[
+        {
+            "id": 1,
+            "title": "Surat Lamaran Pekerjaan dan Daftar Riwayat Hidup ⚡",
+            "progres": 10,
+            "ikon": "/img/ikonSuratLamaranKerja.png",
+            "isGratis": true
+        },
+        {
+            "id": 2,
+            "title": "Teks Cerita Sejarah ⚡",
+            "progres": 15,
+            "ikon": "/img/ikonTeksSejarah.png",
+            "isGratis": true
+        },
+        {
+            "id": 3,
+            "title": "Teks Editorial ⚡",
+            "progres": 0,
+            "ikon": "/img/ikonTeksEditorial.png",
+            "isGratis": false
+        },
+        {
+            "id": 4,
+            "title": "Novel ⚡",
+            "progres": 20,
+            "ikon": "/img/ikonNovel.png",
+            "isGratis": true
+        },
+        {
+            "id": 5,
+            "title": "Teks Iklan ⚡",
+            "progres": 5,
+            "ikon": "/img/ikonTeksIklan.png",
+            "isGratis": true
+        },
+        {
+            "id": 6,
+            "title": "Teks Artikel ⚡",
+            "progres": 90,
+            "ikon": "/img/ikonTeksArtikel.png",
+            "isGratis": false
+        },
+        {
+            "id": 7,
+            "title": "Kritik Sastra dan Esai ⚡",
+            "progres": 30,
+            "ikon": "/img/ikonKritikSastra.png",
+            "isGratis": true
+        },
+        {
+            "id": 8,
+            "title": "Buku Pengayaan (Nonfiksi) dan Buku Drama (Fiksi) ⚡",
+            "progres": 60,
+            "ikon": "/img/ikonPengayaan.png",
+            "isGratis": true
+        }
+        ],
+        "tema": "blue-400",
+        "ikon": "/img/mtk.png"
+    }
+}

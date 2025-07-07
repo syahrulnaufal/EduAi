@@ -3,6 +3,8 @@ import Sidebar from "../components/Sidebar";
 import BurgerMenu from "../components/BurgerMenu";
 import { useState, useEffect } from "react";
 import { useDebounce } from "react-use";
+import { NavLink, useParams } from "react-router";
+import kelas from "../data/kelas"
 
 const Search = ({searchTerm, setSearchTerm}) => {
 
@@ -10,7 +12,7 @@ const Search = ({searchTerm, setSearchTerm}) => {
         <div className="search rounded-xl p-4 shadow-sm flex flex-col sm:flex-row w-80">
             <div className="relative flex items-center flex-1 bg-white rounded-full">
 
-                <img className="absolute left-2" src="./img/search_icon.png" alt="search" width={'25px'} />
+                <img className="absolute left-2" src="/img/search_icon.png" alt="search" width={'25px'} />
                 
                 <input
                     // ref={refToUse}
@@ -28,66 +30,7 @@ const Search = ({searchTerm, setSearchTerm}) => {
     )
 }
 
-const listSubbab = [
-    {
-        id: 1,
-        title: 'Surat Lamaran Pekerjaan dan Daftar Riwayat Hidup ⚡',
-        progres: 10,
-        ikon: './img/ikonSuratLamaranKerja.png',
-        isGratis: true,
-    },
-    {
-        id: 2,
-        title: 'Teks Cerita Sejarah ⚡',
-        progres: 15,
-        ikon: './img/ikonTeksSejarah.png',
-        isGratis: true,
-    },
-    {
-        id: 3,
-        title: 'Teks Editorial ⚡',
-        progres: 0,
-        ikon: './img/ikonTeksEditorial.png',
-        isGratis: false,
-    },
-    {
-        id: 4,
-        title: 'Novel ⚡',
-        progres: 20,
-        ikon: './img/ikonNovel.png',
-        isGratis: true,
-    },
-    {
-        id: 5,
-        title: 'Teks Iklan ⚡',
-        progres: 5,
-        ikon: './img/ikonTeksIklan.png',
-        isGratis: true,
-    },
-    {
-        id: 6,
-        title: 'Teks Artikel ⚡',
-        progres: 90,
-        ikon: './img/ikonTeksArtikel.png',
-        isGratis: false,
-    },
-    {
-        id: 7,
-        title: 'Kritik Sastra dan Esai ⚡',
-        progres: 30,
-        ikon: './img/ikonKritikSastra.png',
-        isGratis: true,
-    },
-    {
-        id: 8,
-        title: 'Buku Pengayaan (Nonfiksi) dan Buku Drama (Fiksi) ⚡',
-        progres: 60,
-        ikon: './img/ikonPengayaan.png',
-        isGratis: true,
-    },
-];
-
-function RuangBelajarBahasaIndo(){
+function RuangMateri(){
 
     // Sidebar 
     const [left, setLeft] = useState('-left-70') 
@@ -102,6 +45,14 @@ function RuangBelajarBahasaIndo(){
     const [debounceSearchTerm, setDebounceSearchTerm] = useState('')
     const [searchTerm, setSearchTerm] = useState('')
 
+    // parameter
+    const {id} = useParams();
+    
+    // data materi 
+    const listSubbab = kelas[id].data;
+    const tema = kelas[id].tema;
+    const ikon = kelas[id].ikon;
+
     // check change of seaerch term every 500ms
     useDebounce(()=>setDebounceSearchTerm(searchTerm), 500,[searchTerm])
     // function run every search term change
@@ -113,7 +64,7 @@ function RuangBelajarBahasaIndo(){
     function hideSidebar (){
         if(isSidebarHidden){
             setLeft('left-0')
-            setBg('bg-my-bg-dark/70 z-20 blur-xl')
+            setBg('bg-my-bg-dark/70 z-20 ')
             setIsSidebarHidden(false)
             setMenuIcon(closeButton)
           }else{
@@ -125,7 +76,7 @@ function RuangBelajarBahasaIndo(){
     }
 
 return(
-    <div className="w-screen text-sm bg-my-bg ">
+    <div className="w-screen text-sm bg-my-bg relative">
         <Sidebar 
             className='absolute'
             hideSidebar={hideSidebar} 
@@ -141,9 +92,9 @@ return(
         </Topbar>
 
         {/* topbar merah */}
-        <div className="flex sm:flex-row flex-col justify-between px-4 items-center bg-indoRed text-white">
+        <div className={`flex sm:flex-row flex-col justify-between px-4 items-center bg-${tema} text-white`}>
             <div className="flex gap-2 items-center mt-4 sm:mt-0 w-full sm:w-fit">
-                <img src="./img/ikonKelasBahasaIndo.png" alt="icon" className="w-10"/>
+                <img src={ikon} alt="icon" className="w-10 p-0.5 rounded-lg bg-white"/>
                 <div className="pb-2 text-lg ">Bahasa Indonesia</div>
             </div>
             
@@ -153,8 +104,8 @@ return(
 
         {/* AI Soal */}
         <div className="bg-white flex justify-center flex-col items-center py-1">
-            <div className="flex flex-col cursor-pointer select-none hover:bg-grey1/20 rounded-lg px-2 py-1 transition-colors duration-100">
-                <img src="./img/ikonAiSoal.png" alt="AI" className="w-10"/>
+            <div className="flex flex-col cursor-pointer select-none hover:bg-grey1/20 active:bg-grey1/10 rounded-lg px-2 py-1 transition-colors duration-100">
+                <img src="/img/ikonAiSoal.png" alt="AI" className="w-10"/>
                 <div className="text-my-text">AI Soal</div>
             </div>
         </div>
@@ -165,26 +116,28 @@ return(
                 <div className="text-lg font-semibold text-my-text mb-3 ps-2">Semua Bab</div>
                 <div className="w-full h-max grid grid-cols-1 md:grid-cols-2 gap-5">
                     {listSubbab.map((subbab) => 
-                        <div className={` min-h-20 bg-white rounded-lg relative flex items-center ${subbab.isGratis ? 'pt-10' : 'pt-4'} pb-5 pe-4`} key={subbab.id} 
-                        style={{boxShadow: '0px 8px 16px 0px rgba(60, 71, 103, 0.06)'}}>
-                            {subbab.isGratis ? <div className="w-fit h-fit text-xs px-2 py-1 text-white bg-indoRed rounded-sm rounded-tl-lg top-0 absolute">Subbab gratis</div> : <div></div> }
-                            
-                            <img src={subbab.ikon} alt='Ikon' className="w-15 h-fit ms-5"/>
-                            <div className="flex flex-col items-start ms-4">
-                                <div>{subbab.title}</div>
-                                <div className="flex gap-2 items-center mt-2">
-                                    <img src="./img/ikonAdapto.png" alt="adapto" className=" w-15" />
-                                    {/* progress bar */}
-                                    <div className="w-65 h-4 rounded-full bg-grey3/30 flex items-center">
-                                        <div className="bg-indoRed h-full rounded-full flex items-center justify-end pe-2" style={{width: `${subbab.progres}%`}}>
-                                            <span className="text-xs text-white"> {subbab.progres > 10 ? subbab.progres : ''}</span>
+                        <NavLink to={`/ruang-belajar/${id}/${subbab.id}`} className={'min-h-20'} key={subbab.id} >
+                            <div className={` bg-white h-full rounded-lg relative flex items-center ${subbab.isGratis ? 'pt-10' : 'pt-4'} pb-5 pe-4 border-2 border-white hover:border-${tema} transition-colors duration-200 active:border-white`} 
+                            style={{boxShadow: '0px 8px 16px 0px rgba(60, 71, 103, 0.06)'}}>
+                                {subbab.isGratis ? <div className={`w-fit h-fit text-xs px-2 py-1 text-white bg-${tema} rounded-sm rounded-tl-md top-0 absolute`}>Subbab gratis</div> : <div></div> }
+                                
+                                <img src={subbab.ikon} alt='Ikon' className="w-15 h-fit ms-5"/>
+                                <div className="flex flex-col items-start ms-4">
+                                    <div>{subbab.title}</div>
+                                    <div className="flex gap-2 items-center mt-2">
+                                        <img src="/img/ikonAdapto.png" alt="adapto" className=" w-15" />
+                                        {/* progress bar */}
+                                        <div className="w-65 h-4 rounded-full bg-grey3/30 flex items-center">
+                                            <div className={` h-full rounded-full flex items-center justify-end pe-2 bg-${tema}`} style={{width: `${subbab.progres}%`}}>
+                                                <span className="text-xs text-white"> {subbab.progres > 10 ? subbab.progres : ''}</span>
+                                            </div>
+                                            <span className="text-xs ps-1"> {subbab.progres <= 10 ? subbab.progres : ''}</span>
                                         </div>
-                                        <span className="text-xs ps-1"> {subbab.progres <= 10 ? subbab.progres : ''}</span>
                                     </div>
                                 </div>
+                                
                             </div>
-                            
-                        </div>
+                        </NavLink>
                     )}
 
                 </div>
@@ -196,4 +149,4 @@ return(
 );
 }
 
-export default RuangBelajarBahasaIndo;
+export default RuangMateri;

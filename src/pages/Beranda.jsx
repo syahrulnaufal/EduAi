@@ -195,7 +195,7 @@ function Beranda(){
     function hideSidebar (){
         if(isSidebarHidden){
             setLeft('left-0')
-            setBg('bg-my-bg-dark/70 z-20 blur-xl')
+            setBg('bg-my-bg-dark/70 z-20')
             setIsSidebarHidden(false)
             setMenuIcon(closeButton)
           }else{
@@ -248,7 +248,7 @@ function Beranda(){
 
             <div className="h-20"></div>
 
-            <div className="z-3 w-screen flex flex-col items-center">
+            <div className="z-3 flex flex-col items-center w-[80%]">
                 <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} >
                     <div className="w-65">
                         <Select

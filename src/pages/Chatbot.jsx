@@ -39,7 +39,7 @@ function Chatbot(){
 
     //function to hide/unhide the asidebar
     function toggleAsidebar() {
-        if(window.innerWidth < 768) {
+        if(window.innerWidth <= 768) {
             if (asidebarLeft === '-left-100') {
                 setAsidebarLeft('left-0');
             } else {

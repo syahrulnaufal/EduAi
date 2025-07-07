@@ -100,7 +100,12 @@ function FiturPopuler () {
 
     // fungsi untuk filter listKelas
     useEffect(() => {
-        if (selectedFilter.length === 0 || selectedFilter.includes('all')) {
+        if(selectedFilter.length > listFilter.length-1){
+            return
+        } else if (selectedFilter.includes('all')) {
+          setListKelas(listSemuaKelas);
+          setSelectedFilter(['all', 'ui/ux', 'design', 'essay', 'infografis', 'data'])
+        } else if (selectedFilter.length === 0 ){
           setListKelas(listSemuaKelas);
         } else {
           setListKelas(listSemuaKelas.filter(e => selectedFilter.includes(e.kategori)));
