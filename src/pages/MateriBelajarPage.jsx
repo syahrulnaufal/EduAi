@@ -16,7 +16,7 @@ function MateriBelajarPage(){
     const [menuIcon, setMenuIcon] = useState(isSidebarHidden? menuButton : closeButton)
 
     // id materi
-    const {id} = useParams();
+    const param = useParams();
     
     // Function to hide the sidebar
     function hideSidebar (){
@@ -48,7 +48,7 @@ function MateriBelajarPage(){
                 <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
                 <div></div>
             </Topbar>
-            <h1>Page Materi Belajar {id}</h1>
+            <h1>Page Materi Belajar {param.kelas} {param.materi}</h1>
         </div>
     );
 }

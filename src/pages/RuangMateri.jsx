@@ -30,7 +30,7 @@ const Search = ({searchTerm, setSearchTerm}) => {
     )
 }
 
-function RuangMateri(){
+function RuangMateri({}){
 
     // Sidebar 
     const [left, setLeft] = useState('-left-70') 
@@ -46,12 +46,37 @@ function RuangMateri(){
     const [searchTerm, setSearchTerm] = useState('')
 
     // parameter
-    const {id} = useParams();
+    const param = useParams();
+    const id = param.kelas ;
+
+    // tema
+    const [tema, setTema] = useState({
+            bg : "bg-blue-400",
+            hoverBorder: "hover:border-blue-400",
+        });
+    const listTema = {
+        mtk : {
+            bg : "bg-blue-400",
+            hoverBorder: "hover:border-blue-400",
+        },
+        indo : {
+            bg : "bg-indoRed",
+            hoverBorder: "hover:border-indoRed",
+        },
+        green : {
+            bg : "bg-green-400",
+            hoverBorder: "hover:border-green-400",
+        },
+    };
+    useEffect(()=>{
+        setTema(listTema[id])
+        console.log(listTema[id])
+    },[id])
     
     // data materi 
     const listSubbab = kelas[id].data;
-    const tema = kelas[id].tema;
     const ikon = kelas[id].ikon;
+    const title = kelas[id].title;
 
     // check change of seaerch term every 500ms
     useDebounce(()=>setDebounceSearchTerm(searchTerm), 500,[searchTerm])
@@ -92,10 +117,10 @@ return(
         </Topbar>
 
         {/* topbar merah */}
-        <div className={`flex sm:flex-row flex-col justify-between px-4 items-center bg-${tema} text-white`}>
+        <div className={`flex sm:flex-row flex-col justify-between px-4 items-center text-white ${tema.bg}`} >
             <div className="flex gap-2 items-center mt-4 sm:mt-0 w-full sm:w-fit">
                 <img src={ikon} alt="icon" className="w-10 p-0.5 rounded-lg bg-white"/>
-                <div className="pb-2 text-lg ">Bahasa Indonesia</div>
+                <div className="pb-2 text-lg ">{title}</div>
             </div>
             
             <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
@@ -115,11 +140,12 @@ return(
             <div className="max-w-full h-full w-fit sm:max-w-[80%] md:max-w-[90%] flex-col flex items-start pt-5">
                 <div className="text-lg font-semibold text-my-text mb-3 ps-2">Semua Bab</div>
                 <div className="w-full h-max grid grid-cols-1 md:grid-cols-2 gap-5">
+                    
                     {listSubbab.map((subbab) => 
                         <NavLink to={`/ruang-belajar/${id}/${subbab.id}`} className={'min-h-20'} key={subbab.id} >
-                            <div className={` bg-white h-full rounded-lg relative flex items-center ${subbab.isGratis ? 'pt-10' : 'pt-4'} pb-5 pe-4 border-2 border-white hover:border-${tema} transition-colors duration-200 active:border-white`} 
+                            <div className={` bg-white h-full rounded-lg relative flex items-center ${subbab.isGratis ? 'pt-10' : 'pt-4'} pb-5 pe-4 border-2 border-white ${tema.hoverBorder} transition-colors duration-200 active:border-white`} 
                             style={{boxShadow: '0px 8px 16px 0px rgba(60, 71, 103, 0.06)'}}>
-                                {subbab.isGratis ? <div className={`w-fit h-fit text-xs px-2 py-1 text-white bg-${tema} rounded-sm rounded-tl-md top-0 absolute`}>Subbab gratis</div> : <div></div> }
+                                {subbab.isGratis ? <div className={`w-fit h-fit text-xs px-2 py-1 text-white ${tema.bg} rounded-sm rounded-tl-md top-0 absolute`}>Subbab gratis</div> : <div></div> }
                                 
                                 <img src={subbab.ikon} alt='Ikon' className="w-15 h-fit ms-5"/>
                                 <div className="flex flex-col items-start ms-4">
@@ -128,7 +154,7 @@ return(
                                         <img src="/img/ikonAdapto.png" alt="adapto" className=" w-15" />
                                         {/* progress bar */}
                                         <div className="w-65 h-4 rounded-full bg-grey3/30 flex items-center">
-                                            <div className={` h-full rounded-full flex items-center justify-end pe-2 bg-${tema}`} style={{width: `${subbab.progres}%`}}>
+                                            <div className={` h-full rounded-full flex items-center justify-end pe-2 ${tema.bg}`} style={{width: `${subbab.progres}%`}}>
                                                 <span className="text-xs text-white"> {subbab.progres > 10 ? subbab.progres : ''}</span>
                                             </div>
                                             <span className="text-xs ps-1"> {subbab.progres <= 10 ? subbab.progres : ''}</span>

@@ -2,7 +2,7 @@
     "indo":{
         "data":[
         {
-                "id": 1,
+            "id": 1,
             "title": "Surat Lamaran Pekerjaan dan Daftar Riwayat Hidup ⚡",
             "progres": 10,
             "ikon": "/img/ikonSuratLamaranKerja.png",
@@ -58,6 +58,7 @@
             "isGratis": true
         }
         ],
+        "title":"Bahasa Indonesia",
         "tema": "indoRed",
         "ikon": "/img/indonesia.png" 
     },
@@ -120,6 +121,7 @@
             "isGratis": true
         }
         ],
+        "title":"Matematika",
         "tema": "blue-400",
         "ikon": "/img/mtk.png"
     }

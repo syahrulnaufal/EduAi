@@ -16,8 +16,8 @@ createRoot(document.getElementById('root')).render(
         <Route path='*' element={<Beranda/>}/>
         <Route path="/" index element={<Beranda />} />
         <Route path="/ruang-belajar" element={<RuangBelajar/>} />
-        <Route path='/ruang-belajar/:id' element={<RuangMateri/>} />
-        <Route path='/ruang-belajar/:id/:id' element={<MateriBelajarPage/>} />
+        <Route path='/ruang-belajar/:kelas' element={<RuangMateri/>} />
+        <Route path='/ruang-belajar/:kelas/:materi' element={<MateriBelajarPage/>} />
         <Route path="/ruang-kelas" element={<RuangKelas />} />
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/tentang" element={<Tentang />} />

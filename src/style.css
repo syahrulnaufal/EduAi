@@ -3,6 +3,8 @@
 @tailwindcss components;
 @tailwindcss utilities;
 
+@import "tailwindcss/preflight.css" layer(base);
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {

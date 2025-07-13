@@ -20,7 +20,7 @@ const listMateri = [
         id : 1,
         label : 'Bahasa Indonesia',
         ikon: '/img/ikonKelasBahasaIndo.png',
-        link: 'indo'
+        link: 'indo' // link berdasarkan data di /data/kelas.json
     },{
         id : 2,
         label : 'IPA Terpadu',
@@ -47,67 +47,67 @@ const listMateri = [
         ikon: '/img/ikonUser.png',
         link: 'indo'
     },{
-        id : 1,
+        id : 7,
         label : 'Bahasa Indonesia',
         ikon: '/img/ikonKelasBahasaIndo.png',
         link: 'indo'
     },{
-        id : 2,
+        id : 8,
         label : 'IPA Terpadu',
         ikon: '/img/ipa.png',
         link: 'indo'
     },{
-        id : 3,
+        id : 9,
         label : 'Matematika',
         ikon: '/img/mtk.png',
         link: 'mtk'
     },{
-        id : 4,
+        id : 10,
         label : 'IPS Terpadu',
         ikon: '/img/ips.png',
         link: 'indo'
     },{
-        id : 5,
+        id : 11,
         label : 'Ruang Ngaji',
         ikon: '/img/ikonMengaji.png',
         link: 'indo'
     },{
-        id : 6,
+        id : 12,
         label : 'Tentang Edu AI',
         ikon: '/img/ikonUser.png',
         link: 'indo'
     },{
-        id : 1,
+        id : 13,
         label : 'Bahasa Indonesia',
         ikon: '/img/ikonKelasBahasaIndo.png',
         link: 'indo'
     },{
-        id : 2,
+        id : 14,
         label : 'IPA Terpadu',
         ikon: '/img/ipa.png',
         link: 'indo'
     },{
-        id : 3,
+        id : 15,
         label : 'Matematika',
         ikon: '/img/mtk.png',
         link: 'mtk'
     },{
-        id : 4,
+        id : 16,
         label : 'IPS Terpadu',
         ikon: '/img/ips.png',
         link: 'indo'
     },{
-        id : 5,
+        id : 17,
         label : 'Ruang Ngaji',
         ikon: '/img/ikonMengaji.png',
         link: 'indo'
     },{
-        id : 6,
+        id : 18,
         label : 'Tentang Edu AI',
         ikon: '/img/ikonUser.png',
         link: 'indo'
     },
-];
+].map((materi, index) => ({...materi, id: index + 1}));
 
 function RuangBelajar(){
     // Sidebar 
