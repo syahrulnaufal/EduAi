@@ -4,6 +4,7 @@ import '../style.css';
 import Topbar from "../components/Topbar";
 import Sidebar from "../components/Sidebar";
 import BurgerMenu from "../components/BurgerMenu";
+import MateriPageAsidebar from "../components/MateriPageAsidebar";
 
 function MateriBelajarPage(){
     // Sidebar 
@@ -17,6 +18,22 @@ function MateriBelajarPage(){
 
     // id materi
     const param = useParams();
+
+    //asidebar
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [asidebarLeft, setAsidebarLeft] = useState('left-0');
+    const [isAsidebarHidden, setIsAsidebarHidden] = isMobile ? useState(true) : useState(false);
+
+    //function to hide/unhide the asidebar
+    function toggleAsidebar() {
+        if(window.innerWidth <= 768) {
+            if (asidebarLeft === '-left-100') {
+                setAsidebarLeft('left-0');
+            } else {
+                setAsidebarLeft('-left-100');
+            }
+        }
+    }
     
     // Function to hide the sidebar
     function hideSidebar (){
@@ -44,10 +61,20 @@ function MateriBelajarPage(){
                 <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
             </Sidebar>
 
-            <Topbar>
-                <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
-                <div></div>
-            </Topbar>
+            <div className="absolute w-screen z-10">
+                <Topbar>
+                    <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
+                    <div></div>
+                </Topbar>
+            </div>
+
+            <div className={`asidebar h-screen ${asidebarLeft} transition-all duration-200 z-5`} onClick={toggleAsidebar}>
+                <MateriPageAsidebar>
+                    <div onClick={toggleAsidebar} className="cursor-pointer hidden flexAt768 p-1 rounded-full hover:bg-indigo-50 duration-150">
+                        <img className="rotate-90" src='/img/arrowDown.png' width={'20px'}/>
+                    </div>
+                </MateriPageAsidebar>
+            </div>
             <h1>Page Materi Belajar {param.kelas} {param.materi}</h1>
         </div>
     );

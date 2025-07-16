@@ -1,63 +1,405 @@
 {
     "indo":{
-        "data":[
+        "data": [
         {
-            "id": 1,
-            "title": "Surat Lamaran Pekerjaan dan Daftar Riwayat Hidup ⚡",
-            "progres": 10,
-            "ikon": "/img/ikonSuratLamaranKerja.png",
-            "isGratis": true
+        "id": 1,
+        "title": "Matematika: Statistika & Peluang ⚡",
+        "progres": 10,
+        "ikon": "/img/ikonMatematika.png",
+        "isGratis": true,
+        "materi": [
+            {
+            "img": "https://via.placeholder.com/300x180/ADD8E6/000000?text=Statistika+Dasar",
+            "title": "Data Tunggal dan Data Kelompok Serta Penyajiannya",
+            "xp": 125,
+            "gold": 10,
+            "data": {
+                "deskripsi": "Ada data tunggal, ada data kelompok. Kita belajar cara penyajiannya yuk! Video ini video konsep kilat. Materi dijelaskan lebih cepat. Langsung aja yuk mulai belajar!",
+                "video": [
+                { "title": "Pengertian dan Contoh data tunggal", "duration": "03:11", "isDone": true },
+                { "title": "Pengertian dan Contoh data kelompok", "duration": "07:53", "isDone": true },
+                { "title": "Penyajian data kelompok dengan histogram", "duration": "11:43", "isDone": true },
+                { "title": "Penyajian data kelompok dengan grafik poligon", "duration": "14:33", "isDone": false },
+                { "title": "Penyajian data kelompok dengan ogive positif dan negatif", "duration": "16:30", "isDone": false },
+                { "title": "Sudah paham tentang histogram dan mau soal yang lebih menantang?", "duration": "14:52", "isDone": false },
+                { "title": "Kesimpulan data tunggal dan data kelompok serta penyajiannya", "duration": "25:36", "isDone": false },
+                { "title": "Kuis 1 Statiska (deskriptif)", "duration": "15:00", "isDone": false }
+                ]
+            }
+            },
+            {
+            "img": "https://via.placeholder.com/300x180/ADD8E6/000000?text=Pemusatan+Data",
+            "title": "Ukuran Pemusatan Data (Mean, Modus, Median)",
+            "xp": 125,
+            "gold": 10,
+            "data": {
+                "deskripsi": "Video ini akan menjelaskan Mean (Rata-rata), Modus (Nilai yang paling sering muncul), dan Median (Nilai tengah) untuk data tunggal dan kelompok.",
+                "video": [
+                { "title": "Pengertian Mean, Modus, Median", "duration": "04:20", "isDone": true },
+                { "title": "Menghitung Mean Data Tunggal", "duration": "06:15", "isDone": true },
+                { "title": "Menghitung Modus Data Kelompok", "duration": "08:00", "isDone": false },
+                { "title": "Menentukan Median Data Tunggal Ganjil Genap", "duration": "07:30", "isDone": false },
+                { "title": "Latihan Soal Ukuran Pemusatan", "duration": "10:00", "isDone": false },
+                { "title": "Kuis 2 Statiska (pemusatan)", "duration": "15:00", "isDone": false }
+                ]
+            }
+            },
+            {
+            "img": "https://via.placeholder.com/300x180/ADD8E6/000000?text=Penyebaran+Data",
+            "title": "Ukuran Penyebaran Data (Jangkauan, Kuartil, Desil)",
+            "xp": 130,
+            "gold": 12,
+            "data": {
+                "deskripsi": "Lanjutkan pemahaman statistika Anda dengan mempelajari jangkauan, kuartil, dan desil untuk mengukur penyebaran data.",
+                "video": [
+                { "title": "Pengertian Ukuran Penyebaran Data", "duration": "03:50", "isDone": false },
+                { "title": "Menghitung Jangkauan (Range)", "duration": "05:00", "isDone": false },
+                { "title": "Menentukan Kuartil Bawah, Tengah, Atas", "duration": "09:20", "isDone": false },
+                { "title": "Menentukan Desil", "duration": "11:00", "isDone": false },
+                { "title": "Aplikasi Ukuran Penyebaran Data", "duration": "07:40", "isDone": false },
+                { "title": "Kuis 3 Statiska (penyebaran)", "duration": "15:00", "isDone": false }
+                ]
+            }
+            }
+        ]
         },
         {
-            "id": 2,
-            "title": "Teks Cerita Sejarah ⚡",
-            "progres": 15,
-            "ikon": "/img/ikonTeksSejarah.png",
-            "isGratis": true
+        "id": 2,
+        "title": "Bahasa Indonesia: Teks Sejarah & Novel ⚡",
+        "progres": 15,
+        "ikon": "/img/ikonBahasaIndonesia.png",
+        "isGratis": true,
+        "materi": [
+            {
+            "img": "https://via.placeholder.com/300x180/FFD700/000000?text=Teks+Sejarah",
+            "title": "Unsur-unsur dan Struktur Teks Cerita Sejarah",
+            "xp": 100,
+            "gold": 8,
+            "data": {
+                "deskripsi": "Pelajari unsur intrinsik dan ekstrinsik, serta struktur lengkap teks cerita sejarah. Video ini adalah ringkasan cepat untuk pemahaman mendalam.",
+                "video": [
+                { "title": "Pengenalan Teks Cerita Sejarah", "duration": "02:45", "isDone": true },
+                { "title": "Unsur Intrinsik dalam Teks Sejarah", "duration": "05:10", "isDone": true },
+                { "title": "Unsur Ekstrinsik dan Pengaruhnya", "duration": "04:30", "isDone": false },
+                { "title": "Struktur Teks Cerita Sejarah: Orientasi", "duration": "03:20", "isDone": false },
+                { "title": "Struktur Teks Cerita Sejarah: Komplikasi dan Resolusi", "duration": "06:00", "isDone": false },
+                { "title": "Kuis 1 Cerita Sejarah (deskriptif)", "duration": "15:00", "isDone": false }
+                ]
+            }
+            },
+            {
+            "img": "https://via.placeholder.com/300x180/E6B0E6/000000?text=Analisis+Novel",
+            "title": "Menganalisis Unsur Intrinsik dan Ekstrinsik Novel",
+            "xp": 110,
+            "gold": 9,
+            "data": {
+                "deskripsi": "Selami dunia novel! Video ini akan memandu Anda dalam menganalisis unsur-unsur pembangun novel, baik dari dalam maupun luar cerita.",
+                "video": [
+                { "title": "Pengantar Novel dan Jenisnya", "duration": "02:50", "isDone": true },
+                { "title": "Unsur Intrinsik: Tokoh dan Penokohan", "duration": "04:00", "isDone": true },
+                { "title": "Unsur Intrinsik: Alur dan Latar", "duration": "05:20", "isDone": false },
+                { "title": "Unsur Intrinsik: Sudut Pandang dan Gaya Bahasa", "duration": "04:40", "isDone": false },
+                { "title": "Unsur Ekstrinsik Novel", "duration": "03:15", "isDone": false },
+                { "title": "Kuis 1 Novel (analisis)", "duration": "15:00", "isDone": false }
+                ]
+            }
+            },
+            {
+            "img": "https://via.placeholder.com/300x180/DDA0DD/000000?text=Kritik+Esai",
+            "title": "Perbedaan dan Unsur Kritik Sastra dan Esai",
+            "xp": 115,
+            "gold": 9,
+            "data": {
+                "deskripsi": "Selami dunia analisis sastra! Video ini akan menjelaskan perbedaan mendasar antara kritik sastra dan esai, serta unsur-unsur pembangunnya.",
+                "video": [
+                { "title": "Definisi Kritik Sastra", "duration": "03:10", "isDone": true },
+                { "title": "Definisi Esai", "duration": "02:50", "isDone": true },
+                { "title": "Perbedaan Kritik Sastra dan Esai", "duration": "04:00", "isDone": false },
+                { "title": "Unsur-unsur Kritik Sastra", "duration": "03:40", "isDone": false },
+                { "title": "Unsur-unsur Esai", "duration": "03:30", "isDone": false },
+                { "title": "Kuis 1 Kritik & Esai", "duration": "15:00", "isDone": false }
+                ]
+            }
+            }
+        ]
         },
         {
-            "id": 3,
-            "title": "Teks Editorial ⚡",
-            "progres": 0,
-            "ikon": "/img/ikonTeksEditorial.png",
-            "isGratis": false
+        "id": 3,
+        "title": "Bahasa Indonesia: Jurnalistik & Periklanan ⚡",
+        "progres": 0,
+        "ikon": "/img/ikonBahasaIndonesia2.png",
+        "isGratis": false,
+        "materi": [
+            {
+            "img": "https://via.placeholder.com/300x180/B0E0E6/000000?text=Teks+Editorial",
+            "title": "Memahami Esensi dan Tujuan Teks Editorial",
+            "xp": 150,
+            "gold": 12,
+            "data": {
+                "deskripsi": "Apa itu teks editorial dan mengapa penting? Video ini akan membahas tujuan, ciri-ciri, dan cara mengenali sebuah teks editorial.",
+                "video": [
+                { "title": "Definisi Teks Editorial", "duration": "03:00", "isDone": false },
+                { "title": "Ciri-ciri dan Karakteristik Teks Editorial", "duration": "04:15", "isDone": false },
+                { "title": "Tujuan dan Fungsi Teks Editorial", "duration": "05:00", "isDone": false },
+                { "title": "Perbedaan Teks Editorial dan Berita", "duration": "03:30", "isDone": false },
+                { "title": "Kuis 1 Teks Editorial", "duration": "15:00", "isDone": false }
+                ]
+            }
+            },
+            {
+            "img": "https://via.placeholder.com/300x180/98FB98/000000?text=Teks+Iklan",
+            "title": "Strategi dan Unsur Pembentuk Teks Iklan Efektif",
+            "xp": 90,
+            "gold": 7,
+            "data": {
+                "deskripsi": "Bagaimana cara membuat iklan yang menarik? Video ini membahas unsur-unsur dan strategi penulisan teks iklan yang persuasif.",
+                "video": [
+                { "title": "Apa itu Teks Iklan?", "duration": "02:00", "isDone": true },
+                { "title": "Unsur-unsur Teks Iklan", "duration": "03:50", "isDone": false },
+                { "title": "Bahasa dalam Teks Iklan", "duration": "03:10", "isDone": false },
+                { "title": "Strategi Penulisan Iklan", "duration": "04:20", "isDone": false },
+                { "title": "Kuis 1 Teks Iklan", "duration": "15:00", "isDone": false }
+                ]
+            }
+            },
+            {
+            "img": "https://via.placeholder.com/300x180/FFC0CB/000000?text=Teks+Artikel",
+            "title": "Menulis Teks Artikel Ilmiah Populer dengan Baik",
+            "xp": 130,
+            "gold": 11,
+            "data": {
+                "deskripsi": "Pahami struktur dan kaidah penulisan artikel ilmiah populer. Video ini akan membimbing Anda menyusun artikel yang informatif dan menarik.",
+                "video": [
+                { "title": "Pengertian dan Jenis Artikel", "duration": "03:00", "isDone": true },
+                { "title": "Struktur Artikel Ilmiah Populer", "duration": "05:00", "isDone": true },
+                { "title": "Bahasa dalam Artikel", "duration": "04:00", "isDone": true },
+                { "title": "Tips Menulis Artikel Efektif", "duration": "06:10", "isDone": false },
+                { "title": "Kuis 1 Teks Artikel", "duration": "15:00", "isDone": false }
+                ]
+            }
+            }
+        ]
         },
         {
-            "id": 4,
-            "title": "Novel ⚡",
-            "progres": 20,
-            "ikon": "/img/ikonNovel.png",
-            "isGratis": true
+        "id": 4,
+        "title": "Seni Budaya: Musik & Tari ⚡",
+        "progres": 20,
+        "ikon": "/img/ikonSeniBudaya.png",
+        "isGratis": true,
+        "materi": [
+            {
+            "img": "https://via.placeholder.com/300x180/E6B0E6/000000?text=Analisis+Musik",
+            "title": "Dasar-dasar Teori Musik dan Harmoni",
+            "xp": 110,
+            "gold": 9,
+            "data": {
+                "deskripsi": "Pelajari notasi musik, tangga nada, dan konsep dasar harmoni untuk memahami struktur musik.",
+                "video": [
+                { "title": "Pengenalan Notasi Balok", "duration": "03:00", "isDone": true },
+                { "title": "Tangga Nada Mayor dan Minor", "duration": "04:30", "isDone": true },
+                { "title": "Interval dan Akor Dasar", "duration": "05:15", "isDone": false },
+                { "title": "Struktur Lagu Populer", "duration": "04:00", "isDone": false },
+                { "title": "Kuis 1 Teori Musik", "duration": "15:00", "isDone": false }
+                ]
+            }
+            },
+            {
+            "img": "https://via.placeholder.com/300x180/E6B0E6/000000?text=Analisis+Tari",
+            "title": "Jenis-jenis dan Unsur Tari Tradisional",
+            "xp": 120,
+            "gold": 10,
+            "data": {
+                "deskripsi": "Jelajahi keindahan tari tradisional Indonesia, mulai dari jenis hingga unsur-unsur pembentuknya.",
+                "video": [
+                { "title": "Definisi dan Fungsi Tari", "duration": "02:40", "isDone": true },
+                { "title": "Jenis Tari Tradisional Indonesia", "duration": "05:00", "isDone": true },
+                { "title": "Unsur Gerak Tari", "duration": "04:10", "isDone": false },
+                { "title": "Tata Rias dan Busana Tari", "duration": "03:30", "isDone": false },
+                { "title": "Kuis 1 Tari Tradisional", "duration": "15:00", "isDone": false }
+                ]
+            }
+            }
+        ]
         },
         {
-            "id": 5,
-            "title": "Teks Iklan ⚡",
-            "progres": 5,
-            "ikon": "/img/ikonTeksIklan.png",
-            "isGratis": true
+        "id": 5,
+        "title": "IPA: Fisika - Listrik & Magnet ⚡",
+        "progres": 5,
+        "ikon": "/img/ikonFisika.png",
+        "isGratis": true,
+        "materi": [
+            {
+            "img": "https://via.placeholder.com/300x180/98FB98/000000?text=Listrik+Statik",
+            "title": "Konsep Dasar Listrik Statis dan Hukum Coulomb",
+            "xp": 135,
+            "gold": 11,
+            "data": {
+                "deskripsi": "Pelajari listrik statis, gaya antar muatan, dan hukum Coulomb yang menjadi dasar fenomena listrik.",
+                "video": [
+                { "title": "Pengantar Listrik Statis", "duration": "04:00", "isDone": true },
+                { "title": "Hukum Coulomb dan Penerapannya", "duration": "06:20", "isDone": false },
+                { "title": "Medan Listrik dan Potensial Listrik", "duration": "07:00", "isDone": false },
+                { "title": "Kuis 1 Listrik Statis", "duration": "15:00", "isDone": false }
+                ]
+            }
+            },
+            {
+            "img": "https://via.placeholder.com/300x180/98FB98/000000?text=Listrik+Dinamis",
+            "title": "Rangkaian Listrik Arus Searah (DC)",
+            "xp": 140,
+            "gold": 12,
+            "data": {
+                "deskripsi": "Memahami konsep arus, tegangan, hambatan, serta rangkaian seri dan paralel dalam listrik arus searah.",
+                "video": [
+                { "title": "Arus Listrik dan Beda Potensial", "duration": "03:30", "isDone": false },
+                { "title": "Hukum Ohm", "duration": "04:50", "isDone": false },
+                { "title": "Rangkaian Seri dan Paralel", "duration": "08:10", "isDone": false },
+                { "title": "Energi dan Daya Listrik", "duration": "06:00", "isDone": false },
+                { "title": "Kuis 1 Listrik Dinamis", "duration": "15:00", "isDone": false }
+                ]
+            }
+            },
+            {
+            "img": "https://via.placeholder.com/300x180/98FB98/000000?text=Magnet",
+            "title": "Medan Magnet dan Induksi Elektromagnetik",
+            "xp": 145,
+            "gold": 13,
+            "data": {
+                "deskripsi": "Selami hubungan antara listrik dan magnet melalui medan magnet dan fenomena induksi elektromagnetik.",
+                "video": [
+                { "title": "Pengenalan Medan Magnet", "duration": "03:45", "isDone": false },
+                { "title": "Gaya Lorentz", "duration": "05:20", "isDone": false },
+                { "title": "Hukum Faraday dan Lenz", "duration": "07:30", "isDone": false },
+                { "title": "Penerapan Elektromagnetik", "duration": "04:15", "isDone": false },
+                { "title": "Kuis 1 Elektromagnetik", "duration": "15:00", "isDone": false }
+                ]
+            }
+            }
+        ]
         },
         {
-            "id": 6,
-            "title": "Teks Artikel ⚡",
-            "progres": 90,
-            "ikon": "/img/ikonTeksArtikel.png",
-            "isGratis": false
+        "id": 6,
+        "title": "Sosial: Geografi - Lingkungan & Pembangunan ⚡",
+        "progres": 90,
+        "ikon": "/img/ikonGeografi.png",
+        "isGratis": false,
+        "materi": [
+            {
+            "img": "https://via.placeholder.com/300x180/FFC0CB/000000?text=Lingkungan+Hidup",
+            "title": "Dinamika Lingkungan Hidup dan Pembangunan Berkelanjutan",
+            "xp": 130,
+            "gold": 11,
+            "data": {
+                "deskripsi": "Pahami interaksi antara manusia dan lingkungan, serta pentingnya konsep pembangunan berkelanjutan untuk masa depan.",
+                "video": [
+                { "title": "Konsep Lingkungan Hidup", "duration": "03:00", "isDone": true },
+                { "title": "Isu-isu Lingkungan Global", "duration": "05:00", "isDone": true },
+                { "title": "Prinsip Pembangunan Berkelanjutan", "duration": "04:00", "isDone": true },
+                { "title": "Studi Kasus: Pengelolaan Sumber Daya Alam", "duration": "06:10", "isDone": false },
+                { "title": "Kuis 1 Lingkungan", "duration": "15:00", "isDone": false }
+                ]
+            }
+            },
+            {
+            "img": "https://via.placeholder.com/300x180/FFC0CB/000000?text=Pembangunan",
+            "title": "Geografi Pembangunan: Perkotaan dan Wilayah",
+            "xp": 120,
+            "gold": 10,
+            "data": {
+                "deskripsi": "Menjelajahi konsep pembangunan wilayah, urbanisasi, dan permasalahan kota serta solusinya.",
+                "video": [
+                { "title": "Pengantar Geografi Pembangunan", "duration": "03:15", "isDone": false },
+                { "title": "Teori Pusat Pertumbuhan", "duration": "04:40", "isDone": false },
+                { "title": "Konsep Urbanisasi dan Permasalahan Perkotaan", "duration": "06:00", "isDone": false },
+                { "title": "Solusi Pembangunan Kota Berkelanjutan", "duration": "05:30", "isDone": false },
+                { "title": "Kuis 1 Pembangunan Wilayah", "duration": "15:00", "isDone": false }
+                ]
+            }
+            }
+        ]
         },
         {
-            "id": 7,
-            "title": "Kritik Sastra dan Esai ⚡",
-            "progres": 30,
-            "ikon": "/img/ikonKritikSastra.png",
-            "isGratis": true
+        "id": 7,
+        "title": "Kimia: Stoikiometri & Redoks ⚡",
+        "progres": 30,
+        "ikon": "/img/ikonKimia.png",
+        "isGratis": true,
+        "materi": [
+            {
+            "img": "https://via.placeholder.com/300x180/DDA0DD/000000?text=Stoikiometri",
+            "title": "Konsep Mol dan Perhitungan Stoikiometri",
+            "xp": 115,
+            "gold": 9,
+            "data": {
+                "deskripsi": "Pelajari konsep dasar mol, hukum-hukum dasar kimia, dan cara melakukan perhitungan stoikiometri.",
+                "video": [
+                { "title": "Pengenalan Konsep Mol", "duration": "03:10", "isDone": true },
+                { "title": "Hukum Kekekalan Massa dan Perbandingan Tetap", "duration": "04:50", "isDone": true },
+                { "title": "Perhitungan Massa dan Volume", "duration": "06:00", "isDone": false },
+                { "title": "Pereaksi Pembatas dan Hasil Reaksi", "duration": "05:30", "isDone": false },
+                { "title": "Kuis 1 Stoikiometri", "duration": "15:00", "isDone": false }
+                ]
+            }
+            },
+            {
+            "img": "https://via.placeholder.com/300x180/DDA0DD/000000?text=Redoks",
+            "title": "Reaksi Reduksi-Oksidasi (Redoks)",
+            "xp": 120,
+            "gold": 10,
+            "data": {
+                "deskripsi": "Memahami konsep bilangan oksidasi, reaksi redoks, serta cara menyetarakan persamaan reaksi redoks.",
+                "video": [
+                { "title": "Pengertian Oksidasi dan Reduksi", "duration": "03:00", "isDone": true },
+                { "title": "Menentukan Bilangan Oksidasi", "duration": "04:20", "isDone": false },
+                { "title": "Menyetarakan Reaksi Redoks Metode Biloks", "duration": "07:15", "isDone": false },
+                { "title": "Menyetarakan Reaksi Redoks Metode Setengah Reaksi", "duration": "08:00", "isDone": false },
+                { "title": "Kuis 1 Redoks", "duration": "15:00", "isDone": false }
+                ]
+            }
+            }
+        ]
         },
         {
-            "id": 8,
-            "title": "Buku Pengayaan (Nonfiksi) dan Buku Drama (Fiksi) ⚡",
-            "progres": 60,
-            "ikon": "/img/ikonPengayaan.png",
-            "isGratis": true
-        }
-        ],
+        "id": 8,
+        "title": "Ekonomi: Akuntansi & Kewirausahaan ⚡",
+        "progres": 60,
+        "ikon": "/img/ikonEkonomi.png",
+        "isGratis": true,
+        "materi": [
+            {
+            "img": "https://via.placeholder.com/300x180/AFEEEE/000000?text=Akuntansi+Dasar",
+            "title": "Siklus Akuntansi Perusahaan Jasa",
+            "xp": 105,
+            "gold": 8,
+            "data": {
+                "deskripsi": "Pahami tahapan lengkap siklus akuntansi pada perusahaan jasa, mulai dari transaksi hingga laporan keuangan.",
+                "video": [
+                { "title": "Pengantar Akuntansi dan Persamaan Dasar", "duration": "02:30", "isDone": true },
+                { "title": "Jurnal Umum dan Buku Besar", "duration": "04:10", "isDone": true },
+                { "title": "Neraca Saldo dan Jurnal Penyesuaian", "duration": "03:50", "isDone": true },
+                { "title": "Neraca Lajur dan Laporan Keuangan", "duration": "05:00", "isDone": false },
+                { "title": "Kuis 1 Akuntansi Jasa", "duration": "15:00", "isDone": false }
+                ]
+            }
+            },
+            {
+            "img": "https://via.placeholder.com/300x180/AFEEEE/000000?text=Kewirausahaan",
+            "title": "Konsep Dasar dan Karakteristik Kewirausahaan",
+            "xp": 95,
+            "gold": 7,
+            "data": {
+                "deskripsi": "Jelajahi dunia wirausaha, pelajari konsep dasarnya, dan karakteristik yang harus dimiliki seorang wirausahawan.",
+                "video": [
+                { "title": "Apa Itu Kewirausahaan?", "duration": "02:00", "isDone": false },
+                { "title": "Karakteristik Wirausahawan Sukses", "duration": "03:30", "isDone": false },
+                { "title": "Ide Bisnis dan Peluang Usaha", "duration": "04:10", "isDone": false },
+                { "title": "Perencanaan Usaha Sederhana", "duration": "03:50", "isDone": false },
+                { "title": "Kuis 1 Kewirausahaan", "duration": "15:00", "isDone": false }
+                ]
+            }
+            }
+        ]
+        }],
         "title":"Bahasa Indonesia",
         "tema": "indoRed",
         "ikon": "/img/indonesia.png" 
