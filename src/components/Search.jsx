@@ -23,7 +23,7 @@ const Search = ({searchTerm, setSearchTerm, children}) => {
                 />
                 
             </div>
-            <div className="ps-2 flex sm:items-center flex-col sm:flex-row items-start gap-2 sm:gap-0">
+            <div className="ps-2 flex sm:items-center flex-row flex-wrap items-center gap-2 sm:gap-0">
                 <div className="me-4 w-fit ps-1"> Pilih kelas : </div>
                 {elements[0]}
             </div>

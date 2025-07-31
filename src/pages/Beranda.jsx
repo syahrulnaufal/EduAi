@@ -10,6 +10,7 @@ import FiturUnggulan from "../components/FiturUnggulan";
 import Select from 'react-select';
 import { NavLink } from "react-router";
 import FiturPopuler from "../components/FiturPopuler";
+import MathCourse from "../components/MathCourse";
 
 // komponen
 const platformTerbaik = (
@@ -163,6 +164,47 @@ const pilihMateri = (
     </div>
 );
 
+const eduChilOffer = (
+    <div className="flex flex-col sm:flex-row items-center w-full px-10 sm:ps-20 sm:pe-10 justify-evenly relative overflow-hidden min-h-80 nunito-base">
+        {/* text and button*/}
+        <div className="flex flex-col max-w-150 gap-5 py-10 relative mt-15">
+            <div className="text-5xl font-semibold">
+                Edu Chil offers you a 30% discount this season
+            </div>
+            <div className="text-xl ps-1">
+                Promotion valid from May 1, 2023 - June 30, 2023
+            </div>
+            {/* explore now button  */}
+            <div className="px-8 py-2 mt-3 select-none cursor-pointer rounded-xl bg-indigo-400 hover:bg-indigo-600 active:bg-indigo-500 text-white text-2xl w-fit transition-colors duration-150">
+                Explore Now
+            </div>
+            {/* bee */}
+            <div className="absolute -z-1 w-15 sm:-left-15 sm:bottom-20 bottom-10 left-60">
+                <img src="./img/bee.png" alt="" />
+            </div>
+        </div>
+
+        {/* foto */}
+        <div className="w-50 h-80 relative">
+            <div className="w-120 absolute -bottom-40 sm:-bottom-50 -left-30">
+                <img src="./img/littlegirlwithglasses.png" alt="littlegirlwithglasses" />
+            </div>
+        </div>
+
+        {/* background png s*/}
+        <div className="absolute -z-1 w-10 sm:bottom-10 bottom-50 sm:left-10 left-10">
+            <img src="./img/spiral-left.png" alt="" />
+        </div>
+        <div className="absolute -z-1 w-10 sm:bottom-10 sm:right-100 lg:right-150 bottom-70 right-15" >
+            <img src="./img/spiral-right.png" alt="" />
+        </div>
+        <div className="absolute -z-1 top-0 right-0 w-30">
+            <img src="./img/flags.png" alt="" />
+        </div>
+
+    </div>
+);
+
 // main
 function Beranda(){
     // Sidebar 
@@ -221,8 +263,10 @@ function Beranda(){
     // html
     return(
         <div className="bg-linear-180 from-white to-my-bg flex flex-col items-center w-screen box-border relative">
+            {/* gradient ungu atas */}
             <img src="./img/bgGradient.webp" alt="Foto background" className="absolute z-1 w-screen" />
 
+            {/* sidebar */}
             <Sidebar 
                 hideSidebar={hideSidebar} 
                 left={left} 
@@ -231,26 +275,26 @@ function Beranda(){
                 <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
             </Sidebar>    
 
+            {/* topbar */}
             <div className="z-2 w-screen">
                 <Topbar>
                     <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
                     <div></div>
                 </Topbar>
             </div>
-            
             <div className="h-20"></div>
 
+            {/* welcome text  */}
             <div className="z-2 w-screen flex flex-col items-center">
                 {platformTerbaik}
-
                 {welcomeText}
             </div>
-
             <div className="h-20"></div>
 
+            {/* search bar and dropdown */}
             <div className="z-3 flex flex-col items-center w-[80%]">
                 <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} >
-                    <div className="w-65">
+                    <div className="w-60">
                         <Select
                             options={dropDownlist}
                             value={selectedDropdown}
@@ -260,37 +304,93 @@ function Beranda(){
                     </div>
                 </Search>
             </div>
-
             <div className="h-20"></div>
 
+            {/* wajah-wajah */}
             <div className="z-2 w-screen">
                 {wajahWajah}
             </div>
-
             <div className="h-20"></div>
 
+            {/* text "ruang belajar"  */}
             <div className="z-2 w-screen flex flex-col items-center">
                 {ruangBelajarText}
             </div>
-
             <div className="h-20"></div>
 
+            {/* pilih materi */}
             <div className="z-2 w-screen flex flex-col items-center">
                 {pilihMateri}
             </div>
-        
             <div className="h-10"></div>
 
+            {/* fitur unggulan */}
             <div className="z-2 w-screen flex flex-col items-center">
                 <FiturUnggulan />
             </div>
-
             <div className="h-20"></div>
 
+            {/* fitur populer */}
             <FiturPopuler/>
-            
+            <div className="h-20"></div>
 
-            <div className="h-30"></div>
+            {/* Edu chil offers  */}
+            <div className="z-2 w-screen flex flex-col items-center bg-radial-[at_50%_-100%] from-amber-50 to-white ">
+                {eduChilOffer}
+            </div>
+            
+            {/* math course */}
+            <div className="z-2 w-screen flex flex-col items-center bg-white py-10 pb-20">
+                <MathCourse /> 
+            </div>
+
+            {/* footer */}
+            <div className="z-2 w-screen flex flex-col items-center bg-white relative min-h-50 h-fit gap-5">
+                <img src="./img/bgFooter.webp" alt="Foto background" className="absolute z-1 bg-cover bg-center w-full h-full" />
+                {/* links  */}
+                <div className="flex flex-col lg:flex-row flex-wrap w-full z-2 text-sm gap-10 leading-8 sm:leading-10">
+                    <div className="px-5 flex-2 ">
+                        <span className="font-bold">Corporate Head Office </span>: Jl. Prof. Dr. Hamka, Tambakaji, Kec. Ngaliyan, Kota Semarang, Jawa Tengah 50185 <br /><br />
+                        <span className="font-bold">Phone</span> : <a href="https://wa.me/628973434055" target="_blank">08973434055</a> <br />
+                        <span className="font-bold">Fax</span> : <a href="tel:02222264303">02-222264303</a> <br />
+                        <span className="font-bold">Email</span> : <a href="mailto:syahrultsaqib@gmail.com">syahrultsaqib@gmail.com</a>
+                    </div>
+                    <div className="flex gap-10 flex-wrap lg:justify-between px-5 pe-10 flex-3 ">
+                        <div className="min-w-30">
+                            <span className="font-bold">Quick Links</span><br />
+                            Pricing <br />
+                            Jobs <br />
+                            Employees <br />
+                            Careers <br />
+                            Contact Us <br />
+                        </div>
+                        <div className="min-w-30">
+                            <span className="font-bold">Others</span><br />
+                            How it Works <br />
+                            Terms and Condition <br />
+                            Privacy Policy <br />
+                            About Us <br />
+                        </div>
+                        <div className="min-w-30">
+                            <span className="font-bold">About Us</span><br />
+                            Company milestone <br />
+                            Web mail <br />
+                            Board of Directors <br />
+                            Senior Management <br />
+                        </div>
+                    </div>
+                </div>
+                {/* copyright and medsos  */}
+                <div className="flex justify-between text-sm px-5 py-10 pe-10 w-screen z-2 ">
+                    <div>© 2025  all right reserved</div>
+                    <div className="flex gap-2">
+                        <a href=""><img src="./img/ig.png" alt="" className="w-5" /></a>
+                        <a href=""><img src="./img/tele.png" alt="" className="w-5" /></a>
+                        <a href=""><img src="./img/tiktok.png" alt="" className="w-5" /></a>
+                        <a href=""><img src="./img/yt.png" alt="" className="w-5" /></a>
+                    </div>
+                </div>
+            </div>
 
         </div>
     );

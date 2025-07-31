@@ -1,4 +1,9 @@
-function FiturCard({img, className, description, price, student, date, discount = 0}){
+import { Children } from "react";
+
+function FiturCard({img, className, description, price, student, date, discount = 0, children}){
+    
+    const elements = Children.toArray(children);
+
     // main
     return (
     <div className="flex flex-col bg-white rounded-xl" style={{boxShadow: '0px 10px 60px 0px rgba(38, 45, 118, 0.08)'}}>
@@ -41,10 +46,12 @@ function FiturCard({img, className, description, price, student, date, discount 
                 {/* harga diskon, harga asli, button */}
                 <div className="flex justify-between mt-5 items-center">
                     <div className=" flex gap-2 items-center flex-col sm:flex-row">
-                        <div className="text-jingga">${price}</div>
+                        <div className="text-jingga text-xl font-semibold">${price}</div>
                         <div className="text-grey1 text-sm line-through">${price}</div>
                     </div>
+                    {elements.length <= 0 ?
                     <div className="rounded-lg cursor-pointer select-none bg-hijau text-white hover:bg-hijau/85 active:bg-hijau px-4 py-2 h-fit transition-colors duration-200">Enroll</div>
+                    : elements[0]}
                 </div>
             </div>
 

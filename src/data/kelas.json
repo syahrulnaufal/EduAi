@@ -5,7 +5,7 @@
         "id": 1,
         "title": "Matematika: Statistika & Peluang ⚡",
         "progres": 10,
-        "ikon": "/img/ikonMatematika.png",
+        "ikon": "/img/ikonSuratLamaranKerja.png",
         "isGratis": true,
         "materi": [
             {
@@ -67,7 +67,7 @@
         "id": 2,
         "title": "Bahasa Indonesia: Teks Sejarah & Novel ⚡",
         "progres": 15,
-        "ikon": "/img/ikonBahasaIndonesia.png",
+        "ikon": "/img/ikonTeksSejarah.png",
         "isGratis": true,
         "materi": [
             {
@@ -127,7 +127,7 @@
         "id": 3,
         "title": "Bahasa Indonesia: Jurnalistik & Periklanan ⚡",
         "progres": 0,
-        "ikon": "/img/ikonBahasaIndonesia2.png",
+        "ikon": "/img/ikonTeksEditorial.png",
         "isGratis": false,
         "materi": [
             {
@@ -184,7 +184,7 @@
         "id": 4,
         "title": "Seni Budaya: Musik & Tari ⚡",
         "progres": 20,
-        "ikon": "/img/ikonSeniBudaya.png",
+        "ikon": "/img/ikonNovel.png",
         "isGratis": true,
         "materi": [
             {
@@ -225,7 +225,7 @@
         "id": 5,
         "title": "IPA: Fisika - Listrik & Magnet ⚡",
         "progres": 5,
-        "ikon": "/img/ikonFisika.png",
+        "ikon": "/img/ikonTeksIklan.png",
         "isGratis": true,
         "materi": [
             {
@@ -281,7 +281,7 @@
         "id": 6,
         "title": "Sosial: Geografi - Lingkungan & Pembangunan ⚡",
         "progres": 90,
-        "ikon": "/img/ikonGeografi.png",
+        "ikon": "/img/ikonTeksArtikel.png",
         "isGratis": false,
         "materi": [
             {
@@ -322,7 +322,7 @@
         "id": 7,
         "title": "Kimia: Stoikiometri & Redoks ⚡",
         "progres": 30,
-        "ikon": "/img/ikonKimia.png",
+        "ikon": "/img/ikonKritikSastra.png",
         "isGratis": true,
         "materi": [
             {
@@ -363,7 +363,7 @@
         "id": 8,
         "title": "Ekonomi: Akuntansi & Kewirausahaan ⚡",
         "progres": 60,
-        "ikon": "/img/ikonEkonomi.png",
+        "ikon": "/img/ikonPengayaan.png",
         "isGratis": true,
         "materi": [
             {
