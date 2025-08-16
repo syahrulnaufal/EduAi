@@ -8,7 +8,9 @@ import RuangKelas from './pages/RuangKelas'
 import Tentang from './pages/Tentang'
 import BrainAcademy from './pages/BrainAcademy'
 import MateriBelajarPage from './pages/MateriBelajarPage'
+import LoginPage from './pages/LoginPage'
 import './style.css'
+import SignInPage from './pages/SignInPage'
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>
@@ -22,6 +24,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/tentang" element={<Tentang />} />
         <Route path="/brain-academy" element={<BrainAcademy />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/sign-in" element={<SignInPage />} />
       </Routes>
     </BrowserRouter>
 )

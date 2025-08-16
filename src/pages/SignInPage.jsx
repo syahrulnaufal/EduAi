@@ -1,0 +1,103 @@
+import Topbar from "../components/Topbar";
+import { useState } from "react";
+import '../style.css'; 
+import Sidebar from "../components/Sidebar";
+import BurgerMenu from "../components/BurgerMenu";
+import { NavLink } from "react-router";
+
+function SignInPage(){
+    // Sidebar 
+    const [left, setLeft] = useState('-left-70') 
+    const [bg, setBg] = useState('bg-transparent -z-10')
+    const [isSidebarHidden, setIsSidebarHidden] = useState(true)
+    const iconSize = '20px'
+    const menuButton = <svg xmlns="http://www.w3.org/2000/svg" id='menu' height={iconSize} viewBox="0 -960 960 960" width={iconSize} className="fill-my-text dark:fill-my-text-dark"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+    const closeButton = <svg xmlns="http://www.w3.org/2000/svg" id='close' height={iconSize} viewBox="0 -960 960 960" width={iconSize} className="fill-my-text dark:fill-my-text-dark"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>;
+    const [menuIcon, setMenuIcon] = useState(isSidebarHidden? menuButton : closeButton)
+    
+    // Function to hide the sidebar
+    function hideSidebar (){
+        if(isSidebarHidden){
+            setLeft('left-0')
+            setBg('bg-my-bg-dark/70 z-20')
+            setIsSidebarHidden(false)
+            setMenuIcon(closeButton)
+          }else{
+            setLeft('-left-70')
+            setIsSidebarHidden(true)
+            setBg('bg-transparent -z-10')
+            setMenuIcon(menuButton)
+        }
+    }
+
+    return(
+        <div>
+            <Sidebar 
+                className='absolute'
+                hideSidebar={hideSidebar} 
+                left={left} 
+                bg={bg}
+            >
+                <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
+            </Sidebar>
+
+            <Topbar>
+                <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
+                <div></div>
+            </Topbar>
+
+            {/* main */}
+            <div className="w-screen h-screen flex flex-col items-center justify-center " style={{background: '#D2BCE5',
+background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(206, 158, 247, 1) 100%)'}}>
+
+                {/* box putih utama */}
+                <div className="w-100 h-fit rounded-2xl flex flex-col bg-white" style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'}}>
+                    
+                    {/* text ungu */}
+                    <div className="w-full text-center py-4 bg-[#5852AB] rounded-t-2xl font-bold text-2xl text-white">Daftar Akun Baru</div>
+                    
+                    <div className="flex flex-col p-6 px-8 gap-4">
+
+                        {/* nama, email dan passsword */}
+                        <div className="flex gap-2 border border-gray-400 rounded-sm">
+                            <img src="/img/username.png" alt="nama" className="w-10"/>
+                            <input type="text" placeholder="Nama Lengkap" className=" p-2 w-full focus:outline-none" />
+                        </div>
+                        <div className="flex gap-2 border border-gray-400 rounded-sm">
+                            <img src="/img/email.png" alt="email" className="w-10 p-2"/>
+                            <input type="email" placeholder="Email" className=" p-2 w-full focus:outline-none" />
+                        </div>
+                        <div className="flex gap-2 border border-gray-400 rounded-sm">
+                            <img src="/img/password.png" alt="kata sandi" className="w-10 p-2 "/>
+                            <input type="password" placeholder="Kata Sandi" className=" p-2 w-full focus:outline-none " />
+                        </div>
+                        
+                        {/* green button */}
+                        <div className="p-2 mt-2 text-xl font-semibold text-center rounded-sm text-white bg-[#00AF34] hover:bg-[#2ca450] active:bg-[#03942e] tracking-normal cursor-pointer transition-colors duration-150">Daftar</div>
+
+                        {/* text atau */}
+                        <div className="flex items-center justify-center w-full relative">
+                            <div className=" bg-gray-400 h-[1px] w-full"></div>
+                            <div className="absolute bg-white px-1 text-gray-500">atau</div>
+                        </div>
+
+                        {/* daftar dengan google */}
+                        <div className="w-full border border-gray-400 rounded-sm relative text-center p-2 mb-4 cursor-pointer hover:bg-gray-50">
+                            <img src="/img/google.png" alt="Daftar dengan Google" className="w-8 ps-2 absolute" />
+                            Daftar dengan Google
+                        </div>
+
+                        <div className="text-sm">Sudah punya akun? <span className="text-[#1C58B4] hover:text-[#3f6bad] cursor-pointer">
+                            <NavLink to="/login">Masuk</NavLink>
+                        </span></div>
+
+                    </div>
+                </div>
+                
+                <div className="h-20"></div>
+            </div>
+        </div>
+    );
+}
+
+export default SignInPage;

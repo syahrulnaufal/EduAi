@@ -11,6 +11,7 @@ import Select from 'react-select';
 import { NavLink } from "react-router";
 import FiturPopuler from "../components/FiturPopuler";
 import MathCourse from "../components/MathCourse";
+import LoginButton from "../components/LoginButton";
 
 // komponen
 const platformTerbaik = (
@@ -279,7 +280,7 @@ function Beranda(){
             <div className="z-2 w-screen">
                 <Topbar>
                     <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
-                    <div></div>
+                    <LoginButton onLogin={() => alert("Login button clicked!")} onSubscribe={() => alert("Subscribe button clicked!")}/>    
                 </Topbar>
             </div>
             <div className="h-20"></div>
