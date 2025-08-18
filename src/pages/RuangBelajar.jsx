@@ -25,7 +25,7 @@ const listMateri = [
         id: 2,
         label: 'IPA Terpadu',
         ikon: '/img/ipa.png',
-        link: 'indo'
+        link: 'fisika'
     }, {
         id: 3,
         label: 'Matematika',
@@ -48,14 +48,14 @@ const listMateri = [
         link: 'indo'
     }, {
         id: 7,
-        label: 'Bahasa Indonesia',
-        ikon: '/img/ikonKelasBahasaIndo.png',
-        link: 'indo'
+        label: 'Kimia',
+        ikon: '/img/kimia.png',
+        link: 'kimia'
     }, {
         id: 8,
-        label: 'IPA Terpadu',
-        ikon: '/img/ipa.png',
-        link: 'indo'
+        label: 'B. Inggris',
+        ikon: '/img/inggris.png',
+        link: 'inggris'
     }, {
         id: 9,
         label: 'Matematika',
@@ -85,7 +85,7 @@ const listMateri = [
         id: 14,
         label: 'IPA Terpadu',
         ikon: '/img/ipa.png',
-        link: 'indo'
+        link: 'fisika'
     }, {
         id: 15,
         label: 'Matematika',

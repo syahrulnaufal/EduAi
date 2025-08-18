@@ -56,16 +56,28 @@ function RuangMateri({}){
         });
     const listTema = {
         mtk : {
-            bg : "bg-blue-400",
-            hoverBorder: "hover:border-blue-400",
+            bg : `bg-[#56C2E2]`,
+            hoverBorder: `hover:border-[#56C2E2]`,
         },
         indo : {
             bg : "bg-indoRed",
             hoverBorder: "hover:border-indoRed",
         },
-        green : {
-            bg : "bg-green-400",
-            hoverBorder: "hover:border-green-400",
+        fisika : {
+            bg : "bg-[#FE5585]",
+            hoverBorder: "hover:border-[#FE5585]",
+        },
+        biologi : {
+            bg : "bg-[#94C630]",
+            hoverBorder: "hover:border-[#94C630]",
+        },
+        kimia : {
+            bg : "bg-[#F79C22]",
+            hoverBorder: "hover:border-[#F79C22]",
+        },
+        inggris : {
+            bg : "bg-[#A974E5]",
+            hoverBorder: "hover:border-[#A974E5]",
         },
     };
     useEffect(()=>{

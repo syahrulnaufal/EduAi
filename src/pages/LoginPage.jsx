@@ -51,7 +51,7 @@ function LoginPage(){
 background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(206, 158, 247, 1) 100%)'}}>
 
                 {/* box putih utama */}
-                <div className="w-100 h-fit rounded-2xl flex flex-col bg-white" style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'}}>
+                <div className="max-w-100 h-fit rounded-2xl flex flex-col bg-white" style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'}}>
                     
                     {/* text ungu */}
                     <div className="w-full text-center py-4 bg-[#5852AB] rounded-t-2xl font-bold text-2xl text-white">Daftar Akun Baru</div>
