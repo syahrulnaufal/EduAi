@@ -56,57 +56,7 @@ const listMateri = [
         label: 'B. Inggris',
         ikon: '/img/inggris.png',
         link: 'inggris'
-    }, {
-        id: 9,
-        label: 'Matematika',
-        ikon: '/img/mtk.png',
-        link: 'mtk'
-    }, {
-        id: 10,
-        label: 'IPS Terpadu',
-        ikon: '/img/ips.png',
-        link: 'indo'
-    }, {
-        id: 11,
-        label: 'Ruang Ngaji',
-        ikon: '/img/ikonMengaji.png',
-        link: 'indo'
-    }, {
-        id: 12,
-        label: 'Tentang Edu AI',
-        ikon: '/img/ikonUser.png',
-        link: 'indo'
-    }, {
-        id: 13,
-        label: 'Bahasa Indonesia',
-        ikon: '/img/ikonKelasBahasaIndo.png',
-        link: 'indo'
-    }, {
-        id: 14,
-        label: 'IPA Terpadu',
-        ikon: '/img/ipa.png',
-        link: 'fisika'
-    }, {
-        id: 15,
-        label: 'Matematika',
-        ikon: '/img/mtk.png',
-        link: 'mtk'
-    }, {
-        id: 16,
-        label: 'IPS Terpadu',
-        ikon: '/img/ips.png',
-        link: 'indo'
-    }, {
-        id: 17,
-        label: 'Ruang Ngaji',
-        ikon: '/img/ikonMengaji.png',
-        link: 'indo'
-    }, {
-        id: 18,
-        label: 'Tentang Edu AI',
-        ikon: '/img/ikonUser.png',
-        link: 'indo'
-    },
+    }, 
 ].map((materi, index) => ({ ...materi, id: index + 1 }));
 
 function RuangBelajar() {

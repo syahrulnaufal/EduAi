@@ -1,4 +1,5 @@
 import FiturCard from "./FiturCard";
+import { NavLink } from "react-router";
 
 const listSemuaKelas = [
     {
@@ -61,21 +62,23 @@ function MathCourse () {
             {/* Cards */}
             <div className="w-screen flex justify-center">
                 <div className="max-w-[90vw] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                    {listSemuaKelas.map((kelas) => 
-                        <FiturCard 
-                            key={kelas.id}
-                            img={kelas.gambar}
-                            className={kelas.namaKelas}
-                            description={kelas.kelasDeskripsi}
-                            student={kelas.jumlahSiswa}
-                            date={kelas.tanggal}
-                            price={kelas.harga}
-                            discount={kelas.diskon}
-                        >
-                            <div className="rounded-xl p-2 bg-amber-100 hover:bg-amber-200 active:bg-amber-50 cursor-pointer transition-colors duration-200 flex items-center justify-center">
-                                <img src="./img/shopping-cart.svg" alt="cart" className="w-7" />
-                            </div>
-                        </FiturCard>
+                    {listSemuaKelas.map((kelas) =>
+                        <NavLink to={`/math-course/${kelas.id}`} className="cursor-pointer">
+                            <FiturCard
+                                key={kelas.id}
+                                img={kelas.gambar}
+                                className={kelas.namaKelas}
+                                description={kelas.kelasDeskripsi}
+                                student={kelas.jumlahSiswa}
+                                date={kelas.tanggal}
+                                price={kelas.harga}
+                                discount={kelas.diskon}
+                            >
+                                <div className="rounded-xl p-2 bg-amber-100 hover:bg-amber-200 active:bg-amber-50 cursor-pointer transition-colors duration-200 flex items-center justify-center">
+                                    <img src="./img/shopping-cart.svg" alt="cart" className="w-7" />
+                                </div>
+                            </FiturCard>
+                        </NavLink>
                     )}
                 </div>
             </div>

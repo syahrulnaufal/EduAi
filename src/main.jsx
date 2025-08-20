@@ -11,6 +11,7 @@ import MateriBelajarPage from './pages/MateriBelajarPage'
 import LoginPage from './pages/LoginPage'
 import './style.css'
 import SignInPage from './pages/SignInPage'
+import MathCoursePage from './pages/MathCoursePage'
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/brain-academy" element={<BrainAcademy />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/math-course/:id" element={<MathCoursePage />} />
       </Routes>
     </BrowserRouter>
 )
