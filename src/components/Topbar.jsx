@@ -34,7 +34,7 @@ function Topbar({children}) {
                     <div className='hover:text-primary dark:hover:text-primary-dark'>ChatBot</div>
                 </NavLink>
                 <NavLink to='/tentang'>
-                    <div className='hover:text-primary dark:hover:text-primary-dark'>Tentang</div>
+                    <div className='hover:text-primary dark:hover:text-primary-dark'>Profile</div>
                 </NavLink>
             </div>      
 

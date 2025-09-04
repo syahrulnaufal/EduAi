@@ -37,6 +37,60 @@ function RuangKelas(){
         return date;
     });
 
+    // materi yang tersedia
+    const materi = [
+        {
+            title : "Kimia",
+            description : "UM Master: Kimia: Latihan Soal Kimia", // <-- Sudah sesuai
+            isOnline : true,
+            startTime : "07.45",
+            endTime : "09.45",
+            tutor : "Kak Triana",
+            tanggal : "Senin, 20 Maret 2023",
+            img : '/img/bgMateriKimia.png',
+        },
+        {
+            title : "IPA",
+            description : "UM Master: IPA: Latihan Soal Campuran", // Diperbaiki dari "Tes Potensi Akademik"
+            isOnline : true,
+            startTime : "11.15",
+            endTime : "13.15",
+            tutor : "Kak Uswa",
+            tanggal : "Senin, 20 Maret 2023",
+            img : '/img/bgMateriIPA.png',
+        },
+        {
+            title : "IPS",
+            description : "UM Master: IPS: Latihan Soal Sejarah dan Geografi", // Diperbaiki dari "Bahasa Indonesia"
+            isOnline : true,
+            startTime : "07.45",
+            endTime : "09.45",
+            tutor : "Kak Triana",
+            tanggal : "Senin, 20 Maret 2023",
+            img : '/img/bgMateriIPS.png',
+        },
+        {
+            title : "Bahasa Inggris",
+            description : "Kelas Kedinasan: Bahasa Inggris: Reading Comprehension (Pendalaman Materi)", // Diperbaiki dari "TIU-N: Pemodelan Matematika"
+            isOnline : true,
+            startTime : "09.15",
+            endTime : "10.45",
+            tutor : "TA P",
+            tanggal : "Senin, 20 Maret 2023",
+            img : '/img/bgMateriInggris.png',
+        },
+        {
+            title : "Bahasa Indonesia",
+            description : "UM Master: Bahasa Indonesia: Latihan Soal Pengetahuan dan Pemahaman Umum 3", // Diperbaiki dari "Tes Potensi Skolastik"
+            isOnline : true,
+            startTime : "11.35",
+            endTime : "13.15",
+            tutor : "Kak Ambar",
+            tanggal : "Senin, 20 Maret 2023",
+            img : '/img/bgMateriIndo.png',
+        },
+    ];
+
     return(
         <div className="w-screen">
             <Sidebar 
@@ -95,8 +149,28 @@ function RuangKelas(){
                         </div>
                     </div>
 
-                    <div className="mt-10">
-                        
+                    <div className="mt-20 pe-10 grid grid-cols-3 gap-6 mb-10">
+                        {materi.map((materi) => (
+                            <div key={materi.title} className="mb-4 w-80 h-auto rounded-2xl bg-white" style={{boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px'}}>
+                                <img src={materi.img} alt="" className="w-full h-30"/>
+                                <div className="flex gap-2 p-2">
+                                    <div className="bg-[#F3E4F6] border border-[#B14EC6] p-0.5 flex text-[#B14EC6] px-2 rounded-lg text-sm">
+                                        <span className="me-1">
+                                            <img src="/img/isOnline.svg" alt="" className="h-full"/>
+                                        </span>
+                                        {materi.isOnline ? 'Online' : 'Offline'}
+                                    </div> 
+                                </div>
+                                <div className="ps-4 pb-1 text-sm text-gray-500 font-semibold">Regular Class</div>
+                                <div className="ps-4 pb-1 text-lg font-bold">{materi.description}</div>
+                                <div className="ps-4 text-sm text-gray-600 flex"><img src="/img/calendar.svg" alt="" className="pe-2" />{materi.tanggal}</div>
+                                <div className="ps-4 text-sm text-gray-600 flex"><img src="/img/clock.svg" alt="" className="pe-2" />{materi.startTime} - {materi.endTime}</div>
+                                <div className="ps-4 text-sm text-gray-600 flex"><img src="/img/teacher.svg" alt="" className="pe-2" />{materi.tutor}</div>
+                                <div className="p-4">
+                                    <div className="w-full py-2 border-gray-300 border-[1.5px] rounded-full text-center font-semibold hover:bg-gray-100 transition-colors duration-150 cursor-pointer">Lihat detail</div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
 
                     
