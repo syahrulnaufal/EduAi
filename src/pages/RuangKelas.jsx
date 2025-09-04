@@ -30,8 +30,15 @@ function RuangKelas(){
         }
     }
 
+    const today = new Date();
+    const dates = Array.from({ length: 15 }).map((_, index) => {
+        const date = new Date(today);
+        date.setDate(today.getDate() + index);
+        return date;
+    });
+
     return(
-        <div>
+        <div className="w-screen">
             <Sidebar 
                 className='absolute'
                 hideSidebar={hideSidebar} 
@@ -45,7 +52,57 @@ function RuangKelas(){
                 <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
                 <div></div>
             </Topbar>
-            <h1>Ruang Kelas</h1>
+
+            <div className="w-full  min-h-screen bg-[#F1F2F9] flex ">
+                
+                {/* aside */}
+                <div className="w-60 shrink-0 p-4 flex flex-col gap-3">
+                    <div className="flex gap-3 items-center cursor-pointer ">
+                        <img src="/img/ruangKelas.png" alt="" className="w-8 h-9 pb-1"/>
+                        <div className="p-3 w-full hover:bg-[#44aeb8] hover:text-white duration-150 transition-colors rounded-lg">Kelas</div>
+                    </div>
+                    <div className="flex gap-3 items-center cursor-pointer ">
+                        <img src="/img/chat.png" alt="" className="w-8 h-9 pb-1"/>
+                        <div className="p-3 w-full hover:bg-[#44aeb8] hover:text-white duration-150 transition-colors rounded-lg">Sesi Tutor</div>
+                    </div>
+                    <div className="flex gap-3 items-center cursor-pointer ">
+                        <img src="/img/materi.png" alt="" className="w-8 h-9 pb-1"/>
+                        <div className="p-3 w-full hover:bg-[#44aeb8] hover:text-white duration-150 transition-colors rounded-lg">Materi</div>
+                    </div>
+                    <div className="flex gap-3 items-center cursor-pointer ">
+                        <img src="/img/videoBelajar.png" alt="" className="w-8 h-9 pb-1"/>
+                        <div className="p-3 w-full hover:bg-[#44aeb8] hover:text-white duration-150 transition-colors rounded-lg">Video Belajar</div>
+                    </div>
+                </div>
+
+                {/* main */}
+                <div className="flex-1 min-w-0" >
+                    
+                    {/* sesi tersedia */}
+                    <div className="w-full bg-white h-10 flex items-center ps-2"><span className="h-full px-2 border-b-3 flex items-center border-[#13939E] font-semibold">Sesi Tersedia</span></div>
+
+                    {/* tanggal */}
+                    <div className="flex-1 h-10 mt-5">
+                        <div className="w-full overflow-x-scroll">
+                            <div className="w-fit flex gap-2">
+                                {dates.map((date, index) => (
+                                    <div key={index} className={`${index >= 5 ? 'cursor-not-allowed' : 'cursor-pointer hover:border-[#2196F3] hover:bg-[#d9ebfa]'} w-25 h-15 bg-white flex flex-col items-center justify-center text-center rounded-lg border border-white`}>
+                                        <div className={`${index >= 5 ? 'text-gray-300' : 'text-black'} font-semibold`}>{date.toLocaleDateString('id-ID', { weekday: 'long'})} </div>
+                                        <div className={`text-sm ${index >= 5 ? 'text-gray-300' : 'text-gray-500'}`}>{date.toLocaleDateString('id-ID', { month: 'short', day: 'numeric'})} </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-10">
+                        
+                    </div>
+
+                    
+                </div>
+
+            </div>
         </div>
     );
 }

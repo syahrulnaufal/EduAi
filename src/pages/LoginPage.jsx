@@ -14,7 +14,15 @@ function LoginPage(){
     const menuButton = <svg xmlns="http://www.w3.org/2000/svg" id='menu' height={iconSize} viewBox="0 -960 960 960" width={iconSize} className="fill-my-text dark:fill-my-text-dark"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
     const closeButton = <svg xmlns="http://www.w3.org/2000/svg" id='close' height={iconSize} viewBox="0 -960 960 960" width={iconSize} className="fill-my-text dark:fill-my-text-dark"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>;
     const [menuIcon, setMenuIcon] = useState(isSidebarHidden? menuButton : closeButton)
+
+    //password
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     
+    // function to hide unhide input password
+    function togglePasswordVisibility() {
+        setIsPasswordVisible(!isPasswordVisible);
+    }
+
     // Function to hide the sidebar
     function hideSidebar (){
         if(isSidebarHidden){
@@ -47,8 +55,7 @@ function LoginPage(){
             </Topbar>
 
             {/* main */}
-            <div className="w-screen h-screen flex flex-col items-center justify-center " style={{background: '#D2BCE5',
-background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(206, 158, 247, 1) 100%)'}}>
+            <div className="w-screen h-screen flex flex-col items-center justify-center " style={{background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(206, 158, 247, 1) 100%)'}}>
 
                 {/* box putih utama */}
                 <div className="max-w-100 h-fit rounded-2xl flex flex-col bg-white" style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'}}>
@@ -65,7 +72,10 @@ background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 25
                         </div>
                         <div className="flex gap-2 border border-gray-400 rounded-sm relative">
                             <img src="/img/password.png" alt="kata sandi" className="w-10 p-2 "/>
-                            <input type="password" placeholder="Kata Sandi" className=" p-2 w-full focus:outline-none " />
+                            <input type={isPasswordVisible? 'text' : 'password'} placeholder="Kata Sandi" id="password" className=" p-2 w-full focus:outline-none " />
+                            <div className="w-fit h-full flex items-center justify-center pe-2">
+                                <img src={isPasswordVisible ? "/img/show.png" : "/img/hide.png"} onClick={togglePasswordVisibility} className="w-8 h-7"/>
+                            </div>
                         </div>
                         <div className="text-end leading-0.5 mb-1 text-[#1C58B4] cursor-pointer hover:text-[#3f6bad] text-sm">
                            <span onClick={()=>{alert("Makanya Password jangan sampe Lupa !!")}}><NavLink>lupa password?</NavLink></span>
