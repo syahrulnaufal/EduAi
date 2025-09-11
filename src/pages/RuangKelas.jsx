@@ -31,65 +31,209 @@ function RuangKelas(){
     }
 
     const today = new Date();
-    const dates = Array.from({ length: 15 }).map((_, index) => {
+    const tanggal = Array.from({ length: 15 }).map((_, index) => {
         const date = new Date(today);
         date.setDate(today.getDate() + index);
-        return date;
+        const hari = {
+            date: date,
+            isSelected: date.getDate() === today.getDate() ? true : false,
+        }
+        return hari;
     });
+    
+    const [dates, setDates] = useState(tanggal);
+
+    function selectDate(clickedIndex){
+        if (clickedIndex >= 5) {
+            return; 
+        }
+
+        const newDates = dates.map((date, index) => ({
+            ...date,
+            isSelected: index === clickedIndex,
+        }));
+    
+        setDates(newDates);
+        gantiMateri(clickedIndex);
+    }
 
     // materi yang tersedia
-    const materi = [
-        {
-            title : "Kimia",
-            description : "UM Master: Kimia: Latihan Soal Kimia", // <-- Sudah sesuai
-            isOnline : true,
-            startTime : "07.45",
-            endTime : "09.45",
-            tutor : "Kak Triana",
-            tanggal : "Senin, 20 Maret 2023",
-            img : '/img/bgMateriKimia.png',
-        },
-        {
-            title : "IPA",
-            description : "UM Master: IPA: Latihan Soal Campuran", // Diperbaiki dari "Tes Potensi Akademik"
-            isOnline : true,
-            startTime : "11.15",
-            endTime : "13.15",
-            tutor : "Kak Uswa",
-            tanggal : "Senin, 20 Maret 2023",
-            img : '/img/bgMateriIPA.png',
-        },
-        {
-            title : "IPS",
-            description : "UM Master: IPS: Latihan Soal Sejarah dan Geografi", // Diperbaiki dari "Bahasa Indonesia"
-            isOnline : true,
-            startTime : "07.45",
-            endTime : "09.45",
-            tutor : "Kak Triana",
-            tanggal : "Senin, 20 Maret 2023",
-            img : '/img/bgMateriIPS.png',
-        },
-        {
-            title : "Bahasa Inggris",
-            description : "Kelas Kedinasan: Bahasa Inggris: Reading Comprehension (Pendalaman Materi)", // Diperbaiki dari "TIU-N: Pemodelan Matematika"
-            isOnline : true,
-            startTime : "09.15",
-            endTime : "10.45",
-            tutor : "TA P",
-            tanggal : "Senin, 20 Maret 2023",
-            img : '/img/bgMateriInggris.png',
-        },
-        {
-            title : "Bahasa Indonesia",
-            description : "UM Master: Bahasa Indonesia: Latihan Soal Pengetahuan dan Pemahaman Umum 3", // Diperbaiki dari "Tes Potensi Skolastik"
-            isOnline : true,
-            startTime : "11.35",
-            endTime : "13.15",
-            tutor : "Kak Ambar",
-            tanggal : "Senin, 20 Maret 2023",
-            img : '/img/bgMateriIndo.png',
-        },
-    ];
+    const allMateri = [
+    // Array 1 (Data Asli)
+    [{
+        title: "Kimia",
+        description: "UM Master: Kimia: Latihan Soal Kimia",
+        isOnline: true,
+        startTime: "07.45",
+        endTime: "09.45",
+        tutor: "Kak Triana",
+        tanggal: "Senin, 20 Maret 2023",
+        img: '/img/bgMateriKimia.png',
+    }, {
+        title: "IPA",
+        description: "UM Master: IPA: Latihan Soal Campuran",
+        isOnline: true,
+        startTime: "11.15",
+        endTime: "13.15",
+        tutor: "Kak Uswa",
+        tanggal: "Senin, 20 Maret 2023",
+        img: '/img/bgMateriIPA.png',
+    }, {
+        title: "IPS",
+        description: "UM Master: IPS: Latihan Soal Sejarah dan Geografi",
+        isOnline: true,
+        startTime: "07.45",
+        endTime: "09.45",
+        tutor: "Kak Triana",
+        tanggal: "Senin, 20 Maret 2023",
+        img: '/img/bgMateriIPS.png',
+    }, {
+        title: "Bahasa Inggris",
+        description: "Kelas Kedinasan: Bahasa Inggris: Reading Comprehension",
+        isOnline: true,
+        startTime: "09.15",
+        endTime: "10.45",
+        tutor: "TA P",
+        tanggal: "Senin, 20 Maret 2023",
+        img: '/img/bgMateriInggris.png',
+    }, {
+        title: "Bahasa Indonesia",
+        description: "UM Master: Bahasa Indonesia: Latihan Soal Pengetahuan Umum",
+        isOnline: true,
+        startTime: "11.35",
+        endTime: "13.15",
+        tutor: "Kak Ambar",
+        tanggal: "Senin, 20 Maret 2023",
+        img: '/img/bgMateriIndo.png',
+    }, ],
+
+    // Array 2
+    [{
+        title: "Bahasa Inggris",
+        description: "TOEFL Prep: Structure and Written Expression",
+        isOnline: true,
+        startTime: "08.00",
+        endTime: "10.00",
+        tutor: "TA P",
+        tanggal: "Selasa, 21 Maret 2023",
+        img: '/img/bgMateriInggris.png',
+    }, {
+        title: "IPA",
+        description: "Pendalaman Materi: Rangka Manusia",
+        isOnline: true,
+        startTime: "10.30",
+        endTime: "12.30",
+        tutor: "Kak Uswa",
+        tanggal: "Selasa, 21 Maret 2023",
+        img: '/img/bgMateriIPA.png',
+    }, {
+        title: "Kimia",
+        description: "Kelas Kedinasan: Stoikiometri Lanjutan",
+        isOnline: true,
+        startTime: "13.00",
+        endTime: "15.00",
+        tutor: "Kak Triana",
+        tanggal: "Selasa, 21 Maret 2023",
+        img: '/img/bgMateriKimia.png',
+    }, ],
+
+    // Array 3
+    [{
+        title: "Bahasa Indonesia",
+        description: "UM Master: Majas dan Peribahasa",
+        isOnline: true,
+        startTime: "09.00",
+        endTime: "11.00",
+        tutor: "Kak Ambar",
+        tanggal: "Rabu, 22 Maret 2023",
+        img: '/img/bgMateriIndo.png',
+    }, {
+        title: "IPS",
+        description: "Pendalaman Materi: Sejarah Kerajaan Majapahit",
+        isOnline: false,
+        startTime: "11.00",
+        endTime: "13.00",
+        tutor: "Kak Triana",
+        tanggal: "Rabu, 22 Maret 2023",
+        img: '/img/bgMateriIPS.png',
+    }, {
+        title: "IPA",
+        description: "Latihan Soal Fisika: Gerak Lurus",
+        isOnline: true,
+        startTime: "14.00",
+        endTime: "16.00",
+        tutor: "Kak Uswa",
+        tanggal: "Rabu, 22 Maret 2023",
+        img: '/img/bgMateriIPA.png',
+    }, ],
+
+    // Array 4
+    [{
+        title: "Kimia",
+        description: "UM Master: Kimia: Termokimia",
+        isOnline: true,
+        startTime: "07.30",
+        endTime: "09.30",
+        tutor: "Kak Triana",
+        tanggal: "Kamis, 23 Maret 2023",
+        img: '/img/bgMateriKimia.png',
+    }, {
+        title: "Bahasa Inggris",
+        description: "Kelas Kedinasan: Vocabulary Building",
+        isOnline: true,
+        startTime: "10.00",
+        endTime: "12.00",
+        tutor: "TA P",
+        tanggal: "Kamis, 23 Maret 2023",
+        img: '/img/bgMateriInggris.png',
+    }, {
+        title: "Bahasa Indonesia",
+        description: "UM Master: Analisis Teks Berita",
+        isOnline: false,
+        startTime: "13.30",
+        endTime: "15.30",
+        tutor: "Kak Ambar",
+        tanggal: "Kamis, 23 Maret 2023",
+        img: '/img/bgMateriIndo.png',
+    }, ],
+
+    // Array 5
+    [{
+        title: "IPS",
+        description: "UM Master: IPS: Latihan Soal Geografi",
+        isOnline: true,
+        startTime: "08.15",
+        endTime: "10.15",
+        tutor: "Kak Triana",
+        tanggal: "Jumat, 24 Maret 2023",
+        img: '/img/bgMateriIPS.png',
+    }, {
+        title: "IPA",
+        description: "UM Master: IPA: Latihan Soal Ekosistem",
+        isOnline: true,
+        startTime: "11.00",
+        endTime: "13.00",
+        tutor: "Kak Uswa",
+        tanggal: "Jumat, 24 Maret 2023",
+        img: '/img/bgMateriIPA.png',
+    }, {
+        title: "Kimia",
+        description: "Praktikum Virtual: Reaksi Asam Basa",
+        isOnline: true,
+        startTime: "14.00",
+        endTime: "16.00",
+        tutor: "Kak Triana",
+        tanggal: "Jumat, 24 Maret 2023",
+        img: '/img/bgMateriKimia.png',
+    }, ],
+];
+
+    const [materi, setMateri] = useState(allMateri[0]);
+
+    // fungsi untuk mengganti materi
+    function gantiMateri(index) {
+        setMateri(allMateri[index]);
+    }
 
     return(
         <div className="w-screen">
@@ -140,34 +284,38 @@ function RuangKelas(){
                         <div className="w-full overflow-x-scroll">
                             <div className="w-fit flex gap-2">
                                 {dates.map((date, index) => (
-                                    <div key={index} className={`${index >= 5 ? 'cursor-not-allowed' : 'cursor-pointer hover:border-[#2196F3] hover:bg-[#d9ebfa]'} w-25 h-15 bg-white flex flex-col items-center justify-center text-center rounded-lg border border-white`}>
-                                        <div className={`${index >= 5 ? 'text-gray-300' : 'text-black'} font-semibold`}>{date.toLocaleDateString('id-ID', { weekday: 'long'})} </div>
-                                        <div className={`text-sm ${index >= 5 ? 'text-gray-300' : 'text-gray-500'}`}>{date.toLocaleDateString('id-ID', { month: 'short', day: 'numeric'})} </div>
+                                    <div key={index} onClick={() => selectDate(index)} className={`${index >= 5 ? 'cursor-not-allowed border-white bg-white' : date.isSelected ? 'cursor-pointer border-[#2196F3] bg-[#d9ebfa]' : 'cursor-pointer hover:border-[#2196F3] hover:bg-[#d9ebfa] bg-white border-white'} w-25 h-15 flex flex-col items-center justify-center text-center rounded-lg border `}>
+                                        <div className={`${index >= 5 ? 'text-gray-300' : 'text-black'} font-semibold`}>{date.date.toLocaleDateString('id-ID', { weekday: 'long'})} </div>
+                                        <div className={`text-sm ${index >= 5 ? 'text-gray-300' : 'text-gray-500'}`}>{date.date.toLocaleDateString('id-ID', { month: 'short', day: 'numeric'})} </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     </div>
-
-                    <div className="mt-20 pe-10 grid grid-cols-3 gap-6 mb-10">
+                    
+                    {/* kelas tersedia */}
+                    <div className="mt-20 pe-10 flex flex-wrap gap-8 mb-10 ms-10">
+                    {/* <div className="mt-20 pe-10 grid grid-cols-3 gap-6 mb-10"> */}
                         {materi.map((materi) => (
-                            <div key={materi.title} className="mb-4 w-80 h-auto rounded-2xl bg-white" style={{boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px'}}>
-                                <img src={materi.img} alt="" className="w-full h-30"/>
-                                <div className="flex gap-2 p-2">
-                                    <div className="bg-[#F3E4F6] border border-[#B14EC6] p-0.5 flex text-[#B14EC6] px-2 rounded-lg text-sm">
-                                        <span className="me-1">
-                                            <img src="/img/isOnline.svg" alt="" className="h-full"/>
-                                        </span>
-                                        {materi.isOnline ? 'Online' : 'Offline'}
-                                    </div> 
-                                </div>
-                                <div className="ps-4 pb-1 text-sm text-gray-500 font-semibold">Regular Class</div>
-                                <div className="ps-4 pb-1 text-lg font-bold">{materi.description}</div>
-                                <div className="ps-4 text-sm text-gray-600 flex"><img src="/img/calendar.svg" alt="" className="pe-2" />{materi.tanggal}</div>
-                                <div className="ps-4 text-sm text-gray-600 flex"><img src="/img/clock.svg" alt="" className="pe-2" />{materi.startTime} - {materi.endTime}</div>
-                                <div className="ps-4 text-sm text-gray-600 flex"><img src="/img/teacher.svg" alt="" className="pe-2" />{materi.tutor}</div>
-                                <div className="p-4">
-                                    <div className="w-full py-2 border-gray-300 border-[1.5px] rounded-full text-center font-semibold hover:bg-gray-100 transition-colors duration-150 cursor-pointer">Lihat detail</div>
+                            <div key={materi.title} className="flex justify-center">
+                                <div className="mb-4 w-80 h-auto rounded-2xl bg-white" style={{boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px'}}>
+                                    <img src={materi.img} alt="" className="w-full h-30"/>
+                                    <div className="flex gap-2 p-2">
+                                        <div className="bg-[#F3E4F6] border border-[#B14EC6] p-0.5 flex text-[#B14EC6] px-2 rounded-lg text-sm">
+                                            <span className="me-1">
+                                                <img src="/img/isOnline.svg" alt="" className="h-full"/>
+                                            </span>
+                                            {materi.isOnline ? 'Online' : 'Offline'}
+                                        </div> 
+                                    </div>
+                                    <div className="ps-4 pb-1 text-sm text-gray-500 font-semibold">Regular Class</div>
+                                    <div className="ps-4 pb-1 text-lg font-bold">{materi.description}</div>
+                                    <div className="ps-4 text-sm text-gray-600 flex"><img src="/img/calendar.svg" alt="" className="pe-2" />{materi.tanggal}</div>
+                                    <div className="ps-4 text-sm text-gray-600 flex"><img src="/img/clock.svg" alt="" className="pe-2" />{materi.startTime} - {materi.endTime}</div>
+                                    <div className="ps-4 text-sm text-gray-600 flex"><img src="/img/teacher.svg" alt="" className="pe-2" />{materi.tutor}</div>
+                                    <div className="p-4">
+                                        <div className="w-full py-2 border-gray-300 border-[1.5px] rounded-full text-center font-semibold hover:bg-gray-100 transition-colors duration-150 cursor-pointer">Lihat detail</div>
+                                    </div>
                                 </div>
                             </div>
                         ))}
