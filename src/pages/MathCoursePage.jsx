@@ -6,6 +6,7 @@ import Sidebar from "../components/Sidebar";
 import BurgerMenu from "../components/BurgerMenu";
 import { useParams } from "react-router";
 import dataKelas from "../components/MathCourse"
+import ThumbnailVideoMathCourse from "../components/ThumbnailVideoMathCourse";
 
 function MathCoursePage(){
     // Sidebar 
@@ -60,7 +61,15 @@ function MathCoursePage(){
                 </div>
 
                 {/* thumbnail video */}
-                <div className="w-full px-2 md:px-4 flex justify-center">
+                <ThumbnailVideoMathCourse
+                    title="Maths - for Standard 3 Students"
+                    lessons={49}
+                    completionTime="1 month"
+                    teacher="Xabi Alonso"
+                    studentsLearned="12.000+"
+                    price="100k"
+                />
+                {/* <div className="w-full px-2 md:px-4 flex justify-center">
                     <div className="w-fit bg-white rounded-lg min-h-40 p-4 flex flex-col sm:flex-row justify-center gap-8" style={{boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px'}}>
                         <div className="max-w-100 relative flex items-center justify-center sm:ms-5 ">
                             <img src="/img/videoPembelajaran.png" alt="video pembelajaran" className="rounded-lg"/>
@@ -86,7 +95,7 @@ function MathCoursePage(){
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 {/* course description */}
                 <div className="h-15"></div>

@@ -63,7 +63,7 @@ function MathCourse () {
             <div className="w-screen flex justify-center">
                 <div className="max-w-[90vw] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     {listSemuaKelas.map((kelas) =>
-                        <NavLink to={`/math-course/${kelas.id}`} className="cursor-pointer">
+                        <NavLink to={`/math-course/${kelas.id}`} key={kelas.id} className="cursor-pointer">
                             <FiturCard
                                 key={kelas.id}
                                 img={kelas.gambar}
