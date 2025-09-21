@@ -1,7 +1,6 @@
 import { Children } from "react";
-import { NavLink } from "react-router";
 
-function FiturCard({img, className, description, price, student, date, discount = 0, children, id}){
+function FiturCard({img, className, description, price, student, date, discount = 0, children}){
     
     const elements = Children.toArray(children);
 
@@ -51,7 +50,7 @@ function FiturCard({img, className, description, price, student, date, discount 
                         <div className="text-grey1 text-sm line-through">${price}</div>
                     </div>
                     {elements.length <= 0 ?
-                    <NavLink to={`/fitur/${id}`} className="rounded-lg cursor-pointer select-none bg-hijau text-white hover:bg-hijau/85 active:bg-hijau px-4 py-2 h-fit transition-colors duration-200">Enroll</NavLink>
+                    <div className="rounded-lg cursor-pointer select-none bg-hijau text-white hover:bg-hijau/85 active:bg-hijau px-4 py-2 h-fit transition-colors duration-200">Enroll</div>
                     : elements[0]}
                 </div>
             </div>

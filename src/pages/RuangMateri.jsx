@@ -4,7 +4,7 @@ import BurgerMenu from "../components/BurgerMenu";
 import { useState, useEffect } from "react";
 import { useDebounce } from "react-use";
 import { NavLink, useParams } from "react-router";
-import kelas from "../data/kelas"
+// import kelas from "../data/kelas"
 
 const Search = ({searchTerm, setSearchTerm}) => {
 
@@ -46,49 +46,66 @@ function RuangMateri({}){
     const [searchTerm, setSearchTerm] = useState('')
 
     // parameter
-    const param = useParams();
-    const id = param.kelas ;
+    // const param = useParams();
+    // const id = param.kelas ;
+    const { id } = useParams(); // dapetin id dari URL
+    console.log("ID dari URL:", id);
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        console.log("Mengirim request ke:", `http://localhost:5000/api/bab/bab-progres?id_pelajaran=${id}`);
+        fetch(`http://localhost:5000/api/bab/bab-progres?id_pelajaran=${id}`)
+        .then((res) => res.json())
+        .then((result) => {
+            console.log("HASIL FETCH API BAB:", result); // Tambahkan ini untuk cek response
+            setData(result);
+        })
+        .catch((err) => {
+            console.error("Error fetch:", err);
+        });
+    }, [id]);
+
 
     // tema
-    const [tema, setTema] = useState({
-            bg : "bg-blue-400",
-            hoverBorder: "hover:border-blue-400",
-        });
-    const listTema = {
-        mtk : {
-            bg : `bg-[#56C2E2]`,
-            hoverBorder: `hover:border-[#56C2E2]`,
-        },
-        indo : {
-            bg : "bg-indoRed",
-            hoverBorder: "hover:border-indoRed",
-        },
-        fisika : {
-            bg : "bg-[#FE5585]",
-            hoverBorder: "hover:border-[#FE5585]",
-        },
-        biologi : {
-            bg : "bg-[#94C630]",
-            hoverBorder: "hover:border-[#94C630]",
-        },
-        kimia : {
-            bg : "bg-[#F79C22]",
-            hoverBorder: "hover:border-[#F79C22]",
-        },
-        inggris : {
-            bg : "bg-[#A974E5]",
-            hoverBorder: "hover:border-[#A974E5]",
-        },
-    };
-    useEffect(()=>{
-        setTema(listTema[id])
-        console.log(listTema[id])
-    },[id])
+    // ...existing code...
+const listTema = {
+  "Matematika": {
+    bg: "bg-blue-400",
+    hoverBorder: "hover:border-blue-400",
+  },
+  "Bahasa Indonesia": {
+    bg: "bg-indoRed",
+    hoverBorder: "hover:border-indoRed",
+  },
+  "IPA Terpadu": {
+    bg: "bg-green-400",
+    hoverBorder: "hover:border-green-400",
+  },
+  // Tambahkan sesuai nama_pelajaran lain jika ada
+};
+
+// default tema awal
+const defaultTema = {
+  bg: "bg-blue-400",
+  hoverBorder: "hover:border-blue-400",
+};
+
+const [tema, setTema] = useState(defaultTema);
+
+useEffect(() => {
+  if (!data || !data.nama_pelajaran) return;
+
+  // ambil tema sesuai pelajaran, kalau tidak ada pakai default
+  const temaBaru = listTema[data.nama_pelajaran] || defaultTema;
+  setTema(temaBaru);
+}, [data]);
+
+// ...existing code...
     
     // data materi 
-    const listSubbab = kelas[id].data;
-    const ikon = kelas[id].ikon;
-    const title = kelas[id].title;
+    // const listSubbab = kelas[id].data;
+    // const ikon = kelas[id].ikon;
+    // const title = kelas[id].title;
 
     // check change of seaerch term every 500ms
     useDebounce(()=>setDebounceSearchTerm(searchTerm), 500,[searchTerm])
@@ -111,7 +128,18 @@ function RuangMateri({}){
             setMenuIcon(menuButton)
         }
     }
+    // gabungkan progres dengan bab
+  const babWithProgress = (data?.bab || []).map((b) => {
+  return {
+    ...b,
+    total_subbab: b.progres?.total || 0,
+    selesai: b.progres?.selesai || 0,
+    progres: b.progres?.persen || 0, // default 0 kalau belum ada progres
+  };
+});
 
+    // filter subbab gratis
+    
 return(
     <div className="w-screen text-sm bg-my-bg relative">
         <Sidebar 
@@ -129,10 +157,15 @@ return(
         </Topbar>
 
         {/* topbar merah */}
-        <div className={`flex sm:flex-row flex-col justify-between px-4 items-center text-white ${tema.bg}`} >
+        <div className={`flex sm:flex-row flex-col justify-between px-4 items-center text-white ${listTema[data?.nama_pelajaran]?.bg || "bg-blue-400"}`} >
             <div className="flex gap-2 items-center mt-4 sm:mt-0 w-full sm:w-fit">
-                <img src={ikon} alt="icon" className="w-10 p-0.5 rounded-lg bg-white"/>
-                <div className="pb-2 text-lg ">{title}</div>
+                <img
+                  src={data?.icon_pelajaran ? data.icon_pelajaran : "/img/default.png"}
+                  alt="icon"
+                  className="w-10 p-0.5 rounded-lg bg-white"
+                />
+                <div className="pb-2 text-lg ">{data ? data.nama_pelajaran : <span className="text-gray-400">Loading...</span>}
+                </div>
             </div>
             
             <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
@@ -152,33 +185,41 @@ return(
             <div className="max-w-full h-full w-fit sm:max-w-[80%] md:max-w-[90%] flex-col flex items-start pt-5">
                 <div className="text-lg font-semibold text-my-text mb-3 ps-2">Semua Bab</div>
                 <div className="w-full h-max grid grid-cols-1 md:grid-cols-2 gap-5">
-                    
-                    {listSubbab.map((subbab) => 
-                        <NavLink to={`/ruang-belajar/${id}/${subbab.id}`} className={'min-h-20'} key={subbab.id} >
-                            <div className={` bg-white h-full rounded-lg relative flex items-center ${subbab.isGratis ? 'pt-10' : 'pt-4'} pb-5 pe-4 border-2 border-white ${tema.hoverBorder} transition-colors duration-200 active:border-white`} 
-                            style={{boxShadow: '0px 8px 16px 0px rgba(60, 71, 103, 0.06)'}}>
-                                {subbab.isGratis ? <div className={`w-fit h-fit text-xs px-2 py-1 text-white ${tema.bg} rounded-sm rounded-tl-md top-0 absolute`}>Subbab gratis</div> : <div></div> }
-                                
-                                <img src={subbab.ikon} alt='Ikon' className="w-15 h-fit ms-5"/>
-                                <div className="flex flex-col items-start ms-4">
-                                    <div>{subbab.title}</div>
-                                    <div className="flex gap-2 items-center mt-2">
-                                        <img src="/img/ikonAdapto.png" alt="adapto" className=" w-15" />
-                                        {/* progress bar */}
-                                        <div className="w-65 h-4 rounded-full bg-grey3/30 flex items-center">
-                                            <div className={` h-full rounded-full flex items-center justify-end pe-2 ${tema.bg}`} style={{width: `${subbab.progres}%`}}>
-                                                <span className="text-xs text-white"> {subbab.progres > 10 ? subbab.progres : ''}</span>
-                                            </div>
-                                            <span className="text-xs ps-1"> {subbab.progres <= 10 ? subbab.progres : ''}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </NavLink>
-                    )}
+                {babWithProgress.length === 0 && (
+                    <div className="col-span-full text-center text-gray-400">
+                    Tidak ada bab ditemukan.
+                    </div>
+                )}
+                {babWithProgress.map((bab) => (
+                    <NavLink to={`/ruang-belajar/${id}/${bab.id_bab}`} className={'min-h-20'} key={bab.id_bab} >
+                    <div
+                        className={`bg-white h-full rounded-lg relative flex items-center ${Number(bab.harga) === 0 ? 'pt-10' : 'pt-4'} pb-5 pe-4 border-2 border-white ${tema.hoverBorder} transition-colors duration-200 active:border-white`}
+                        style={{ boxShadow: '0px 8px 16px 0px rgba(60, 71, 103, 0.06)' }}
+                    >
+                        {Number(bab.harga) === 0 ? (
+                        <div className={`w-fit h-fit text-xs px-2 py-1 text-white ${tema.bg} rounded-sm rounded-tl-md top-0 absolute`}>
+                            Subbab gratis
+                        </div>
+                        ) : null}
 
-                </div>
+        <img src={bab.icon || "/img/default.png"} alt='Ikon' className="w-15 h-fit ms-5" />
+        <div className="flex flex-col items-start ms-4">
+          <div>{bab.judul_bab}</div>
+          <div className="flex gap-2 items-center mt-2">
+            <img src="/img/ikonAdapto.png" alt="adapto" className=" w-15" />
+            {/* progress bar */}
+            <div className="w-65 h-4 rounded-full bg-grey3/30 flex items-center">
+              <div className={`h-full rounded-full flex items-center justify-end pe-2 ${tema.bg}`} style={{ width: `${bab.progres}%` }}>
+                <span className="text-xs text-white"> {bab.progres > 10 ? bab.progres : ''}</span>
+              </div>
+              <span className="text-xs ps-1"> {bab.progres <= 10 ? bab.progres : ''}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </NavLink>
+  ))}
+</div>
             </div>
         </div>
 

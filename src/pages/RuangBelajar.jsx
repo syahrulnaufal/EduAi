@@ -8,56 +8,109 @@ import BurgerMenu from "../components/BurgerMenu";
 import Search from "../components/Search";
 import Select from 'react-select';
 import { NavLink } from "react-router";
+// import React, { useEffect, useState } from 'react';
+
+
 
 // data akun user
-const user = {
-    name: 'Syahrul',
-}
+// const user = {
+//     name: 'Syahrul',
+// }
 
-// list materi belajar
-const listMateri = [
-    {
-        id: 1,
-        label: 'Bahasa Indonesia',
-        ikon: '/img/ikonKelasBahasaIndo.png',
-        link: 'indo' // link berdasarkan data di /data/kelas.json
-    }, {
-        id: 2,
-        label: 'IPA Terpadu',
-        ikon: '/img/ipa.png',
-        link: 'fisika'
-    }, {
-        id: 3,
-        label: 'Matematika',
-        ikon: '/img/mtk.png',
-        link: 'mtk'
-    }, {
-        id: 4,
-        label: 'IPS Terpadu',
-        ikon: '/img/ips.png',
-        link: 'indo'
-    }, {
-        id: 5,
-        label: 'Ruang Ngaji',
-        ikon: '/img/ikonMengaji.png',
-        link: 'indo'
-    }, {
-        id: 6,
-        label: 'Tentang Edu AI',
-        ikon: '/img/ikonUser.png',
-        link: 'indo'
-    }, {
-        id: 7,
-        label: 'Kimia',
-        ikon: '/img/kimia.png',
-        link: 'kimia'
-    }, {
-        id: 8,
-        label: 'B. Inggris',
-        ikon: '/img/inggris.png',
-        link: 'inggris'
-    }, 
-].map((materi, index) => ({ ...materi, id: index + 1 }));
+// // list materi belajar
+// const listMateri = [
+//     {
+//         id: 1,
+//         label: 'Bahasa Indonesia',
+//         ikon: '/img/ikonKelasBahasaIndo.png',
+//         link: 'indo' // link berdasarkan data di /data/kelas.json
+//     }, {
+//         id: 2,
+//         label: 'IPA Terpadu',
+//         ikon: '/img/ipa.png',
+//         link: 'indo'
+//     }, {
+//         id: 3,
+//         label: 'Matematika',
+//         ikon: '/img/mtk.png',
+//         link: 'mtk'
+//     }, {
+//         id: 4,
+//         label: 'IPS Terpadu',
+//         ikon: '/img/ips.png',
+//         link: 'indo'
+//     }, {
+//         id: 5,
+//         label: 'Ruang Ngaji',
+//         ikon: '/img/ikonMengaji.png',
+//         link: 'indo'
+//     }, {
+//         id: 6,
+//         label: 'Tentang Edu AI',
+//         ikon: '/img/ikonUser.png',
+//         link: 'indo'
+//     }, {
+//         id: 7,
+//         label: 'Bahasa Indonesia',
+//         ikon: '/img/ikonKelasBahasaIndo.png',
+//         link: 'indo'
+//     }, {
+//         id: 8,
+//         label: 'IPA Terpadu',
+//         ikon: '/img/ipa.png',
+//         link: 'indo'
+//     }, {
+//         id: 9,
+//         label: 'Matematika',
+//         ikon: '/img/mtk.png',
+//         link: 'mtk'
+//     }, {
+//         id: 10,
+//         label: 'IPS Terpadu',
+//         ikon: '/img/ips.png',
+//         link: 'indo'
+//     }, {
+//         id: 11,
+//         label: 'Ruang Ngaji',
+//         ikon: '/img/ikonMengaji.png',
+//         link: 'indo'
+//     }, {
+//         id: 12,
+//         label: 'Tentang Edu AI',
+//         ikon: '/img/ikonUser.png',
+//         link: 'indo'
+//     }, {
+//         id: 13,
+//         label: 'Bahasa Indonesia',
+//         ikon: '/img/ikonKelasBahasaIndo.png',
+//         link: 'indo'
+//     }, {
+//         id: 14,
+//         label: 'IPA Terpadu',
+//         ikon: '/img/ipa.png',
+//         link: 'indo'
+//     }, {
+//         id: 15,
+//         label: 'Matematika',
+//         ikon: '/img/mtk.png',
+//         link: 'mtk'
+//     }, {
+//         id: 16,
+//         label: 'IPS Terpadu',
+//         ikon: '/img/ips.png',
+//         link: 'indo'
+//     }, {
+//         id: 17,
+//         label: 'Ruang Ngaji',
+//         ikon: '/img/ikonMengaji.png',
+//         link: 'indo'
+//     }, {
+//         id: 18,
+//         label: 'Tentang Edu AI',
+//         ikon: '/img/ikonUser.png',
+//         link: 'indo'
+//     },
+// ].map((materi, index) => ({ ...materi, id: index + 1 }));
 
 function RuangBelajar() {
     // Sidebar 
@@ -74,34 +127,46 @@ function RuangBelajar() {
     const [searchTerm, setSearchTerm] = useState('')
 
     // dropdown 
-    const [selectedDropdown, setSelectedDropdown] = useState(null);
-    const dropDownlist = [
-        { value: 1, label: 'Kelas 1 ' },
-        { value: 2, label: 'Kelas 2 ' },
-        { value: 3, label: 'Kelas 3 ' },
-        { value: 4, label: 'Kelas 4 ' },
-        { value: 5, label: 'Kelas 5 ' },
-        { value: 6, label: 'Kelas 6 ' },
-        { value: 7, label: 'Kelas 7 ' },
-        { value: 8, label: 'Kelas 8 ' },
-        { value: 9, label: 'Kelas 9 ' },
-        { value: 10, label: 'Kelas 10 ' },
-        { value: 11, label: 'Kelas 11 ' },
-        { value: 12, label: 'Kelas 12 ' },
-        { value: 13, label: 'Kelas 10 SMK' },
-        { value: 14, label: 'Kelas 11 SMK' },
-        { value: 15, label: 'Kelas 12 SMK' },
-        { value: 16, label: 'UTBK & Ujian Mandiri' },
-        { value: 17, label: 'Mahasiswa dan Umum' },
-        { value: 18, label: 'Orang tua' },
-        { value: 19, label: 'Pelatihan Guru' },
+    const [options, setOptions] = useState([]);
+    const [selected, setSelected] = useState(null);
+  // materi state
+    const [listMateri, setListMateri] = useState([]);
+    const [user, setUser] = useState("hi");
 
-    ];
+  useEffect(() => {
+    fetch("http://localhost:5000/api/jenjang")
+      .then((res) => res.json())
+      .then((data) => {
+        const formatted = data.map((j) => ({
+          value: j.id_jenjang,
+          label: j.nama_jenjang,
+        }));
+        setOptions(formatted);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
-    // handle onChange event of the dropdown
-    const dropdown = e => {
-        setSelectedDropdown(e);
+   useEffect(() => {
+        if (selected) {
+            fetch(`http://localhost:5000/api/materi?jenjang=${selected.value}`)
+                .then(res => res.json())
+                .then(data => setListMateri(data))
+                .catch(err => setListMateri([]));
+        } else {
+            setListMateri([]);
+        }
+    }, [selected]);
+    useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    console.log("User dari localStorage:", user);
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
+  }, []);
+
+
+  // Debounce search
+    useDebounce(() => setDebounceSearchTerm(searchTerm), 500, [searchTerm]);
 
     // check change of seaerch term every 500ms
     useDebounce(() => setDebounceSearchTerm(searchTerm), 500, [searchTerm])
@@ -124,6 +189,14 @@ function RuangBelajar() {
             setMenuIcon(menuButton)
         }
     }
+    const iconMap = {
+    Matematika: "/img/mtk.png",
+    "Bahasa Indonesia": "/img/ikonKelasBahasaIndo.png",
+    IPA: "/img/ipa.png",
+    IPS: "/img/ips.png",
+    default: "/img/default.png"
+    };
+        
 
     return (
         <div className="bg-my-bg relative w-screen h-screen">
@@ -143,7 +216,7 @@ function RuangBelajar() {
 
             {/* background gradasi biru hijau */}
             <div className="w-screen h-max bg-linear-90 from-[#52A9BC] to-[#7060D1] absolute z-1 text-white p-4 px-11 sm:px-21 pb-10 text-lg font-semibold rounded-b-2xl">
-                Hi, {user.name} <br /><span className="text-base font-normal">Mau belajar apa hari ini ?</span>
+                Hi, {user.username} <br /><span className="text-base font-normal">Mau belajar apa hari ini ?</span>
             </div>
 
             {/* main */}
@@ -151,32 +224,37 @@ function RuangBelajar() {
                 {/* search bar */}
                 <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} >
                     <div className="w-65">
-                        <Select
-                            options={dropDownlist}
-                            value={selectedDropdown}
-                            onChange={dropdown}
-                            placeholder={dropDownlist[0].label}
-                        />
+                        <Select options={options} value={selected} onChange={setSelected} placeholder="Pilih Jenjang" />
                     </div>
                 </Search>
 
                 {/* list kelas */}
                 <div className="w-full bg-white rounded-xl mt-5 p-5 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 2xl:grid-cols-12 gap-y-2 mb-20"
                     style={{ boxShadow: '0px 6px 20px 4px rgba(113, 130, 164, 0.10)' }}>
-                    {listMateri.map((materi) =>
-                        <NavLink key={materi.id} className="w-full" to={`/ruang-belajar/${materi.link}`} >
+                        {listMateri.length === 0 && (
+                        <div className="col-span-full text-center text-gray-400">
+                            {selected ? "Tidak ada materi untuk jenjang ini." : "Silakan pilih jenjang terlebih dahulu."}
+                        </div>
+                    )}
+                    {listMateri.map((materi) => {
+                        const ikonSrc = materi.ikon || iconMap[materi.label] || iconMap.default;
+                        return (
+                        <NavLink key={materi.id} className="w-full" to={`/ruang-belajar/${materi.id}`} >
                             <div className="w-full flex justify-center">
                                 <div className="p-0.5 hover:bg-gray-200 rounded-lg w-25 h-25 flex flex-col items-center justify-baseline gap-2 transition-colors duration-200 cursor-pointer select-none">
-                                    <img src={materi.ikon} alt='ikon' className="w-[50%]" />
+                                    <img src={ikonSrc} alt='ikon' className="w-[50%]" />
                                     <div className="text-sm text-center text-my-text">{materi.label}</div>
                                 </div>
                             </div>
                         </NavLink>
-                    )}
+                    );
+                    })}
                 </div>
             </div>
         </div>
     );
 }
+  
+
 
 export default RuangBelajar;

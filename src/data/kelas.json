@@ -1,9 +1,9 @@
 {
-    "mtk":{
+    "indo":{
         "data": [
         {
         "id": 1,
-        "title": "Persamaan Linear & Kuadrat",
+        "title": "Matematika: Statistika & Peluang ⚡",
         "progres": 10,
         "ikon": "/img/ikonSuratLamaranKerja.png",
         "isGratis": true,
@@ -65,7 +65,7 @@
         },
         {
         "id": 2,
-        "title": "Fungsi dan Grafik⚡",
+        "title": "Bahasa Indonesia: Teks Sejarah & Novel ⚡",
         "progres": 15,
         "ikon": "/img/ikonTeksSejarah.png",
         "isGratis": true,
@@ -125,7 +125,7 @@
         },
         {
         "id": 3,
-        "title": "Barisan dan Deret ⚡",
+        "title": "Bahasa Indonesia: Jurnalistik & Periklanan ⚡",
         "progres": 0,
         "ikon": "/img/ikonTeksEditorial.png",
         "isGratis": false,
@@ -182,7 +182,7 @@
         },
         {
         "id": 4,
-        "title": "Limit Fungsi⚡",
+        "title": "Seni Budaya: Musik & Tari ⚡",
         "progres": 20,
         "ikon": "/img/ikonNovel.png",
         "isGratis": true,
@@ -223,7 +223,7 @@
         },
         {
         "id": 5,
-        "title": "Turunan dan Penerapannya ⚡",
+        "title": "IPA: Fisika - Listrik & Magnet ⚡",
         "progres": 5,
         "ikon": "/img/ikonTeksIklan.png",
         "isGratis": true,
@@ -279,7 +279,7 @@
         },
         {
         "id": 6,
-        "title": "Vektor ⚡",
+        "title": "Sosial: Geografi - Lingkungan & Pembangunan ⚡",
         "progres": 90,
         "ikon": "/img/ikonTeksArtikel.png",
         "isGratis": false,
@@ -320,7 +320,7 @@
         },
         {
         "id": 7,
-        "title": "Matriks ⚡",
+        "title": "Kimia: Stoikiometri & Redoks ⚡",
         "progres": 30,
         "ikon": "/img/ikonKritikSastra.png",
         "isGratis": true,
@@ -361,7 +361,7 @@
         },
         {
         "id": 8,
-        "title": "Statistika Dasar ⚡",
+        "title": "Ekonomi: Akuntansi & Kewirausahaan ⚡",
         "progres": 60,
         "ikon": "/img/ikonPengayaan.png",
         "isGratis": true,
@@ -400,11 +400,11 @@
             }
         ]
         }],
-        "title":"Matematika Wajib dan Minat",
-        "ikon": "/img/mtk.png",
-        "tema": "#56C2E2"
+        "title":"Bahasa Indonesia",
+        "tema": "indoRed",
+        "ikon": "/img/indonesia.png" 
     },
-    "indo":{
+    "mtk":{
         "data":[
         {
             "id": 1,
@@ -463,260 +463,8 @@
             "isGratis": true
         }
         ],
-        "title":"Bahasa Indonesia",
-        "ikon": "/img/indonesia.png",
-        "tema": "#EA4F57"
-    },
-    "fisika":{
-        "data":[
-        {
-            "id": 1,
-            "title": "Gerak Lurus⚡",
-            "progres": 10,
-            "ikon": "/img/ikonSuratLamaranKerja.png",
-            "isGratis": true
-        },
-        {
-            "id": 2,
-            "title": "Hukum Newton ⚡",
-            "progres": 15,
-            "ikon": "/img/ikonTeksSejarah.png",
-            "isGratis": true
-        },
-        {
-            "id": 3,
-            "title": "Usaha dan Energi ⚡",
-            "progres": 0,
-            "ikon": "/img/ikonTeksEditorial.png",
-            "isGratis": false
-        },
-        {
-            "id": 4,
-            "title": "Listrik Dinamis ⚡",
-            "progres": 20,
-            "ikon": "/img/ikonNovel.png",
-            "isGratis": true
-        },
-        {
-            "id": 5,
-            "title": "Momentum dan Impuls ⚡",
-            "progres": 5,
-            "ikon": "/img/ikonTeksIklan.png",
-            "isGratis": true
-        },
-        {
-            "id": 6,
-            "title": "Getaran dan Gelombang ⚡",
-            "progres": 90,
-            "ikon": "/img/ikonTeksArtikel.png",
-            "isGratis": false
-        },
-        {
-            "id": 7,
-            "title": "Optika (Cahaya dan Cermin) ⚡",
-            "progres": 30,
-            "ikon": "/img/ikonKritikSastra.png",
-            "isGratis": true
-        },
-        {
-            "id": 8,
-            "title": "Suhu dan Calor ⚡",
-            "progres": 60,
-            "ikon": "/img/ikonPengayaan.png",
-            "isGratis": true
-        }
-        ],
-        "title":"Fisika",
-        "ikon": "/img/fisika.png",
-        "tema": "#FE5585"
-    },
-    "biologi":{
-        "data":[
-        {
-            "id": 1,
-            "title": "Sel dan Organel ⚡",
-            "progres": 10,
-            "ikon": "/img/ikonSuratLamaranKerja.png",
-            "isGratis": true
-        },
-        {
-            "id": 2,
-            "title": "Jaringan Tumbuhan dan Hewan ⚡",
-            "progres": 15,
-            "ikon": "/img/ikonTeksSejarah.png",
-            "isGratis": true
-        },
-        {
-            "id": 3,
-            "title": "Sistem Pernafasan ⚡",
-            "progres": 0,
-            "ikon": "/img/ikonTeksEditorial.png",
-            "isGratis": false
-        },
-        {
-            "id": 4,
-            "title": "Sistem Pencernaan Manusia ⚡",
-            "progres": 20,
-            "ikon": "/img/ikonNovel.png",
-            "isGratis": true
-        },
-        {
-            "id": 5,
-            "title": "Sistem Reproduksi ⚡",
-            "progres": 5,
-            "ikon": "/img/ikonTeksIklan.png",
-            "isGratis": true
-        },
-        {
-            "id": 6,
-            "title": "Ekosistem ⚡",
-            "progres": 90,
-            "ikon": "/img/ikonTeksArtikel.png",
-            "isGratis": false
-        },
-        {
-            "id": 7,
-            "title": "Genetika Pewarisan Sifat ⚡",
-            "progres": 30,
-            "ikon": "/img/ikonKritikSastra.png",
-            "isGratis": true
-        },
-        {
-            "id": 8,
-            "title": "Reproduksi Manusia ⚡",
-            "progres": 60,
-            "ikon": "/img/ikonPengayaan.png",
-            "isGratis": true
-        }
-        ],
-        "title":"Biologi",
-        "ikon": "/img/biologi.png",
-        "tema": "#94C630"
-    },
-    "kimia":{
-        "data":[
-        {
-            "id": 1,
-            "title": "Struktur Atom ⚡",
-            "progres": 10,
-            "ikon": "/img/ikonSuratLamaranKerja.png",
-            "isGratis": true
-        },
-        {
-            "id": 2,
-            "title": "Tabel Periodik Unsur⚡",
-            "progres": 15,
-            "ikon": "/img/ikonTeksSejarah.png",
-            "isGratis": true
-        },
-        {
-            "id": 3,
-            "title": "Ikatan Kimia ⚡",
-            "progres": 0,
-            "ikon": "/img/ikonTeksEditorial.png",
-            "isGratis": false
-        },
-        {
-            "id": 4,
-            "title": "Reaksi Redoks ⚡",
-            "progres": 20,
-            "ikon": "/img/ikonNovel.png",
-            "isGratis": true
-        },
-        {
-            "id": 5,
-            "title": "Larutan Elektorlit dan Non Elektrolit ⚡",
-            "progres": 5,
-            "ikon": "/img/ikonTeksIklan.png",
-            "isGratis": true
-        },
-        {
-            "id": 6,
-            "title": "Stoikiometri ⚡",
-            "progres": 90,
-            "ikon": "/img/ikonTeksArtikel.png",
-            "isGratis": false
-        },
-        {
-            "id": 7,
-            "title": "Larutan Elektrolit ⚡",
-            "progres": 30,
-            "ikon": "/img/ikonKritikSastra.png",
-            "isGratis": true
-        },
-        {
-            "id": 8,
-            "title": "Termokimia ⚡",
-            "progres": 60,
-            "ikon": "/img/ikonPengayaan.png",
-            "isGratis": true
-        }
-        ],
-        "title":"Kimia",
-        "ikon": "/img/kimia.png",
-        "tema": "#94C630"
-    },
-    "inggris":{
-        "data":[
-        {
-            "id": 1,
-            "title": "Deskriptive Text ⚡",
-            "progres": 10,
-            "ikon": "/img/ikonSuratLamaranKerja.png",
-            "isGratis": true
-        },
-        {
-            "id": 2,
-            "title": "Vocabulary Basics ⚡",
-            "progres": 15,
-            "ikon": "/img/ikonTeksSejarah.png",
-            "isGratis": true
-        },
-        {
-            "id": 3,
-            "title": "Procedure Text ⚡",
-            "progres": 0,
-            "ikon": "/img/ikonTeksEditorial.png",
-            "isGratis": false
-        },
-        {
-            "id": 4,
-            "title": "Narrative Text ⚡",
-            "progres": 20,
-            "ikon": "/img/ikonNovel.png",
-            "isGratis": true
-        },
-        {
-            "id": 5,
-            "title": "Grammar Essentials (Tenses)⚡",
-            "progres": 5,
-            "ikon": "/img/ikonTeksIklan.png",
-            "isGratis": true
-        },
-        {
-            "id": 6,
-            "title": "Functional Text (Invitatsion, Anouncement) ⚡",
-            "progres": 90,
-            "ikon": "/img/ikonTeksArtikel.png",
-            "isGratis": false
-        },
-        {
-            "id": 7,
-            "title": "Reading Comprehension ⚡",
-            "progres": 30,
-            "ikon": "/img/ikonKritikSastra.png",
-            "isGratis": true
-        },
-        {
-            "id": 8,
-            "title": "Offering and Suggesting ⚡",
-            "progres": 60,
-            "ikon": "/img/ikonPengayaan.png",
-            "isGratis": true
-        }
-        ],
-        "title":"Bahasa Inggris",
-        "ikon": "/img/inggris.png",
-        "tema": "#94C630"
+        "title":"Matematika",
+        "tema": "blue-400",
+        "ikon": "/img/mtk.png"
     }
 }

@@ -14,6 +14,9 @@ function SignInPage(){
     const menuButton = <svg xmlns="http://www.w3.org/2000/svg" id='menu' height={iconSize} viewBox="0 -960 960 960" width={iconSize} className="fill-my-text dark:fill-my-text-dark"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
     const closeButton = <svg xmlns="http://www.w3.org/2000/svg" id='close' height={iconSize} viewBox="0 -960 960 960" width={iconSize} className="fill-my-text dark:fill-my-text-dark"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>;
     const [menuIcon, setMenuIcon] = useState(isSidebarHidden? menuButton : closeButton)
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     
     // Function to hide the sidebar
     function hideSidebar (){
@@ -29,7 +32,55 @@ function SignInPage(){
             setMenuIcon(menuButton)
         }
     }
+    
+    const handleSignin = async () => {
+    if (!username || !email || !password) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Username, email, dan kata sandi harus diisi!',
+      });
+      return;
+    }
 
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil!',
+          text: data.message,
+          timer: 2000,
+          showConfirmButton: false,
+        }).then(() => {
+          navigate('/sign-in'); // Redirect ke halaman login setelah registrasi
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: data.message,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Terjadi kesalahan pada server',
+      });
+    }
+  };
+  
     return(
         <div>
             <Sidebar 
@@ -51,7 +102,7 @@ function SignInPage(){
 background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(206, 158, 247, 1) 100%)'}}>
 
                 {/* box putih utama */}
-                <div className="max-w-100 h-fit rounded-2xl flex flex-col bg-white" style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'}}>
+                <div className="w-100 h-fit rounded-2xl flex flex-col bg-white" style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'}}>
                     
                     {/* text ungu */}
                     <div className="w-full text-center py-4 bg-[#5852AB] rounded-t-2xl font-bold text-2xl text-white">Daftar Akun Baru</div>
@@ -61,19 +112,26 @@ background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 25
                         {/* nama, email dan passsword */}
                         <div className="flex gap-2 border border-gray-400 rounded-sm">
                             <img src="/img/username.png" alt="nama" className="w-10"/>
-                            <input type="text" placeholder="Nama Lengkap" className=" p-2 w-full focus:outline-none" />
+                            <input type="text" placeholder="Nama Lengkap" className=" p-2 w-full focus:outline-none" value={username}
+          onChange={(e) => setUsername(e.target.value)}/>
                         </div>
                         <div className="flex gap-2 border border-gray-400 rounded-sm">
                             <img src="/img/email.png" alt="email" className="w-10 p-2"/>
-                            <input type="email" placeholder="Email" className=" p-2 w-full focus:outline-none" />
+                            <input type="email" placeholder="Email" className=" p-2 w-full focus:outline-none" value={email}
+          onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div className="flex gap-2 border border-gray-400 rounded-sm">
                             <img src="/img/password.png" alt="kata sandi" className="w-10 p-2 "/>
-                            <input type="password" placeholder="Kata Sandi" className=" p-2 w-full focus:outline-none " />
+                            <input type="password" placeholder="Kata Sandi" className=" p-2 w-full focus:outline-none " value={password}
+          onChange={(e) => setPassword(e.target.value)}/>
                         </div>
                         
                         {/* green button */}
-                        <div className="p-2 mt-2 text-xl font-semibold text-center rounded-sm text-white bg-[#00AF34] hover:bg-[#2ca450] active:bg-[#03942e] tracking-normal cursor-pointer transition-colors duration-150">Daftar</div>
+                        <button 
+                        onClick={handleSignin} 
+                        className="p-2 mt-2 text-xl font-semibold text-center rounded-sm text-white bg-[#00AF34] hover:bg-[#2ca450] active:bg-[#03942e] tracking-normal cursor-pointer transition-colors duration-150">
+                        Daftar
+                        </button>
 
                         {/* text atau */}
                         <div className="flex items-center justify-center w-full relative">
