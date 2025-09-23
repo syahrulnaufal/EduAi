@@ -5,7 +5,6 @@ import Beranda from './pages/Beranda'
 import RuangBelajar from './pages/RuangBelajar'
 import RuangMateri from './pages/RuangMateri'
 import RuangKelas from './pages/RuangKelas'
-import Tentang from './pages/Tentang'
 import BrainAcademy from './pages/BrainAcademy'
 import MateriBelajarPage from './pages/MateriBelajarPage'
 import LoginPage from './pages/LoginPage'
@@ -14,6 +13,7 @@ import SignInPage from './pages/SignInPage'
 import MathCoursePage from './pages/MathCoursePage'
 import FiturPopuler from './pages/FiturPopuler'
 import Curriculum from './pages/CurriculumPage'
+import Profil from './pages/Profil'
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>
@@ -25,13 +25,13 @@ createRoot(document.getElementById('root')).render(
         <Route path='/ruang-belajar/:kelas/:materi' element={<MateriBelajarPage/>} />
         <Route path="/ruang-kelas" element={<RuangKelas />} />
         <Route path="/chatbot" element={<Chatbot />} />
-        <Route path="/tentang" element={<Tentang />} />
         <Route path="/brain-academy" element={<BrainAcademy />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/math-course/:id" element={<MathCoursePage />} />
         <Route path="/fitur/:id" element={<FiturPopuler />} />
         <Route path="/fitur/:id/curriculum" element={<Curriculum />} />
+        <Route path="/profile" element={<Profil />} />
       </Routes>
     </BrowserRouter>
 )
