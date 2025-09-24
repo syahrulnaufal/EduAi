@@ -16,6 +16,14 @@ function LoginPage(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+
+    //password
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    
+    // function to hide unhide input password
+    function togglePasswordVisibility() {
+        setIsPasswordVisible(!isPasswordVisible);
+    }
     
     // Function to hide the sidebar
     function hideSidebar (){
@@ -147,12 +155,15 @@ background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 25
                         <div className="flex gap-2 border border-gray-400 rounded-sm">
                             <img src="/img/email.png" alt="email" className="w-10 p-2"/>
                             <input type="email" placeholder="Email" className=" p-2 w-full focus:outline-none" value={email}
-          onChange={(e) => setEmail(e.target.value)} />
+                            onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div className="flex gap-2 border border-gray-400 rounded-sm relative">
                             <img src="/img/password.png" alt="kata sandi" className="w-10 p-2 "/>
-                            <input type="password" placeholder="Kata Sandi" className=" p-2 w-full focus:outline-none " value={password}
-          onChange={(e) => setPassword(e.target.value)}  />
+                            <input type={isPasswordVisible? 'text' : 'password'}  placeholder="Kata Sandi" className=" p-2 w-full focus:outline-none " value={password}
+                            onChange={(e) => setPassword(e.target.value)}  />
+                            <div className="w-fit h-full flex items-center justify-center pe-2">
+                                <img src={isPasswordVisible ? "/img/show.png" : "/img/hide.png"} onClick={togglePasswordVisibility} className="w-8 h-7"/>
+                            </div>
                         </div>
                         <div className="text-end leading-0.5 mb-1 text-[#1C58B4] cursor-pointer hover:text-[#3f6bad] text-sm">
                            <span onClick={()=>{alert("Makanya Password jangan sampe Lupa !!")}}><NavLink>lupa password?</NavLink></span>

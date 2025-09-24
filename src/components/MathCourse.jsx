@@ -1,4 +1,5 @@
 import FiturCard from "./FiturCard";
+import { NavLink } from "react-router";
 
 const listSemuaKelas = [
     {
@@ -62,8 +63,8 @@ function MathCourse () {
             <div className="w-screen flex justify-center">
                 <div className="max-w-[90vw] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     {listSemuaKelas.map((kelas) => 
+                    <NavLink key={kelas.id} to={`/math-course/${kelas.id}`} className="cursor-pointer">
                         <FiturCard 
-                            key={kelas.id}
                             img={kelas.gambar}
                             className={kelas.namaKelas}
                             description={kelas.kelasDeskripsi}
@@ -76,6 +77,7 @@ function MathCourse () {
                                 <img src="./img/shopping-cart.svg" alt="cart" className="w-7" />
                             </div>
                         </FiturCard>
+                    </NavLink>
                     )}
                 </div>
             </div>

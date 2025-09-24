@@ -117,6 +117,14 @@ html {
         opacity: 1; transform: none; 
     } 
 }
+
+@keyframes grow{
+  from{
+    height: 20px;
+  }to{
+    height: 100%;
+  }
+}
                 
 .animate-fadeIn { animation: fadeIn 0.4s; }
 

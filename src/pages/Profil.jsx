@@ -214,10 +214,16 @@ function Profil(){
                     </div>
 
                     <div>
-                        <div className="flex justify-center items-end h-32 space-x-2">
-                            {[40, 60, 80, 50, 90, 70, 60].map((height, i) => (
-                                <div key={i} className="w-5 bg-purple-200 rounded-t-lg" style={{ height: `${height}%` }}></div>
-                            ))}
+                        <div className="flex h-32 overflow-x-scroll items-end">
+                            <div className="flex justify-evenly items-end space-x-2 w-max " style={{ animation: 'grow 1s forwards' }}>
+                                {[40, 60, 80, 50, 90, 70, 60, 80, 100, 70, 40, 60, 30, 80, 50, 90, 70, 60, 80].map((height, i) => (
+                                    <div key={i} className="w-5 bg-purple-200 rounded-t-md flex items-end" style={{ height: `${height}%` }}>
+                                        <div className="w-full h-[80%] bg-purple-300 rounded-t-md flex items-end">
+                                            <div className="w-full h-[60%] bg-purple-400 rounded-t-md"></div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                     
