@@ -222,15 +222,21 @@ function Beranda(){
     const [searchTerm, setSearchTerm] = useState('')
     
     // dropdown 
-    const [selectedDropdown, setSelectedDropdown] = useState(null);
-    const dropDownlist = [
-        { value: 1, label: 'Kelas 10 - IPA - K13 Revisi' },
-        { value: 2, label: 'Kelas 11 - IPA - K13 Revisi' },
-        { value: 3, label: 'Kelas 12 - IPA - K13 Revisi' },
-        { value: 4, label: 'Kelas 10 - IPS - K13 Revisi' },
-        { value: 5, label: 'Kelas 11 - IPS - K13 Revisi' },
-        { value: 6, label: 'Kelas 12 - IPS - K13 Revisi' },
-    ];
+        const [options, setOptions] = useState([]);
+          const [selected, setSelected] = useState(null);
+        
+          useEffect(() => {
+            fetch("http://localhost:5000/api/jenjang")
+              .then((res) => res.json())
+              .then((data) => {
+                const formatted = data.map((j) => ({
+                  value: j.id_jenjang,
+                  label: j.nama_jenjang,
+                }));
+                setOptions(formatted);
+              })
+              .catch((err) => console.error(err));
+          }, []);
 
 
 
@@ -296,12 +302,7 @@ function Beranda(){
             <div className="z-3 flex flex-col items-center w-[80%]">
                 <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} >
                     <div className="w-60">
-                        <Select
-                            options={dropDownlist}
-                            value={selectedDropdown}
-                            onChange={dropdown}
-                            placeholder={dropDownlist[0].label}
-                            />
+                        <Select options={options} value={selected} onChange={setSelected} placeholder="Pilih Jenjang" />
                     </div>
                 </Search>
             </div>
