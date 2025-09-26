@@ -5,7 +5,7 @@ import mysql from "mysql2/promise";
 const db = await mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '', // isi password kalau ada
+  password: '1234', // isi password kalau ada
   database: 'eduai'
 });
 

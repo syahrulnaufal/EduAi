@@ -150,6 +150,7 @@ function FiturPopuler () {
                     {listKelas.map((kelas) => 
                         <FiturCard 
                             key={kelas.id}
+                            id={kelas.id}
                             img={kelas.gambar}
                             className={kelas.namaKelas}
                             description={kelas.kelasDeskripsi}

@@ -150,27 +150,29 @@ function Profil(){
                                 <span className="ps-2">ACTIONS</span>
                             </div>
                             {/* ✅ Setiap baris diubah ke 'md:grid' */}
-                            <div className="sm:hidden">
-                                {mentors.map((mentor, index) => (
-                                    <div key={index} className="flex flex-col mb-6 max-w-80 bg-white p-4">
-                                        <div className="flex items-center space-x-3">
-                                            <img src={`/img/photoFrame${index+1}.png`} alt={mentor.name} className="w-10 h-10 rounded-full" />
-                                            <div>
-                                                <p className="font-semibold text-gray-800">{mentor.name}</p>
-                                                <p className="text-xs text-gray-400">{mentor.date}</p>
+                            <div className="block sm:hidden overflow-x-auto">    
+                                <div className=" flex gap-4 w-max">
+                                    {mentors.map((mentor, index) => (
+                                        <div key={index} className="flex flex-col mb-6 max-w-80 min-w-60 bg-white p-4">
+                                            <div className="flex items-center space-x-3">
+                                                <img src={`/img/photoFrame${index+1}.png`} alt={mentor.name} className="w-10 h-10 rounded-full" />
+                                                <div>
+                                                    <p className="font-semibold text-gray-800">{mentor.name}</p>
+                                                    <p className="text-xs text-gray-400">{mentor.date}</p>
+                                                </div>
+                                            </div>
+                                            {/* ✅ Margin atas (mt) hanya berlaku di mobile, dihilangkan di 'md' */}
+                                            <div className="mt-3 md:mt-0">
+                                                <span className="font-semibold text-sm py-2 px-4 bg-purple-100 text-purple-600 rounded-full w-fit">{mentor.courseType}</span>
+                                            </div>
+                                            <p className="text-sm text-gray-700 mt-3 md:mt-0">{mentor.courseTitle}</p>
+                                            <div className="mt-4 md:mt-0">
+                                                {/* ✅ Lebar tombol diubah menjadi responsif */}
+                                                <button className="w-full text-blue-600 bg-blue-100 text-sm font-semibold py-2 px-4 rounded-lg">SHOW DETAILS</button>
                                             </div>
                                         </div>
-                                        {/* ✅ Margin atas (mt) hanya berlaku di mobile, dihilangkan di 'md' */}
-                                        <div className="mt-3 md:mt-0">
-                                            <span className="font-semibold text-sm py-2 px-4 bg-purple-100 text-purple-600 rounded-full w-fit">{mentor.courseType}</span>
-                                        </div>
-                                        <p className="text-sm text-gray-700 mt-3 md:mt-0">{mentor.courseTitle}</p>
-                                        <div className="mt-4 md:mt-0">
-                                            {/* ✅ Lebar tombol diubah menjadi responsif */}
-                                            <button className="w-full text-blue-600 bg-blue-100 text-sm font-semibold py-2 px-4 rounded-lg">SHOW DETAILS</button>
-                                        </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                             <div className="hidden sm:block">
                                 {mentors.map((mentor, index) => (

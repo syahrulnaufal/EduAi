@@ -1,14 +1,16 @@
-
 import '../style.css'; 
 import Topbar from "../components/Topbar";
 import Sidebar from "../components/Sidebar";
 import BurgerMenu from "../components/BurgerMenu";
 import MateriPageAsidebar from "../components/MateriPageAsidebar";
 import { useState, useEffect } from "react";
-import { NavLink, useParams } from "react-router";
+import { NavLink, useParams, useNavigate } from "react-router";
 
 
 function MateriBelajarPage(){
+    //navigasi
+    const navigate = useNavigate();
+
     // Sidebar 
     const [left, setLeft] = useState('-left-70') 
     const [bg, setBg] = useState('bg-transparent -z-10')
@@ -29,7 +31,7 @@ function MateriBelajarPage(){
         fetch(`http://localhost:5000/api/bab/bab-all?id_pelajaran=${id}`)
         .then((res) => res.json())
         .then((result) => {
-            console.log("HASIL FETCH API BAB:", result); // Tambahkan ini untuk cek response
+            console.log("HASIL FETCH API BAB:", result);
             setBab(result);
         })
         .catch((err) => {
@@ -37,10 +39,9 @@ function MateriBelajarPage(){
         });
     }, [id]);
 
-// ...existing code...
-        useEffect(() => {
-        const idBab = selectedBab || materi; // pilih yang ada dulu
-        if (!idBab) return; // kalau dua-duanya null, jangan fetch
+    useEffect(() => {
+        const idBab = selectedBab || materi;
+        if (!idBab) return;
 
         const url = `http://localhost:5000/api/subbab?id_bab=${idBab}`;
         console.log("Mengirim request ke:", url);
@@ -50,7 +51,13 @@ function MateriBelajarPage(){
             .then((result) => {
                 if (result?.subbab && Array.isArray(result.subbab)) {
                     const sorted = [...result.subbab].sort((a, b) => (a.urutan ?? 0) - (b.urutan ?? 0));
-                    result.subbab = sorted.map((s, i) => ({ ...s, isSelected: i === 0 }));
+                    // Tandai item terakhir sebagai 'isSelected' jika itu kuis, atau item pertama jika bukan.
+                    // Logika ini bisa disesuaikan dengan kebutuhan Anda.
+                    const lastItemIsQuiz = sorted[sorted.length - 1]?.judul_subbab.toLowerCase().includes('kuis');
+                    result.subbab = sorted.map((s, i) => ({ 
+                        ...s, 
+                        isSelected: lastItemIsQuiz ? i === sorted.length - 1 : i === 0 
+                    }));
                 }
                 setData(result);
             })
@@ -59,14 +66,10 @@ function MateriBelajarPage(){
             });
     }, [selectedBab, materi]);
 
-        
-
     //asidebar
-    // const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [asidebarLeft, setAsidebarLeft] = useState('left-0');
     const [isAsidebarHidden, setIsAsidebarHidden] = useState(false);
 
-    //function to hide/unhide the asidebar
     function toggleAsidebar() {
         if (asidebarLeft === '-left-90') {
             setAsidebarLeft('left-0');
@@ -77,7 +80,6 @@ function MateriBelajarPage(){
         }
     }
     
-    // Function to hide the sidebar
     function hideSidebar (){
         if(isSidebarHidden){
             setLeft('left-0')
@@ -92,120 +94,29 @@ function MateriBelajarPage(){
         }
     }
 
-    // data materi buat asidebar
-    // const listMateri = [
-    //     {
-    //         "id": 1,
-    //         "img": "/img/video1.png",
-    //         "title": "Data Tunggal dan Data Kelompok beserta Penyajiannya",
-    //         "description": "Ada data tunggal, ada data kelompok. Kita belajar cara penyajiannya yuk! Video ini video konsep kilat. Materi dijelaskan lebih cepat. Langsung aja yuk mulai belajar!",
-    //         "kuis": {
-    //             "title": "Kuis 1 Statistika",
-    //             "xp": 50,
-    //             "gold": 50
-    //         },
-    //         "xp": 125,
-    //         "gold": 10,
-    //         "listVideo": [
-    //             {"title": "Pengertian dan Contoh Data Tunggal", "duration": "03:11", isSelected : false},
-    //             {"title": "Pengertian dan Contoh Data Kelompok", "duration": "07:53", isSelected : false},
-    //             {"title": "Penyajian Data Kelompok dengan Histogram", "duration": "11:43", isSelected : false},
-    //             {"title": "Penyajian Data Kelompok dengan Grafik Poligon", "duration": "10:15", isSelected : false},
-    //             {"title": "Penyajian data kelompok dengan ogive positif dan negatif", "duration": "09:56", isSelected : false},
-    //             {"title": "Sudah paham tentang histogram dan mau soal yang lebih menantang?", "duration": "12:40", isSelected : false},
-    //             {"title": "Kesimpulan data tunggal dan data kelompok serta penyajiannya", "duration": "13:20", isSelected : false},
-    //             {"title": "Kuis 1 Statistika (Deskriptif)", "duration": " ", isSelected : true}
-    //         ]
-    //     },
-    //     {
-    //         "id": 2,
-    //         "img": "/img/video2.png",
-    //         "title": "Ukuran Pemusatan Data (Mean, Modus, Median)",
-    //         "description": "Yuk, kita pelajari cara menemukan nilai pusat dari sebuah data! Dalam video konsep kilat ini, kamu akan belajar tentang Mean, Median, dan Modus dengan cepat dan mudah. Mari kita mulai!",
-    //         "kuis": {
-    //             "title": "Kuis 2 Statistika",
-    //             "xp": 50,
-    //             "gold": 50
-    //         },
-    //         "xp": 125,
-    //         "gold": 10,
-    //         "listVideo": [
-    //             {"title": "Pengertian Ukuran Pemusatan Data", "duration": "04:15", isSelected : false},
-    //             {"title": "Mencari Mean (Rata-Rata) pada Data Tunggal dan Kelompok", "duration": "08:30", isSelected : false},
-    //             {"title": "Mencari Median (Nilai Tengah) pada Data Tunggal dan Kelompok", "duration": "09:55", isSelected : false},
-    //             {"title": "Mencari Modus (Nilai yang Sering Muncul) pada Data Tunggal dan Kelompok", "duration": "07:40", isSelected : false},
-    //             {"title": "Hubungan antara Mean, Median, dan Modus", "duration": "06:20", isSelected : false},
-    //             {"title": "Latihan Soal Gabungan Mean, Median, dan Modus", "duration": "14:50", isSelected : false},
-    //             {"title": "Kuis 2 Statistika (Ukuran Pemusatan)", "duration": " ", isSelected : false}
-    //         ]
-    //     },{
-    //         "id": 3,
-    //         "img": "/img/video1.png",
-    //         "title": "Data Tunggal dan Data Kelompok beserta Penyajiannya",
-    //         "description": "Ada data tunggal, ada data kelompok. Kita belajar cara penyajiannya yuk! Video ini video konsep kilat. Materi dijelaskan lebih cepat. Langsung aja yuk mulai belajar!",
-    //         "kuis": {
-    //             "title": "Kuis 1 Statistika",
-    //             "xp": 50,
-    //             "gold": 50
-    //         },
-    //         "xp": 125,
-    //         "gold": 10,
-    //         "listVideo": [
-    //             {"title": "Pengertian dan Contoh Data Tunggal", "duration": "03:11", isSelected : false},
-    //             {"title": "Pengertian dan Contoh Data Kelompok", "duration": "07:53", isSelected : false},
-    //             {"title": "Penyajian Data Kelompok dengan Histogram", "duration": "11:43", isSelected : false},
-    //             {"title": "Penyajian Data Kelompok dengan Grafik Poligon", "duration": "10:15", isSelected : false},
-    //             {"title": "Penyajian data kelompok dengan ogive positif dan negatif", "duration": "09:56", isSelected : false},
-    //             {"title": "Sudah paham tentang histogram dan mau soal yang lebih menantang?", "duration": "12:40", isSelected : false},
-    //             {"title": "Kesimpulan data tunggal dan data kelompok serta penyajiannya", "duration": "13:20", isSelected : false},
-    //             {"title": "Kuis 1 Statistika (Deskriptif)", "duration": " ", isSelected : false}
-    //         ]
-    //     },
-    //     {
-    //         "id": 4,
-    //         "img": "/img/video2.png",
-    //         "title": "Ukuran Pemusatan Data (Mean, Modus, Median)",
-    //         "description": "Yuk, kita pelajari cara menemukan nilai pusat dari sebuah data! Dalam video konsep kilat ini, kamu akan belajar tentang Mean, Median, dan Modus dengan cepat dan mudah. Mari kita mulai!",
-    //         "kuis": {
-    //             "title": "Kuis 2 Statistika",
-    //             "xp": 50,
-    //             "gold": 50
-    //         },
-    //         "xp": 125,
-    //         "gold": 10,
-    //         "listVideo": [
-    //             {"title": "Pengertian Ukuran Pemusatan Data", "duration": "04:15", isSelected : false},
-    //             {"title": "Mencari Mean (Rata-Rata) pada Data Tunggal dan Kelompok", "duration": "08:30", isSelected : false},
-    //             {"title": "Mencari Median (Nilai Tengah) pada Data Tunggal dan Kelompok", "duration": "09:55", isSelected : false},
-    //             {"title": "Mencari Modus (Nilai yang Sering Muncul) pada Data Tunggal dan Kelompok", "duration": "07:40", isSelected : false},
-    //             {"title": "Hubungan antara Mean, Median, dan Modus", "duration": "06:20", isSelected : false},
-    //             {"title": "Latihan Soal Gabungan Mean, Median, dan Modus", "duration": "14:50", isSelected : false},
-    //             {"title": "Kuis 2 Statistika (Ukuran Pemusatan)", "duration": " ", isSelected : false}
-    //         ]
-    //     },
-    // ];
+    function selectVideo(index, id_subbab){
+        const clickedVideo = data?.subbab?.[index];
 
-    // main content 
-    // const [showedContent, setShowedContent] = useState(listMateri[0]);
-    
+        // JIKA item yang diklik SUDAH memiliki isSelected: true, MAKA navigasi
+        if (clickedVideo && clickedVideo.isSelected) {
+            // Ganti '/kuis/' dengan path halaman tujuan Anda
+            console.log(`Navigasi ke kuis dengan id_subbab: ${id_subbab}`);
+            navigate(`/ruang-belajar/${id}/${materi}/${id_subbab}`); 
+            return; // Hentikan fungsi
+        }
 
-    // function to change showedContent
-    // function selectContent(index){
-    //     setShowedContent(listMateri[index])
-    // }
-
-    // togle function to selected video or not
-    function selectVideo(index){
+        // JIKA tidak, cukup ubah item mana yang terpilih
         setData(prev => {
             if (!prev?.subbab) return prev;
             const newSubbab = prev.subbab.map((s, i) => ({ ...s, isSelected: i === index }));
             return { ...prev, subbab: newSubbab };
         });
-   }
+    }
     
 
     return(
         <div className="flex">
+            {/* ...sisa JSX Anda yang tidak berubah... */}
             <Sidebar 
                 className='absolute'
                 hideSidebar={hideSidebar} 
@@ -215,14 +126,7 @@ function MateriBelajarPage(){
                 <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
             </Sidebar>
 
-            {/* Topbar */}
             <div className="fixed w-screen z-10">
-                {/* topbar */}
-                {/* <Topbar>
-                    <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
-                </Topbar> */}
-
-                {/* blue topbar  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;*/}
                 <div className="w-screen bg-[#1C58B4] p-6" style={{boxShadow: "rgba(100, 100, 111, 0.3) 0px 7px 29px 0px"}}>
                     <div className="flex gap-3">
                         <div className="bg-white p-1 rounded-lg">
@@ -236,20 +140,13 @@ function MateriBelajarPage(){
                 </div>
             </div>
 
-            {/* asidebar */}
             <div className={` h-screen ${asidebarLeft} transition-all duration-200 z-5 fixed w-fit`} >
-                
-                {/* close togle button  */}
                 <div onClick={toggleAsidebar} className={` ${isAsidebarHidden ? '-right-20' : '-right-5'} top-35 z-10 absolute cursor-pointer p-2 rounded-full bg-white hover:bg-indigo-50 duration-150`}>
                     <img className={`${isAsidebarHidden ? '-rotate-90' : 'rotate-90'} transition-all duration-500`} src='/img/arrowDown.png' width={'20px'}/>
-			    </div>
+                </div>
 
                 <MateriPageAsidebar>
                     <div className="flex gap-4 flex-col p-4 mt-10 mb-20">
-                        {/*
-                          handle: data bisa berupa array (lama) atau object { bab, subbab } (API)
-                          buat array uniform: kalau data adalah array pakai data, kalau object pakai data.subbab atau fallback []
-                        */}
                         {(() => {
                             const asideItems = Array.isArray(bab) ? bab : (bab?.bab ?? []);
                             if (!asideItems || asideItems.length === 0) {
@@ -264,35 +161,21 @@ function MateriBelajarPage(){
                                         className="border border-[#025584] mt-20 w-[90%] active:ms-5 transition-all duration-150 ease-out cursor-pointer bg-white rounded-xl flex flex-col items-center relative"
                                         onClick={() => setSelectedBab(materi.id_bab)} 
                                     >
-                                        <div className="w-[60%] absolute -top-20 ">
-                                            <img src={materi.img || '/img/default.png'} alt="thumbnail" className="rounded-lg"/>
-                                        </div>
+                                        <div className="w-[60%] absolute -top-20 "><img src={materi.img || '/img/default.png'} alt="thumbnail" className="rounded-lg"/></div>
                                         <div className="h-8 bg-[#025584] w-full rounded-t-lg "></div>
                                         <img src="/img/ikonAdapto.png" alt="" className="w-20 absolute top-5"/>
                                         <div className="px-2 text-center pt-5 pb-3">{title}</div>
                                         <div className="flex gap-3 pb-3">
-                                            <div className="flex gap-2 items-center">
-                                                <img src="/img/ikonXp.png" alt="XP" className="w-7"/>
-                                                <div>{materi.point_xp ?? 0}</div>
-                                            </div>
-                                            <div className="flex gap-2 items-center">
-                                                <img src="/img/ikonGold.png" alt="GOLD" className="w-7"/>
-                                                <div>{materi.point_gold ?? 0}</div>
-                                            </div>
+                                            <div className="flex gap-2 items-center"><img src="/img/ikonXp.png" alt="XP" className="w-7"/><div>{materi.point_xp ?? 0}</div></div>
+                                            <div className="flex gap-2 items-center"><img src="/img/ikonGold.png" alt="GOLD" className="w-7"/><div>{materi.point_gold ?? 0}</div></div>
                                         </div>
                                         <div className="p-2 w-full">
                                             <div className="border-gray-300 border rounded-lg p-2 flex gap-1 items-center justify-between hover:bg-gray-100 transition-colors duration-150">
                                                 <img src="/img/ikonKuis.png" alt="" className="w-9 h-9"/>
                                                 <div className="w-20 truncate">{title}</div>
                                                 <div className="flex gap-1">
-                                                    <div className="flex gap-1 items-center">
-                                                        <img src="/img/ikonXp.png" alt="XP" className="w-7"/>
-                                                        <div>{materi.point_xp ?? 0}</div>
-                                                    </div>
-                                                    <div className="flex gap-1 items-center">
-                                                        <img src="/img/ikonGold.png" alt="GOLD" className="w-7"/>
-                                                        <div>{materi.point_gold ?? 0}</div>
-                                                    </div>
+                                                    <div className="flex gap-1 items-center"><img src="/img/ikonXp.png" alt="XP" className="w-7"/><div>{materi.point_xp ?? 0}</div></div>
+                                                    <div className="flex gap-1 items-center"><img src="/img/ikonGold.png" alt="GOLD" className="w-7"/><div>{materi.point_gold ?? 0}</div></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -304,78 +187,56 @@ function MateriBelajarPage(){
                 </MateriPageAsidebar>
             </div>
             
-            {/* video pembelajaran */}
             <div className={`w-screen h-screen bg-my-bg px-5 sm:px-20 lg:px-40 ${isAsidebarHidden ? 'ml-0' : window.innerWidth <= 768 ? 'ml-0' : 'ml-80'} transition-all duration-200`}>
-                {/* close togle button  */}
-                {/* <div onClick={toggleAsidebar} className={` ${isAsidebarHidden ? 'left-20' : '-left-5'} top-35 z-10 absolute cursor-pointer p-2 rounded-full bg-white hover:bg-indigo-50 duration-150`}>
-                    <img className={`${isAsidebarHidden ? '-rotate-90' : 'rotate-90'} transition-all duration-500`} src='/img/arrowDown.png' width={'20px'}/>
-			    </div> */}
-
                 <div className="w-full min-h-full flex flex-col bg-surface">
                     <div className="h-30"></div>
-                    {/* image  */}
-                    <div className="w-full px-2">
-                        <img src={data?.bab?.img||'/img/default.png'} alt="" className="w-full rounded-xl" />
-                    </div>
-
-                    {/* deskripsi  */}
+                    <div className="w-full px-2"><img src={data?.bab?.img||'/img/default.png'} alt="" className="w-full rounded-xl" /></div>
                     <div className="mt-5 mb-1 font-bold text-xl px-4">{data?.bab?.judul_bab}</div>
                     <div className="px-4">{data?.bab?.detail}</div>
-
-                    {/* timeline video */}
                     <div className="px-4 text-xl font-bold mt-5 mb-1">Timeline Video</div>
                     {data?.subbab
-                        ?.sort((a, b) => a.urutan - b.urutan) // urutkan sesuai urutan
+                        ?.sort((a, b) => a.urutan - b.urutan)
                         .map((video, index) => {
-                            const keyId = video.id_subbab ?? video.id_bab ?? `sub-${index}`;
+                            const keyId = video.id_subbab ?? `sub-${index}`;
                              if (video.isSelected) {
                             return (
                                 <div
-                                className="px-4 py-2 text-white w-full"
-                                key={keyId}
-                                onClick={() => selectVideo(index)}
-                                 >
-                                <div className=" flex bg-[#5BA4F9] transition-all duration-150 cursor-pointer px-4 py-2 rounded-lg justify-between items-center mb-2 w-full">
-                                    <div className="flex gap-2 items-center w-[90%]">
-                                    <div className="bg-[#F3FFC6] w-15 h-10 rounded-md flex justify-center items-center">
-                                        <img src="/img/ikonKuis.png" alt="" className="h-[90%]" />
+                                    className="px-4 py-2 text-white w-full"
+                                    key={keyId}
+                                    onClick={() => selectVideo(index, video.id_subbab)}
+                                >
+                                    <div className=" flex bg-[#5BA4F9] transition-all duration-150 cursor-pointer px-4 py-2 rounded-lg justify-between items-center mb-2 w-full">
+                                        <div className="flex gap-2 items-center w-[90%]">
+                                            <div className="bg-[#F3FFC6] w-15 h-10 rounded-md flex justify-center items-center">
+                                                <img src="/img/ikonKuis.png" alt="" className="h-[90%]" />
+                                            </div>
+                                            <span className="max-w-[80%]">{video.judul_subbab}</span>
+                                        </div>
+                                        <div className="text-sm ">{video.duration ?? "00:00"}</div>
                                     </div>
-                                    <span className="max-w-[80%]">{video.judul_subbab}</span>
-                                    </div>
-                                    <div className="text-sm ">
-                                    {video.duration ?? "00:00"}
-                                    </div>
-                                </div>
                                 </div>
                             );
                             } else {
                             return (
                                 <div
-                                className="px-4 py-2"
-                                key={keyId}
-                                onClick={() => selectVideo(index)}
+                                    className="px-4 py-2"
+                                    key={keyId}
+                                    onClick={() => selectVideo(index, video.id_subbab)}
                                 >
-                                <div className=" flex bg-[#F1F4F9] hover:bg-[#e5ebf7] transition-all duration-150 cursor-pointer px-4 py-2 rounded-lg justify-between items-center mb-2">
-                                    <div className="flex gap-2 items-center w-[90%]">
-                                    <img src="/img/videoIkon.png" alt="" className="w-8" />
-                                    <span className="truncate ">{video.judul_subbab}</span>
+                                    <div className=" flex bg-[#F1F4F9] hover:bg-[#e5ebf7] transition-all duration-150 cursor-pointer px-4 py-2 rounded-lg justify-between items-center mb-2">
+                                        <div className="flex gap-2 items-center w-[90%]">
+                                            <img src="/img/videoIkon.png" alt="" className="w-8" />
+                                            <span className="truncate ">{video.judul_subbab}</span>
+                                        </div>
+                                        <div className="text-sm text-gray-500 ">{video.duration ?? "00:00"}</div>
                                     </div>
-                                    <div className="text-sm text-gray-500 ">
-                                    {video.duration ?? "00:00"}
-                                    </div>
-                                </div>
                                 </div>
                             );
                             }
                         })}
-
-
                     <div className="h-20"></div>
-
                 </div>
-
             </div>
-
         </div>
     );
 }

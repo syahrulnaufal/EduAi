@@ -15,7 +15,7 @@ import FiturPopuler from './pages/FiturPopuler'
 import Curriculum from './pages/CurriculumPage'
 import Profil from './pages/Profil'
 import ProtectedRoute from "./components/ProtectedRoute"
-
+import WatchMateriVideo from './pages/WatchMateriVideo'
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>
@@ -25,6 +25,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/ruang-belajar" element={<RuangBelajar/>} />
         <Route path='/ruang-belajar/:id' element={<RuangMateri/>} />
         <Route path='/ruang-belajar/:id/:materi' element={<MateriBelajarPage/>} />
+        <Route path='/ruang-belajar/:id/:materi/:subbab' element={<WatchMateriVideo/>} />
         <Route path="/ruang-kelas" element={<ProtectedRoute><RuangKelas /></ProtectedRoute>} />
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/brain-academy" element={<BrainAcademy />} />
