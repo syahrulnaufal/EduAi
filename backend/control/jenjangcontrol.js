@@ -61,4 +61,26 @@ export const deleteJenjang = async (req, res) => {
   }
 };
 
-export default { getAllJenjang, addJenjang, updateJenjang, deleteJenjang };
+export const getJenjangByNama = async (req, res) => {
+  const { nama } = req.params; // ambil parameter dari URL
+
+  try {
+    const [rows] = await db.query(
+      "SELECT * FROM jenjang WHERE nama_jenjang LIKE ?",
+      [`%${nama}%`] // pakai LIKE untuk cari berdasarkan sebagian huruf
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Jenjang tidak ditemukan" });
+    }
+
+    return res.json(rows);
+  } catch (err) {
+    console.error("Database error:", err);
+    return res
+      .status(500)
+      .json({ message: "Terjadi kesalahan pada server", error: err.message });
+  }
+};
+
+export default { getAllJenjang, addJenjang, updateJenjang, deleteJenjang, getJenjangByNama };

@@ -19,6 +19,13 @@ import materiroutes from './routes/materiroutes.js';
 import babroutes from './routes/babroutes.js';
 import subbabroutes from './routes/subbabroutes.js';
 import chatRoutes from "./routes/chatroutes.js";
+import quiz from './routes/quizroutes.js';
+import soal from './routes/soalroutes.js';
+import guru from './routes/gururoutes.js';
+import course from './routes/courseroutes.js';
+import pembelian from './routes/pembelianroutes.js';
+import dasboard from './routes/dasboardroutes.js';
+
 
 // import signinroutes from './routes/signinroutes.js';
 
@@ -44,6 +51,11 @@ app.use(session({
     maxAge: 1000 * 60 * 60 // 1 jam
   }
 }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// serve folder public yang ada di root project
+app.use(express.static(path.resolve(__dirname, "../public")))
 // Register routes
 // app.use('/api/regis', signinroutes);
 app.use('/api/auth', loginroutes);
@@ -52,8 +64,14 @@ app.use('/api/pelajaran', pelajaranroutes);
 app.use('/api/materi', materiroutes);
 app.use('/api/bab', babroutes);
 app.use('/api/subbab', subbabroutes);
-
+app.use('/api/quiz', quiz);
+app.use('/api/soal', soal);
 app.use('/api/chat', chatRoutes);
+app.use('/api/guru', guru);
+app.use('/api/course', course);
+app.use('/api/pembelian', pembelian);
+app.use('/api/dashboard', dasboard);
+
 
 // Handle 404
 app.use((req, res) => {

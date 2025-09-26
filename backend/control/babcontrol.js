@@ -78,4 +78,106 @@ export const getallbab = async (req, res) => {
   }
 };
 
-export default { getBabAndProgresByPelajaran, getallbab };
+// ================== READ ==================
+// Semua bab + pelajaran + jenjang (untuk admin)
+export const getBabByPelajaran = async (req, res) => {
+  try {
+    const { id_pelajaran } = req.params;
+
+    const [rows] = await db.query(`
+      SELECT 
+        b.id_bab,
+        b.judul_bab,
+        b.detail,
+        b.harga,
+        b.icon,
+        b.point_xp,
+        p.id_pelajaran,
+        p.nama_pelajaran,
+        j.id_jenjang,
+        j.nama_jenjang,
+        (SELECT COUNT(*) FROM subbab s WHERE s.id_bab = b.id_bab) AS total_subbab,
+        (SELECT COUNT(*) FROM quiz q WHERE q.id_bab = b.id_bab) AS total_quiz
+      FROM bab b
+      JOIN pelajaran p ON b.id_pelajaran = p.id_pelajaran
+      JOIN jenjang j ON p.id_jenjang = j.id_jenjang
+      WHERE b.id_pelajaran = ?
+      ORDER BY b.id_bab ASC
+    `, [id_pelajaran]);
+
+    res.json(rows);
+  } catch (err) {
+    console.error("DB ERROR getBabByPelajaran:", err);
+    res.status(500).json({ message: "Gagal ambil data bab", error: err.message });
+  }
+};
+
+
+
+// ================== CREATE ==================
+export const addBab = async (req, res) => {
+  try {
+    const { judul_bab, point_xp, detail, harga, id_pelajaran } = req.body;
+    if (!judul_bab || !id_pelajaran) {
+      return res.status(400).json({ message: "Judul Bab & id_pelajaran wajib diisi" });
+    }
+
+    const iconPath = req.file ? `/img/${req.file.filename}` : "/img/default.png";
+
+    const [result] = await db.query(
+      `INSERT INTO bab (judul_bab, point_xp, detail, harga, icon, id_pelajaran) 
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [judul_bab, point_xp || 0, detail || "", harga || 0, iconPath, id_pelajaran]
+    );
+
+    res.json({ message: "Bab berhasil ditambahkan", id: result.insertId });
+  } catch (err) {
+    console.error("DB ERROR addBab:", err);
+    res.status(500).json({ message: "Gagal menambah bab", error: err.message });
+  }
+};
+
+
+// ================== UPDATE ==================
+export const updateBab = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { judul_bab, point_xp, detail, harga, id_pelajaran } = req.body;
+    if (!judul_bab || !id_pelajaran) {
+      return res.status(400).json({ message: "Judul Bab & id_pelajaran wajib diisi" });
+    }
+
+    const iconPath = req.file ? `/img/${req.file.filename}` : null;
+
+    let query = `UPDATE bab SET judul_bab=?, point_xp=?, detail=?, harga=?, id_pelajaran=?`;
+    const params = [judul_bab, point_xp || 0, detail || "", harga || 0, id_pelajaran];
+
+    if (iconPath) {
+      query += `, icon=?`;
+      params.push(iconPath);
+    }
+    query += ` WHERE id_bab=?`;
+    params.push(id);
+
+    await db.query(query, params);
+    res.json({ message: "Bab berhasil diupdate" });
+  } catch (err) {
+    console.error("DB ERROR updateBab:", err);
+    res.status(500).json({ message: "Gagal mengupdate bab", error: err.message });
+  }
+};
+
+// ================== DELETE ==================
+export const deleteBab = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await db.query("DELETE FROM bab WHERE id_bab=?", [id]);
+    res.json({ message: "Bab berhasil dihapus" });
+  } catch (err) {
+    console.error("DB ERROR deleteBab:", err);
+    res.status(500).json({ message: "Gagal menghapus bab", error: err.message });
+  }
+};
+
+
+export default { getBabAndProgresByPelajaran, getallbab, getBabByPelajaran, addBab, updateBab, deleteBab };
