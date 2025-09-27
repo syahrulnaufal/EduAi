@@ -25,6 +25,7 @@ import guru from './routes/gururoutes.js';
 import course from './routes/courseroutes.js';
 import pembelian from './routes/pembelianroutes.js';
 import dasboard from './routes/dasboardroutes.js';
+import users from './routes/usersroutes.js';
 
 
 // import signinroutes from './routes/signinroutes.js';
@@ -71,6 +72,7 @@ app.use('/api/guru', guru);
 app.use('/api/course', course);
 app.use('/api/pembelian', pembelian);
 app.use('/api/dashboard', dasboard);
+app.use('/api/users', users);
 
 
 // Handle 404
