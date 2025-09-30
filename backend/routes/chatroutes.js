@@ -1,5 +1,5 @@
 import express from "express";
-import { getHistory, clearHistory, sendMessage, debugSession, getConversations, createConversation, getConversationMessages } from "../control/chatcontrol.js";
+import { getHistory, clearHistory, sendMessage, debugSession, getConversations, createConversation, getConversationMessages, deleteConversation, renameConversation } from "../control/chatcontrol.js";
 import { verifyUser } from "../middleware/auth.js"; 
 
 const router = express.Router();
@@ -13,6 +13,8 @@ router.post("/clear", verifyUser, clearHistory);
 router.get("/conversations", verifyUser, getConversations);
 router.post("/conversations", verifyUser, createConversation);
 router.get("/conversations/:id/messages", verifyUser, getConversationMessages);
+router.delete("/conversations/:id", verifyUser, deleteConversation);
+router.put("/conversations/:id", verifyUser, renameConversation);
 
 // debug endpoint (opsional, untuk testing)
 router.get("/debug-session", debugSession);

@@ -322,3 +322,92 @@ export const getConversationMessages = async (req, res) => {
     return res.status(500).json({ msg: "Server error" });
   }
 };
+
+// DELETE /chat/conversations/:id - menghapus conversation
+export const deleteConversation = async (req, res) => {
+  try {
+    const userId = getUserIdFromSession(req);
+    const conversationId = req.params.id;
+    
+    console.log(`🗑️ Deleting conversation ${conversationId} for user ${userId}`);
+    
+    if (!userId) {
+      console.log("❌ No user ID found in session");
+      return res.status(401).json({ msg: "Silakan login dulu" });
+    }
+
+    // Verifikasi bahwa conversation ini milik user yang login
+    const [convCheck] = await db.query(
+      `SELECT id_conversation FROM conversations WHERE id_conversation = ? AND id_user = ?`,
+      [conversationId, userId]
+    );
+
+    if (convCheck.length === 0) {
+      console.log(`❌ Conversation ${conversationId} not found or not owned by user ${userId}`);
+      return res.status(404).json({ msg: "Conversation tidak ditemukan" });
+    }
+
+    // Hapus conversation (histori_chat akan terhapus otomatis karena CASCADE)
+    await db.query(
+      `DELETE FROM conversations WHERE id_conversation = ? AND id_user = ?`,
+      [conversationId, userId]
+    );
+
+    console.log(`✅ Successfully deleted conversation ${conversationId}`);
+    return res.json({ msg: "Conversation berhasil dihapus" });
+  } catch (err) {
+    console.error("deleteConversation error:", err);
+    return res.status(500).json({ msg: "Server error" });
+  }
+};
+
+// PUT /chat/conversations/:id - mengubah nama conversation
+export const renameConversation = async (req, res) => {
+  try {
+    const userId = getUserIdFromSession(req);
+    const conversationId = req.params.id;
+    const { title } = req.body;
+    
+    console.log(`✏️ Renaming conversation ${conversationId} for user ${userId} to: "${title}"`);
+    
+    if (!userId) {
+      console.log("❌ No user ID found in session");
+      return res.status(401).json({ msg: "Silakan login dulu" });
+    }
+
+    if (!title || title.trim().length === 0) {
+      return res.status(400).json({ msg: "Nama conversation tidak boleh kosong" });
+    }
+
+    const newTitle = title.trim();
+    if (newTitle.length > 255) {
+      return res.status(400).json({ msg: "Nama conversation terlalu panjang (maksimal 255 karakter)" });
+    }
+
+    // Verifikasi bahwa conversation ini milik user yang login
+    const [convCheck] = await db.query(
+      `SELECT id_conversation FROM conversations WHERE id_conversation = ? AND id_user = ?`,
+      [conversationId, userId]
+    );
+
+    if (convCheck.length === 0) {
+      console.log(`❌ Conversation ${conversationId} not found or not owned by user ${userId}`);
+      return res.status(404).json({ msg: "Conversation tidak ditemukan" });
+    }
+
+    // Update nama conversation
+    await db.query(
+      `UPDATE conversations SET title = ?, updated_at = CURRENT_TIMESTAMP WHERE id_conversation = ? AND id_user = ?`,
+      [newTitle, conversationId, userId]
+    );
+
+    console.log(`✅ Successfully renamed conversation ${conversationId} to: "${newTitle}"`);
+    return res.json({ 
+      msg: "Nama conversation berhasil diubah",
+      title: newTitle 
+    });
+  } catch (err) {
+    console.error("renameConversation error:", err);
+    return res.status(500).json({ msg: "Server error" });
+  }
+};

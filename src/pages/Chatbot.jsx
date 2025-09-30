@@ -34,8 +34,31 @@ function Chatbot() {
     const [currentUser, setCurrentUser] = useState(null);
     
     // State untuk conversation management
-    const [conversations, setConversations] = useState([]);
-    const [activeConversationId, setActiveConversationId] = useState(null);
+    const [conversations, setConversations] = useState([
+        // Mock data for testing when backend is not available
+        {
+            id_conversation: 1,
+            title: "Chat Baru",
+            message_count: 8,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        },
+        {
+            id_conversation: 2,
+            title: "Pertanyaan tentang Matematika",
+            message_count: 5,
+            created_at: new Date(Date.now() - 86400000).toISOString(), // Yesterday
+            updated_at: new Date(Date.now() - 86400000).toISOString()
+        },
+        {
+            id_conversation: 3,
+            title: "Diskusi tentang Fisika Quantum",
+            message_count: 12,
+            created_at: new Date(Date.now() - 86400000 * 3).toISOString(), // 3 days ago
+            updated_at: new Date(Date.now() - 86400000 * 3).toISOString()
+        }
+    ]);
+    const [activeConversationId, setActiveConversationId] = useState(1);
 
     //asidebar
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -283,6 +306,7 @@ function Chatbot() {
                             conversations={conversations}
                             activeConversationId={activeConversationId}
                             onSelectConversation={selectConversation}
+                            onConversationsUpdate={loadConversations}
                         >
                             <div onClick={toggleAsidebar} className="cursor-pointer hidden flexAt768 p-1 rounded-full hover:bg-indigo-50 duration-150">
                                 <img className="rotate-90" src='/img/arrowDown.png' width={'20px'} />
