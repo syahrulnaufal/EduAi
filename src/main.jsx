@@ -16,6 +16,8 @@ import Curriculum from './pages/CurriculumPage'
 import Profil from './pages/Profil'
 import ProtectedRoute from "./components/ProtectedRoute"
 import WatchMateriVideo from './pages/WatchMateriVideo'
+import ExamPage from './pages/ExamPage'
+import PembahasanExam from './pages/PembahasanExam'
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>
@@ -35,6 +37,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/fitur/:id" element={<FiturPopuler />} />
         <Route path="/fitur/:id/curriculum" element={<Curriculum />} />
         <Route path="/profile" element={<Profil />} />
+        <Route path="/exam" element={<ExamPage />} />
+        <Route path="/exam/pembahasan" element={<PembahasanExam />} />  
       </Routes>
     </BrowserRouter>
 )
