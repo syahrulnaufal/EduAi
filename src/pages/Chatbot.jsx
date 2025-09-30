@@ -34,31 +34,8 @@ function Chatbot() {
     const [currentUser, setCurrentUser] = useState(null);
     
     // State untuk conversation management
-    const [conversations, setConversations] = useState([
-        // Mock data for testing when backend is not available
-        {
-            id_conversation: 1,
-            title: "Chat Baru",
-            message_count: 8,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-        },
-        {
-            id_conversation: 2,
-            title: "Pertanyaan tentang Matematika",
-            message_count: 5,
-            created_at: new Date(Date.now() - 86400000).toISOString(), // Yesterday
-            updated_at: new Date(Date.now() - 86400000).toISOString()
-        },
-        {
-            id_conversation: 3,
-            title: "Diskusi tentang Fisika Quantum",
-            message_count: 12,
-            created_at: new Date(Date.now() - 86400000 * 3).toISOString(), // 3 days ago
-            updated_at: new Date(Date.now() - 86400000 * 3).toISOString()
-        }
-    ]);
-    const [activeConversationId, setActiveConversationId] = useState(1);
+    const [conversations, setConversations] = useState([]);
+    const [activeConversationId, setActiveConversationId] = useState(null);
 
     //asidebar
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -104,6 +81,8 @@ function Chatbot() {
     const sendMessage = useCallback(async (text) => {
         if (!text.trim()) return;
 
+        console.log("🚀 Sending message with activeConversationId:", activeConversationId);
+
         const newUserMsg = {
             role: "user",
             content: text,
@@ -114,15 +93,18 @@ function Chatbot() {
         setLoading(true);
 
         try {
+            const requestBody = {
+                message: text, 
+                conversationId: activeConversationId 
+            };
+            console.log("📤 Request body:", requestBody);
+
             const res = await fetch("http://localhost:5000/api/chat/send", {
                 method: "POST",
                 headers: {
                     'Content-Type': "application/json",
                 },
-                body: JSON.stringify({ 
-                    message: text, 
-                    conversationId: activeConversationId 
-                }),
+                body: JSON.stringify(requestBody),
                 credentials: "include" // jika menggunakan cookie untuk session agar cookie dikirim dan diterima backend
             });
 

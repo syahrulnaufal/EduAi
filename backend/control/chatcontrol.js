@@ -1,7 +1,6 @@
 import db from "../db.js";
 import dotenv from "dotenv";
 import Groq from "groq-sdk";
-//import OpenAI from "openai";
 
 // Optional: load .env
 dotenv.config();
@@ -11,6 +10,13 @@ console.log("DEBUG: GROQ_MODEL =", process.env.GROQ_MODEL || "Belum di-set");
 
 // Helper ambil userId dari session 
 function getUserIdFromSession(req) {
+  console.log("🔍 Session debug:", {
+    hasSession: !!req.session,
+    sessionData: req.session,
+    hasUser: !!req.session?.user,
+    userData: req.session?.user
+  });
+  
   return (
     req.session?.user?.id ||         // dari login response
     req.session?.user?.id_user ||    // kebiasaan projek kamu
@@ -127,7 +133,7 @@ export const sendMessage = async (req, res) => {
     console.log("💾 Saving user message to database...");
     // 1) simpan pesan user dengan conversation ID
     await db.query(
-      `INSERT INTO histori_chat (id_user, id_conversation, role, isi_chat) VALUES (?, ?, 'user', ?)`,
+      `INSERT INTO histori_chat (id_user, id_conversation, role, isi_chat, tanggal) VALUES (?, ?, 'user', ?, NOW())`,
       [userId, conversationId, message]
     );
 
@@ -175,7 +181,7 @@ export const sendMessage = async (req, res) => {
     console.log("💾 Saving AI response to database...");
     // 5) simpan jawaban AI ke conversation yang sama
     await db.query(
-      `INSERT INTO histori_chat (id_user, id_conversation, role, isi_chat) VALUES (?, ?, 'assistant', ?)`,
+      `INSERT INTO histori_chat (id_user, id_conversation, role, isi_chat, tanggal) VALUES (?, ?, 'assistant', ?, NOW())`,
       [userId, conversationId, replyText]
     );
 
