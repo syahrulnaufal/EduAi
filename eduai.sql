@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Waktu pembuatan: 30 Sep 2025 pada 04.40
--- Versi server: 10.4.32-MariaDB
--- Versi PHP: 8.2.12
+-- Host: localhost:3306
+-- Waktu pembuatan: 30 Sep 2025 pada 16.06
+-- Versi server: 8.0.30
+-- Versi PHP: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,15 +28,15 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `bab` (
-  `id_bab` int(11) NOT NULL,
-  `judul_bab` varchar(200) NOT NULL,
-  `point_xp` int(11) DEFAULT NULL,
-  `point_gold` int(11) DEFAULT NULL,
-  `detail` text NOT NULL,
-  `harga` int(11) NOT NULL,
-  `icon` varchar(200) NOT NULL,
-  `id_pelajaran` int(11) NOT NULL,
-  `id_quiz` int(11) DEFAULT NULL
+  `id_bab` int NOT NULL,
+  `judul_bab` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `point_xp` int DEFAULT NULL,
+  `point_gold` int DEFAULT NULL,
+  `detail` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `harga` int NOT NULL,
+  `icon` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_pelajaran` int NOT NULL,
+  `id_quiz` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -53,12 +53,19 @@ INSERT INTO `bab` (`id_bab`, `judul_bab`, `point_xp`, `point_gold`, `detail`, `h
 --
 
 CREATE TABLE `conversations` (
-  `id_conversation` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `id_conversation` int NOT NULL,
+  `id_user` int NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `conversations`
+--
+
+INSERT INTO `conversations` (`id_conversation`, `id_user`, `title`, `created_at`, `updated_at`) VALUES
+(1, 2, 'test', '2025-09-30 22:59:06', '2025-09-30 23:02:56');
 
 -- --------------------------------------------------------
 
@@ -67,15 +74,15 @@ CREATE TABLE `conversations` (
 --
 
 CREATE TABLE `course` (
-  `id_course` int(11) NOT NULL,
-  `nama_course` varchar(255) DEFAULT NULL,
+  `id_course` int NOT NULL,
+  `nama_course` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `harga` float NOT NULL,
-  `jumlah_peserta` int(11) DEFAULT NULL,
-  `detail` varchar(500) NOT NULL,
-  `sertifikasi` varchar(100) NOT NULL,
+  `jumlah_peserta` int DEFAULT NULL,
+  `detail` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
+  `sertifikasi` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `durasi` float NOT NULL,
-  `target_course` varchar(255) NOT NULL,
-  `id_guru` int(11) NOT NULL
+  `target_course` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `id_guru` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -93,10 +100,10 @@ INSERT INTO `course` (`id_course`, `nama_course`, `harga`, `jumlah_peserta`, `de
 --
 
 CREATE TABLE `guru` (
-  `id_guru` int(11) NOT NULL,
-  `nama_guru` varchar(100) NOT NULL,
-  `bio_guru` text NOT NULL,
-  `pendidikan_terakhir` varchar(255) NOT NULL
+  `id_guru` int NOT NULL,
+  `nama_guru` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bio_guru` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pendidikan_terakhir` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -113,11 +120,11 @@ INSERT INTO `guru` (`id_guru`, `nama_guru`, `bio_guru`, `pendidikan_terakhir`) V
 --
 
 CREATE TABLE `hasil` (
-  `id_hasil` int(11) NOT NULL,
+  `id_hasil` int NOT NULL,
   `score` decimal(5,2) NOT NULL,
   `waktu_pengerjaan` datetime NOT NULL,
-  `id_quiz` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL
+  `id_quiz` int NOT NULL,
+  `id_user` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -127,13 +134,21 @@ CREATE TABLE `hasil` (
 --
 
 CREATE TABLE `histori_chat` (
-  `id_chat` int(11) NOT NULL,
-  `isi_chat` text NOT NULL,
+  `id_chat` int NOT NULL,
+  `isi_chat` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `tanggal` datetime NOT NULL,
-  `role` varchar(20) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id_conversation` int(11) DEFAULT NULL
+  `role` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_user` int NOT NULL,
+  `id_conversation` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `histori_chat`
+--
+
+INSERT INTO `histori_chat` (`id_chat`, `isi_chat`, `tanggal`, `role`, `id_user`, `id_conversation`) VALUES
+(1, 'test', '2025-09-30 23:02:56', 'user', 2, 1),
+(2, 'Tolong berikan pertanyaan yang lebih spesifik terkait pendidikan, sehingga saya dapat membantu Anda dengan lebih efektif. Apakah Anda ingin tahu tentang strategi belajar, cara meningkatkan kemampuan akademik, atau hal-hal lain yang terkait dengan pendidikan?', '2025-09-30 23:02:56', 'assistant', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -142,10 +157,10 @@ CREATE TABLE `histori_chat` (
 --
 
 CREATE TABLE `jawaban_user` (
-  `id_jawaban` int(11) NOT NULL,
-  `jawaban_dipilih` char(1) NOT NULL,
-  `id_hasil` int(11) NOT NULL,
-  `id_soal` int(11) NOT NULL
+  `id_jawaban` int NOT NULL,
+  `jawaban_dipilih` char(1) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_hasil` int NOT NULL,
+  `id_soal` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -155,8 +170,8 @@ CREATE TABLE `jawaban_user` (
 --
 
 CREATE TABLE `jenjang` (
-  `id_jenjang` int(11) NOT NULL,
-  `nama_jenjang` varchar(100) NOT NULL
+  `id_jenjang` int NOT NULL,
+  `nama_jenjang` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -184,12 +199,12 @@ INSERT INTO `jenjang` (`id_jenjang`, `nama_jenjang`) VALUES
 --
 
 CREATE TABLE `pelajaran` (
-  `id_pelajaran` int(11) NOT NULL,
-  `nama_pelajaran` varchar(100) NOT NULL,
-  `icon` varchar(200) NOT NULL,
-  `link` varchar(255) NOT NULL,
-  `id_jenjang` int(11) NOT NULL,
-  `id_bab` int(11) DEFAULT NULL
+  `id_pelajaran` int NOT NULL,
+  `nama_pelajaran` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `icon` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `link` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_jenjang` int NOT NULL,
+  `id_bab` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -208,12 +223,12 @@ INSERT INTO `pelajaran` (`id_pelajaran`, `nama_pelajaran`, `icon`, `link`, `id_j
 --
 
 CREATE TABLE `pembelian` (
-  `id_pembelian` int(11) NOT NULL,
+  `id_pembelian` int NOT NULL,
   `tanggal_pembelian` date NOT NULL,
-  `status_pembayaran` varchar(20) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id_bab` int(11) DEFAULT NULL,
-  `id_course` int(11) DEFAULT NULL
+  `status_pembayaran` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_user` int NOT NULL,
+  `id_bab` int DEFAULT NULL,
+  `id_course` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -230,9 +245,9 @@ INSERT INTO `pembelian` (`id_pembelian`, `tanggal_pembelian`, `status_pembayaran
 --
 
 CREATE TABLE `point_pembelajaran` (
-  `id_point` int(11) NOT NULL,
-  `isi_point` varchar(100) NOT NULL,
-  `id_course` int(11) NOT NULL
+  `id_point` int NOT NULL,
+  `isi_point` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_course` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -253,10 +268,10 @@ INSERT INTO `point_pembelajaran` (`id_point`, `isi_point`, `id_course`) VALUES
 --
 
 CREATE TABLE `quiz` (
-  `id_quiz` int(11) NOT NULL,
-  `nama_quiz` varchar(100) NOT NULL,
+  `id_quiz` int NOT NULL,
+  `nama_quiz` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `rating` decimal(3,2) NOT NULL,
-  `id_bab` int(11) NOT NULL
+  `id_bab` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -273,14 +288,14 @@ INSERT INTO `quiz` (`id_quiz`, `nama_quiz`, `rating`, `id_bab`) VALUES
 --
 
 CREATE TABLE `soal` (
-  `id_soal` int(11) NOT NULL,
-  `pertanyaan` text NOT NULL,
-  `opsi_a` varchar(255) NOT NULL,
-  `opsi_b` varchar(255) NOT NULL,
-  `opsi_c` varchar(255) NOT NULL,
-  `opsi_d` varchar(255) NOT NULL,
-  `jawaban` char(1) NOT NULL,
-  `id_quiz` int(11) NOT NULL
+  `id_soal` int NOT NULL,
+  `pertanyaan` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `opsi_a` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `opsi_b` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `opsi_c` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `opsi_d` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `jawaban` char(1) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_quiz` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -297,11 +312,11 @@ INSERT INTO `soal` (`id_soal`, `pertanyaan`, `opsi_a`, `opsi_b`, `opsi_c`, `opsi
 --
 
 CREATE TABLE `subbab` (
-  `id_subbab` int(11) NOT NULL,
-  `judul_subbab` varchar(200) NOT NULL,
-  `video_materi` varchar(255) NOT NULL,
-  `urutan` int(11) NOT NULL,
-  `id_bab` int(11) NOT NULL
+  `id_subbab` int NOT NULL,
+  `judul_subbab` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `video_materi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `urutan` int NOT NULL,
+  `id_bab` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -319,12 +334,12 @@ INSERT INTO `subbab` (`id_subbab`, `judul_subbab`, `video_materi`, `urutan`, `id
 --
 
 CREATE TABLE `users` (
-  `id_user` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `id_google` varchar(100) DEFAULT NULL,
-  `role` enum('admin','user') NOT NULL
+  `id_user` int NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_google` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `role` enum('admin','user') COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -344,13 +359,13 @@ INSERT INTO `users` (`id_user`, `username`, `email`, `password`, `id_google`, `r
 --
 
 CREATE TABLE `user_progres_bab` (
-  `status` int(11) NOT NULL,
+  `status` int NOT NULL,
   `tanggal_selesai` datetime DEFAULT NULL,
   `tanggal_menonton` datetime DEFAULT NULL,
-  `durasi_video` int(11) NOT NULL,
-  `durasi_menonton` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id_subbab` int(11) NOT NULL
+  `durasi_video` int NOT NULL,
+  `durasi_menonton` int NOT NULL,
+  `id_user` int NOT NULL,
+  `id_subbab` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -482,91 +497,91 @@ ALTER TABLE `user_progres_bab`
 -- AUTO_INCREMENT untuk tabel `bab`
 --
 ALTER TABLE `bab`
-  MODIFY `id_bab` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_bab` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `conversations`
 --
 ALTER TABLE `conversations`
-  MODIFY `id_conversation` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_conversation` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `course`
 --
 ALTER TABLE `course`
-  MODIFY `id_course` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_course` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `guru`
 --
 ALTER TABLE `guru`
-  MODIFY `id_guru` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_guru` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `hasil`
 --
 ALTER TABLE `hasil`
-  MODIFY `id_hasil` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_hasil` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `histori_chat`
 --
 ALTER TABLE `histori_chat`
-  MODIFY `id_chat` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_chat` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `jawaban_user`
 --
 ALTER TABLE `jawaban_user`
-  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_jawaban` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `jenjang`
 --
 ALTER TABLE `jenjang`
-  MODIFY `id_jenjang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_jenjang` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT untuk tabel `pelajaran`
 --
 ALTER TABLE `pelajaran`
-  MODIFY `id_pelajaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_pelajaran` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `pembelian`
 --
 ALTER TABLE `pembelian`
-  MODIFY `id_pembelian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_pembelian` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `point_pembelajaran`
 --
 ALTER TABLE `point_pembelajaran`
-  MODIFY `id_point` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_point` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT untuk tabel `quiz`
 --
 ALTER TABLE `quiz`
-  MODIFY `id_quiz` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_quiz` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `soal`
 --
 ALTER TABLE `soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_soal` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `subbab`
 --
 ALTER TABLE `subbab`
-  MODIFY `id_subbab` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_subbab` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
