@@ -48,7 +48,6 @@ function MathCoursePage(){
 
             <Topbar>
                 <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
-                <div></div>
             </Topbar>
             <div className="w-screen min-h-screen bg-[#F9F9F9] nunito-base">
                 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import Topbar from '../components/Topbar'; 
 import BurgerMenu from '../components/BurgerMenu';
 import Sidebar from '../components/Sidebar';
@@ -26,7 +26,7 @@ function PembahasanExam() {
     const { questions, userAnswers } = location.state || {};
 
     if (!questions || !userAnswers) {
-        React.useEffect(() => { navigate('/'); }, [navigate]);
+        // React.useEffect(() => { navigate('/'); }, [navigate]);
         return <div>Data tidak ditemukan. Mengarahkan...</div>;
     }
 
@@ -67,7 +67,6 @@ function PembahasanExam() {
             
             <Topbar>
                 <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
-                <div></div>
             </Topbar>
             
             <div className="flex-1 flex flex-col">

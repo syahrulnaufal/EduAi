@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 30 Sep 2025 pada 16.06
+-- Waktu pembuatan: 30 Sep 2025 pada 17.50
 -- Versi server: 8.0.30
 -- Versi PHP: 8.1.10
 
@@ -44,7 +44,13 @@ CREATE TABLE `bab` (
 --
 
 INSERT INTO `bab` (`id_bab`, `judul_bab`, `point_xp`, `point_gold`, `detail`, `harga`, `icon`, `id_pelajaran`, `id_quiz`) VALUES
-(1, 'Matematika: Statistika & Peluang', 75, NULL, 'Ada data tunggal, ada data kelompok. Kita belajar cara penyajiannya yuk! Video ini video konsep kilat. Materi dijelaskan lebih cepat. Langsung aja yuk mulai belajar!', 0, '/img/ikonSuratLamaranKerja.png', 3, NULL);
+(1, 'Matematika: Statistika & Peluang', 75, NULL, 'Ada data tunggal, ada data kelompok. Kita belajar cara penyajiannya yuk! Video ini video konsep kilat. Materi dijelaskan lebih cepat. Langsung aja yuk mulai belajar!', 0, '/img/ikonSuratLamaranKerja.png', 3, NULL),
+(2, 'Teks Laporan Hasil Observasi', NULL, NULL, 'Pelajari cara membuat teks laporan hasil observasi yang baik dan benar sesuai struktur yang tepat.', 0, '/img/ikonKelasBahasaIndo.png', 2, NULL),
+(3, 'Teks Eksposisi', NULL, NULL, 'Memahami struktur, ciri-ciri, dan cara menulis teks eksposisi yang efektif untuk menyampaikan informasi.', 0, '/img/ikonKelasBahasaIndo.png', 2, NULL),
+(4, 'Teks Anekdot', NULL, NULL, 'Belajar menulis dan menganalisis teks anekdot yang mengandung kritik sosial dengan bahasa yang lugas.', 0, '/img/ikonKelasBahasaIndo.png', 2, NULL),
+(5, 'Fisika - Gerak dan Gaya', NULL, NULL, 'Pelajari konsep dasar gerak lurus, gerak melingkar, dan gaya-gaya dalam fisika', 0, '/img/fisika.png', 5, NULL),
+(6, 'Kimia - Struktur Atom', NULL, NULL, 'Memahami struktur atom, elektron, proton, neutron dan tabel periodik', 0, '/img/kimia.png', 5, NULL),
+(7, 'Biologi - Sel dan Jaringan', NULL, NULL, 'Mengenal struktur sel, fungsi organel, dan berbagai jenis jaringan makhluk hidup', 0, '/img/biologi.png', 5, NULL);
 
 -- --------------------------------------------------------
 
@@ -214,7 +220,7 @@ CREATE TABLE `pelajaran` (
 INSERT INTO `pelajaran` (`id_pelajaran`, `nama_pelajaran`, `icon`, `link`, `id_jenjang`, `id_bab`) VALUES
 (2, 'Bahasa Indonesia', '/img/ikonKelasBahasaIndo.png', 'indo', 10, NULL),
 (3, 'Matematika', '/img/mtk.png', 'mtk', 10, NULL),
-(5, 'IPA terpadu', '/img/ipa_1758732397872.png', '', 10, NULL);
+(5, 'IPA Terpadu', '/img/ipa_1758732397872.png', 'ipa', 10, NULL);
 
 -- --------------------------------------------------------
 
@@ -324,8 +330,23 @@ CREATE TABLE `subbab` (
 --
 
 INSERT INTO `subbab` (`id_subbab`, `judul_subbab`, `video_materi`, `urutan`, `id_bab`) VALUES
-(1, 'Pengertian dan Contoh Data Tunggal', 'httpsss', 1, 1),
-(2, 'Pengertian dan Contoh Data Kelompok', 'http', 2, 1);
+(1, 'Pengertian dan Contoh Data Tunggal', 'https://www.youtube.com/watch?v=sample101', 1, 1),
+(2, 'Pengertian dan Contoh Data Kelompok', 'https://www.youtube.com/watch?v=sample102', 2, 1),
+(4, 'Pengertian dan Ciri-ciri Teks Laporan', 'https://www.youtube.com/watch?v=sample104', 1, 2),
+(5, 'Struktur Teks Laporan', 'https://www.youtube.com/watch?v=sample105', 2, 2),
+(6, 'Pengertian Teks Eksposisi', 'https://www.youtube.com/watch?v=sample106', 1, 3),
+(7, 'Jenis-jenis Teks Eksposisi', 'https://www.youtube.com/watch?v=sample107', 2, 3),
+(8, 'Pengertian Teks Anekdot', 'https://www.youtube.com/watch?v=sample100\r\n', 1, 4),
+(9, 'Struktur dan Ciri Teks Anekdot', 'https://www.youtube.com/watch?v=sample109', 2, 4),
+(10, 'Pengertian Gerak', 'https://www.youtube.com/watch?v=sample1', 1, 5),
+(11, 'Gerak Lurus Beraturan', 'https://www.youtube.com/watch?v=sample2', 2, 5),
+(12, 'Gaya dan Hukum Newton', 'https://www.youtube.com/watch?v=sample3', 3, 5),
+(13, 'Partikel Penyusun Atom', 'https://www.youtube.com/watch?v=sample4', 1, 6),
+(14, 'Model Atom', 'https://www.youtube.com/watch?v=sample5', 2, 6),
+(15, 'Tabel Periodik', 'https://www.youtube.com/watch?v=sample6', 3, 6),
+(16, 'Struktur Sel', 'https://www.youtube.com/watch?v=sample7', 1, 7),
+(17, 'Organel Sel', 'https://www.youtube.com/watch?v=sample8', 2, 7),
+(18, 'Jaringan Tumbuhan dan Hewan', 'https://www.youtube.com/watch?v=sample9', 3, 7);
 
 -- --------------------------------------------------------
 
@@ -497,7 +518,7 @@ ALTER TABLE `user_progres_bab`
 -- AUTO_INCREMENT untuk tabel `bab`
 --
 ALTER TABLE `bab`
-  MODIFY `id_bab` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_bab` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `conversations`
@@ -575,7 +596,7 @@ ALTER TABLE `soal`
 -- AUTO_INCREMENT untuk tabel `subbab`
 --
 ALTER TABLE `subbab`
-  MODIFY `id_subbab` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_subbab` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`

@@ -121,7 +121,6 @@ function ExamPage(){
 
             <Topbar>
                 <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
-                <div></div>
             </Topbar>
             
             <div className="flex-1 flex flex-col ">

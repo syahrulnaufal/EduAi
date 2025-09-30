@@ -260,7 +260,6 @@ function Curriculum(){
 
             <Topbar>
                 <BurgerMenu icon={menuIcon} handleClick={hideSidebar}/>
-                <div></div>
             </Topbar>
 
             <main className="bg-gray-50 min-h-screen">
