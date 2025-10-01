@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 30 Sep 2025 pada 17.50
+-- Waktu pembuatan: 01 Okt 2025 pada 05.57
 -- Versi server: 8.0.30
 -- Versi PHP: 8.1.10
 
@@ -50,7 +50,39 @@ INSERT INTO `bab` (`id_bab`, `judul_bab`, `point_xp`, `point_gold`, `detail`, `h
 (4, 'Teks Anekdot', NULL, NULL, 'Belajar menulis dan menganalisis teks anekdot yang mengandung kritik sosial dengan bahasa yang lugas.', 0, '/img/ikonKelasBahasaIndo.png', 2, NULL),
 (5, 'Fisika - Gerak dan Gaya', NULL, NULL, 'Pelajari konsep dasar gerak lurus, gerak melingkar, dan gaya-gaya dalam fisika', 0, '/img/fisika.png', 5, NULL),
 (6, 'Kimia - Struktur Atom', NULL, NULL, 'Memahami struktur atom, elektron, proton, neutron dan tabel periodik', 0, '/img/kimia.png', 5, NULL),
-(7, 'Biologi - Sel dan Jaringan', NULL, NULL, 'Mengenal struktur sel, fungsi organel, dan berbagai jenis jaringan makhluk hidup', 0, '/img/biologi.png', 5, NULL);
+(7, 'Biologi - Sel dan Jaringan', NULL, NULL, 'Mengenal struktur sel, fungsi organel, dan berbagai jenis jaringan makhluk hidup', 0, '/img/biologi.png', 5, NULL),
+(8, 'Fisika - Kinematika Gerak Lurus', 75, 50, 'Mempelajari konsep dasar gerak lurus beraturan dan gerak lurus berubah beraturan. Analisis grafik gerak dan persamaan kinematika.', 0, './img/fisika.png', 6, NULL),
+(9, 'Fisika - Dinamika Partikel', 80, 60, 'Memahami hukum-hukum Newton, gaya gesekan, dan penerapannya dalam kehidupan sehari-hari.', 15000, './img/fisika.png', 6, NULL),
+(10, 'Fisika - Usaha dan Energi', 90, 70, 'Konsep usaha, energi kinetik, energi potensial, dan hukum kekekalan energi mekanik.', 20000, './img/fisika.png', 6, NULL),
+(11, 'Biologi - Keanekaragaman Hayati', 70, 45, 'Mempelajari tingkat keanekaragaman hayati, klasifikasi makhluk hidup, dan konservasi alam.', 0, './img/biologi.png', 7, NULL),
+(12, 'Biologi - Virus dan Bakteri', 75, 55, 'Memahami struktur, reproduksi, dan peranan virus serta bakteri dalam kehidupan.', 12000, './img/biologi.png', 7, NULL),
+(13, 'Biologi - Kingdom Plantae', 85, 65, 'Klasifikasi tumbuhan, struktur dan fungsi organ tumbuhan, serta reproduksi tumbuhan.', 18000, './img/biologi.png', 7, NULL),
+(14, 'Kimia - Struktur Atom dan Tabel Periodik', 80, 60, 'Mempelajari model atom, konfigurasi elektron, dan sifat keperiodikan unsur.', 0, './img/kimia.png', 8, NULL),
+(15, 'Kimia - Ikatan Kimia', 85, 65, 'Memahami ikatan ion, ikatan kovalen, dan ikatan logam beserta sifat-sifatnya.', 15000, './img/kimia.png', 8, NULL),
+(16, 'Kimia - Stoikiometri', 90, 70, 'Perhitungan kimia, konsep mol, rumus empiris dan molekul, serta reaksi kimia.', 20000, './img/kimia.png', 8, NULL),
+(17, 'English - Talking About Self', 65, 40, 'Learn how to introduce yourself, talk about hobbies, and describe personal characteristics.', 0, './img/inggris.png', 9, NULL),
+(18, 'English - Congratulating and Complimenting', 70, 50, 'Master expressions of congratulations, compliments, and positive responses in various situations.', 10000, './img/inggris.png', 9, NULL),
+(19, 'English - Expressing Intention', 75, 55, 'Learn to express plans, intentions, and future activities using proper grammar structures.', 15000, './img/inggris.png', 9, NULL),
+(20, 'Fisika - Kinematika Gerak Lurus', 75, 50, 'Mempelajari konsep dasar gerak lurus beraturan dan gerak lurus berubah beraturan. Analisis grafik gerak dan persamaan kinematika.', 0, './img/fisika.png', 6, NULL),
+(21, 'Fisika - Dinamika Partikel', 80, 60, 'Memahami hukum-hukum Newton, gaya gesekan, dan penerapannya dalam kehidupan sehari-hari.', 15000, './img/fisika.png', 6, NULL),
+(22, 'Fisika - Usaha dan Energi', 90, 70, 'Konsep usaha, energi kinetik, energi potensial, dan hukum kekekalan energi mekanik.', 20000, './img/fisika.png', 6, NULL),
+(23, 'Biologi - Keanekaragaman Hayati', 70, 45, 'Mempelajari tingkat keanekaragaman hayati, klasifikasi makhluk hidup, dan konservasi alam.', 0, './img/biologi.png', 7, NULL),
+(24, 'Biologi - Virus dan Bakteri', 75, 55, 'Memahami struktur, reproduksi, dan peranan virus serta bakteri dalam kehidupan.', 12000, './img/biologi.png', 7, NULL),
+(25, 'Biologi - Kingdom Plantae', 85, 65, 'Klasifikasi tumbuhan, struktur dan fungsi organ tumbuhan, serta reproduksi tumbuhan.', 18000, './img/biologi.png', 7, NULL),
+(26, 'Kimia - Struktur Atom dan Tabel Periodik', 80, 60, 'Mempelajari model atom, konfigurasi elektron, dan sifat keperiodikan unsur.', 0, './img/kimia.png', 8, NULL),
+(27, 'Kimia - Ikatan Kimia', 85, 65, 'Memahami ikatan ion, ikatan kovalen, dan ikatan logam beserta sifat-sifatnya.', 15000, './img/kimia.png', 8, NULL),
+(28, 'Kimia - Stoikiometri', 90, 70, 'Perhitungan kimia, konsep mol, rumus empiris dan molekul, serta reaksi kimia.', 20000, './img/kimia.png', 8, NULL),
+(29, 'English - Talking About Self', 65, 40, 'Learn how to introduce yourself, talk about hobbies, and describe personal characteristics.', 0, './img/inggris.png', 9, NULL),
+(30, 'English - Congratulating and Complimenting', 70, 50, 'Master expressions of congratulations, compliments, and positive responses in various situations.', 10000, './img/inggris.png', 9, NULL),
+(31, 'English - Expressing Intention', 75, 55, 'Learn to express plans, intentions, and future activities using proper grammar structures.', 15000, './img/inggris.png', 9, NULL),
+(32, 'Fisika - Kinematika Gerak Lurus', 75, 50, 'Mempelajari konsep dasar gerak lurus beraturan dan gerak lurus berubah beraturan. Analisis grafik gerak dan persamaan kinematika.', 0, './img/fisika.png', 6, NULL),
+(33, 'Fisika - Dinamika Partikel', 80, 60, 'Memahami hukum-hukum Newton, gaya gesekan, dan penerapannya dalam kehidupan sehari-hari.', 15000, './img/fisika.png', 6, NULL),
+(34, 'Biologi - Keanekaragaman Hayati', 70, 45, 'Mempelajari tingkat keanekaragaman hayati, klasifikasi makhluk hidup, dan konservasi alam.', 0, './img/biologi.png', 7, NULL),
+(35, 'Biologi - Virus dan Bakteri', 75, 55, 'Memahami struktur, reproduksi, dan peranan virus serta bakteri dalam kehidupan.', 12000, './img/biologi.png', 7, NULL),
+(36, 'Kimia - Struktur Atom', 80, 60, 'Mempelajari model atom, konfigurasi elektron, dan sifat keperiodikan unsur.', 0, './img/kimia.png', 8, NULL),
+(37, 'Kimia - Ikatan Kimia', 85, 65, 'Memahami ikatan ion, ikatan kovalen, dan ikatan logam beserta sifat-sifatnya.', 15000, './img/kimia.png', 8, NULL),
+(38, 'English - Talking About Self', 65, 40, 'Learn how to introduce yourself, talk about hobbies, and describe personal characteristics.', 0, './img/inggris.png', 9, NULL),
+(39, 'English - Congratulating and Complimenting', 70, 50, 'Master expressions of congratulations, compliments, and positive responses in various situations.', 10000, './img/inggris.png', 9, NULL);
 
 -- --------------------------------------------------------
 
@@ -220,7 +252,11 @@ CREATE TABLE `pelajaran` (
 INSERT INTO `pelajaran` (`id_pelajaran`, `nama_pelajaran`, `icon`, `link`, `id_jenjang`, `id_bab`) VALUES
 (2, 'Bahasa Indonesia', '/img/ikonKelasBahasaIndo.png', 'indo', 10, NULL),
 (3, 'Matematika', '/img/mtk.png', 'mtk', 10, NULL),
-(5, 'IPA Terpadu', '/img/ipa_1758732397872.png', 'ipa', 10, NULL);
+(5, 'IPA Terpadu', '/img/ipa_1758732397872.png', 'ipa', 10, NULL),
+(6, 'Fisika', './img/fisika.png', 'fisika', 10, NULL),
+(7, 'Biologi', './img/biologi.png', 'biologi', 10, NULL),
+(8, 'Kimia', './img/kimia.png', 'kimia', 10, NULL),
+(9, 'Bahasa Inggris', './img/inggris.png', 'inggris', 10, NULL);
 
 -- --------------------------------------------------------
 
@@ -518,7 +554,7 @@ ALTER TABLE `user_progres_bab`
 -- AUTO_INCREMENT untuk tabel `bab`
 --
 ALTER TABLE `bab`
-  MODIFY `id_bab` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_bab` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT untuk tabel `conversations`
@@ -566,7 +602,7 @@ ALTER TABLE `jenjang`
 -- AUTO_INCREMENT untuk tabel `pelajaran`
 --
 ALTER TABLE `pelajaran`
-  MODIFY `id_pelajaran` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_pelajaran` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT untuk tabel `pembelian`

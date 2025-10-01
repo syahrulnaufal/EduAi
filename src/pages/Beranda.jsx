@@ -106,64 +106,12 @@ const listMateri = [
         link: '/'
     },
     {
-        id: 2,
-        img: './img/mtk.png',
-        label: 'Matematika',
-        link: '/'
-    },
-    {
-        id: 3,
-        img: './img/fisika.png',
-        label: 'Fisika',
-        link: '/'
-    },
-    {
-        id: 4,
-        img: './img/biologi.png',
-        label: 'Biologi',
-        link: '/'
-    },
-    {
-        id: 5,
-        img: './img/kimia.png',
-        label: 'Kimia',
-        link: '/'
-    },
-    {
-        id: 6,
-        img: './img/inggris.png',
-        label: 'Bahasa Inggris',
-        link: '/'
-    },
-    {
-        id: 7,
-        img: './img/indonesia.png',
-        label: 'Bahasa Indonesia',
-        link: '/'
-    },
-    {
         id: 8,
         img: './img/all.png',
         label: 'Semua Pelajaran',
         link: '/chatbot'
     },
 ]
-const pilihMateri = (
-    <div className="max-w-[90%] w-fit px-2 rounded-xl bg-white">
-        <div className="overflow-x-auto overflow-y-hidden w-full">
-            <div className="w-max p-3 flex flex-wrap gap-2 justify-start">
-                {listMateri.map((materi) => 
-                    <NavLink to={materi.link} key={materi.id}>
-                        <div className="flex flex-col items-center sm:w-30 w-20 p-2 h-full rounded-lg hover:bg-indigo-50 active:bg-indigo-200 transition-colors duration-200" >
-                            <img className="sm:w-[50px] w-[30px] rounded-xl" src={materi.img} alt={materi.label} />
-                            <div className="mt-1 text-center sm:text-base text-sm">{materi.label}</div>
-                        </div>
-                    </NavLink>
-                )}
-            </div>
-        </div>
-    </div>
-);
 
 const eduChilOffer = (
     <div className="flex flex-col sm:flex-row items-center w-full px-10 sm:ps-20 sm:pe-10 justify-evenly relative overflow-hidden min-h-80 nunito-base">
@@ -208,6 +156,10 @@ const eduChilOffer = (
 
 // main
 function Beranda(){
+    // Dynamic subjects state
+    const [dynamicSubjects, setDynamicSubjects] = useState([]);
+    const [subjectsLoading, setSubjectsLoading] = useState(true);
+    
     // Sidebar 
     const [left, setLeft] = useState('-left-70') 
     const [bg, setBg] = useState('bg-transparent -z-10')
@@ -234,9 +186,156 @@ function Beranda(){
                   label: j.nama_jenjang,
                 }));
                 setOptions(formatted);
+                
+                // Set default to grade 10 (Kelas 10) for homepage subjects
+                // Try multiple variations to find grade 10
+                const defaultGrade = formatted.find(j => 
+                  j.label.includes('10') || 
+                  j.label.includes('X') || 
+                  j.label.toLowerCase().includes('sepuluh')
+                ) || formatted[0]; // fallback to first available grade
+                
+                if (defaultGrade) {
+                  setSelected(defaultGrade);
+                }
               })
-              .catch((err) => console.error(err));
+              .catch((err) => {
+                console.error('Error loading grades:', err);
+                // Set some fallback subjects if API fails
+                setDynamicSubjects([
+                  {
+                    id: 'fallback-1',
+                    img: './img/mtk.png',
+                    label: 'Matematika',
+                    link: '/ruang-belajar'
+                  },
+                  {
+                    id: 'fallback-2',
+                    img: './img/indonesia.png',
+                    label: 'Bahasa Indonesia',
+                    link: '/ruang-belajar'
+                  },
+                  {
+                    id: 'fallback-3',
+                    img: './img/fisika.png',
+                    label: 'Fisika',
+                    link: '/ruang-belajar'
+                  },
+                  {
+                    id: 'fallback-4',
+                    img: './img/biologi.png',
+                    label: 'Biologi',
+                    link: '/ruang-belajar'
+                  },
+                  {
+                    id: 'fallback-5',
+                    img: './img/kimia.png',
+                    label: 'Kimia',
+                    link: '/ruang-belajar'
+                  },
+                  {
+                    id: 'fallback-6',
+                    img: './img/inggris.png',
+                    label: 'Bahasa Inggris',
+                    link: '/ruang-belajar'
+                  }
+                ]);
+                setSubjectsLoading(false);
+              });
           }, []);
+
+    // Load subjects for homepage display
+    useEffect(() => {
+        if (selected) {
+            setSubjectsLoading(true);
+            fetch(`http://localhost:5000/api/materi?jenjang=${selected.value}`)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    // Map backend data to match the expected structure
+                    const mappedSubjects = data.map(subject => ({
+                        id: subject.id,
+                        img: subject.ikon || getSubjectIcon(subject.label),
+                        label: subject.label,
+                        link: `/ruang-belajar/${subject.id}`
+                    }));
+                    setDynamicSubjects(mappedSubjects);
+                    console.log('Loaded subjects for homepage:', mappedSubjects);
+                })
+                .catch(err => {
+                    console.error('Error loading subjects:', err);
+                    setDynamicSubjects([]);
+                })
+                .finally(() => {
+                    setSubjectsLoading(false);
+                });
+        }
+    }, [selected]);
+
+    // Helper function to get icon based on subject name
+    const getSubjectIcon = (subjectName) => {
+        const iconMap = {
+            'Matematika': './img/mtk.png',
+            'Bahasa Indonesia': './img/indonesia.png',
+            'IPA Terpadu': './img/fisika.png',
+            'IPA': './img/fisika.png',
+            'Fisika': './img/fisika.png',
+            'Biologi': './img/biologi.png',
+            'Kimia': './img/kimia.png',
+            'Bahasa Inggris': './img/inggris.png',
+            'IPS': './img/ips.png',
+            'IPS Terpadu': './img/ips.png'
+        };
+        return iconMap[subjectName] || './img/default.png';
+    };
+
+    // Render pilihMateri inside component so it has access to state
+    const renderPilihMateri = () => (
+        <div className="max-w-[90%] w-fit px-2 rounded-xl bg-white">
+            <div className="overflow-x-auto overflow-y-hidden w-full">
+                <div className="w-max p-3 flex flex-wrap gap-2 justify-start">
+                    {/* Dynamic subjects from backend first */}
+                    {!subjectsLoading && dynamicSubjects.map((materi) => 
+                        <NavLink to={materi.link} key={`dynamic-${materi.id}`}>
+                            <div className="flex flex-col items-center sm:w-30 w-20 p-2 h-full rounded-lg hover:bg-indigo-50 active:bg-indigo-200 transition-colors duration-200" >
+                                <img className="sm:w-[50px] w-[30px] rounded-xl" src={materi.img} alt={materi.label} />
+                                <div className="mt-1 text-center sm:text-base text-sm">{materi.label}</div>
+                            </div>
+                        </NavLink>
+                    )}
+                    
+                    {/* Static items */}
+                    {listMateri.map((materi) => 
+                        <NavLink to={materi.link} key={materi.id}>
+                            <div className="flex flex-col items-center sm:w-30 w-20 p-2 h-full rounded-lg hover:bg-indigo-50 active:bg-indigo-200 transition-colors duration-200" >
+                                <img className="sm:w-[50px] w-[30px] rounded-xl" src={materi.img} alt={materi.label} />
+                                <div className="mt-1 text-center sm:text-base text-sm">{materi.label}</div>
+                            </div>
+                        </NavLink>
+                    )}
+                    
+                    {/* Loading indicator */}
+                    {subjectsLoading && (
+                        <div className="flex flex-col items-center sm:w-30 w-20 p-2 h-full">
+                            <div className="sm:w-[50px] w-[30px] h-[50px] sm:h-[50px] bg-gray-200 rounded-xl animate-pulse"></div>
+                            <div className="mt-1 text-center sm:text-base text-sm text-gray-400">Loading...</div>
+                        </div>
+                    )}
+                    
+                    {/* Show message if no subjects loaded and not loading */}
+                    {!subjectsLoading && dynamicSubjects.length === 0 && selected && (
+                        <div className="col-span-full text-center text-gray-400 p-4">
+                            No subjects available for {selected.label}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
 
 
 
@@ -257,7 +356,7 @@ function Beranda(){
  
     // handle onChange event of the dropdown
     const dropdown = e => {
-        setSelectedDropdown(e);
+        setSelected(e);
     }
 
     // check change of seaerch term every 500ms
@@ -322,7 +421,7 @@ function Beranda(){
 
             {/* pilih materi */}
             <div className="z-2 w-screen flex flex-col items-center">
-                {pilihMateri}
+                {renderPilihMateri()}
             </div>
             <div className="h-10"></div>
 
