@@ -5,7 +5,9 @@ import { loginUser,
   listUsers,
   updateUser,
   updatePassword,
-  deleteUser } from '../control/logincontrol.js';
+  deleteUser,
+  updateProfile,
+  updateProfilePassword } from '../control/logincontrol.js';
 import { verifyUser, adminOnly } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -30,6 +32,12 @@ router.post("/logout", verifyUser, (req, res) => {
 router.get("/me", verifyUser, (req, res) => {
   res.json({ user: req.session.user });
 });
+
+// PUT /api/auth/profile - update user profile
+router.put("/profile", verifyUser, updateProfile);
+
+// PUT /api/auth/password - update user password
+router.put("/password", verifyUser, updateProfilePassword);
 
 // hanya admin
 router.get("/users", verifyUser, adminOnly, listUsers);
