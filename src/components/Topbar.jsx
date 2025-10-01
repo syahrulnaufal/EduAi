@@ -24,9 +24,9 @@ function Topbar({children}) {
                 <NavLink to='/ruang-belajar'>
                     <div className='hover:text-primary dark:hover:text-primary-dark'>Ruang Belajar</div>
                 </NavLink>
-                <NavLink to='/brain-academy'>
+                {/* <NavLink to='/brain-academy'>
                     <div className='hover:text-primary dark:hover:text-primary-dark'>Brain Academy</div>
-                </NavLink>
+                </NavLink> */}
                 <NavLink to='/ruang-kelas'>
                     <div className='hover:text-primary dark:hover:text-primary-dark'>Ruang Kelas</div>
                 </NavLink>

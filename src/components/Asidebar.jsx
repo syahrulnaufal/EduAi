@@ -184,10 +184,10 @@ export default function Asidebar({ onNewChat, children, conversations = [], acti
 		return (
 			<div className="flex-1 overflow-y-auto pb-6 border-b border-gray-200 h-fit mb-5">
 				<div className='py-2 tracking-wider font-semibold transition-colors duration-300 flex justify-between items-center px-5 dark:text-gray-400'>
-					<span>{title}</span>
+					<span className="text-lg">{title}</span>
 					<span className="text-my-text/50 text-sm flex gap-2 items-center p-1 px-2 rounded-sm hover:bg-indigo-100 cursor-pointer transition-colors duration-200 hover:text-my-text/80">
 						{convList.length} total
-						<span><img src="/img/arrowDown.png" alt="show all" width={'15px'}/></span>
+						{/* <span><img src="/img/arrowDown.png" alt="show all" width={'15px'}/></span> */}
 					</span>
 				</div>
 				
@@ -277,7 +277,7 @@ export default function Asidebar({ onNewChat, children, conversations = [], acti
 						</div>
 					</div>
 
-					<img src="/img/edit.png" alt="edit" width={'25px'}/>
+					{/* <img src="/img/edit.png" alt="edit" width={'25px'}/> */}
 					
 					{elements[0]}
 				
