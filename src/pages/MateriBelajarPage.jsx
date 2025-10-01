@@ -25,6 +25,11 @@ function MateriBelajarPage(){
     const [data, setData] = useState(null);
     const [bab, setBab] = useState(null);
     const [selectedBab, setSelectedBab] = useState(materi||null);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const id_user = user?.id;
+    const [hasilMap, setHasilMap] = useState({});
+
+
 
     useEffect(() => {
         console.log("Mengirim request ke:", `http://localhost:5000/api/bab/bab-all?id_pelajaran=${id}`);
@@ -65,6 +70,93 @@ function MateriBelajarPage(){
                 console.error("Error fetch:", err);
             });
     }, [selectedBab, materi]);
+ useEffect(() => {
+  if (!id_user || !bab) return;
+
+  const asideItems = Array.isArray(bab) ? bab : (bab?.bab ?? []);
+
+  asideItems.forEach(materi => {
+    const quizId = materi.quiz?.[0]?.id_quiz;   // ambil id_quiz dari materi
+    if (!quizId) return;
+
+    fetch("http://localhost:5000/api/bab/check-hasil", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_user, id_quiz: quizId })
+    })
+      .then(res => res.json())
+      .then(data => {
+        setHasilMap(prev => ({
+          ...prev,
+          [quizId]: data   // simpan hasil quiz tertentu ke hasilMap
+        }));
+      })
+      .catch(err => console.error("Error cek hasil:", err));
+  });
+}, [id_user, bab]);
+
+
+
+    // handle klik quiz pakai Swal
+  const handleQuizClick = (quizId, namaQuiz) => {
+  fetch("http://localhost:5000/api/bab/check-hasil", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id_user, id_quiz: quizId })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (!data) {
+        // belum pernah kerjakan → buat baru
+        fetch("http://localhost:5000/api/soal/hasil/start", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id_user, id_quiz: quizId })
+        })
+          .then(res => res.json())
+          .then(newData => {
+            navigate(`/exam/${quizId}?id_hasil=${newData.id_hasil}`);
+          });
+      } else if (!data.selesai) {
+        // quiz belum selesai → lanjutkan
+        Swal.fire({
+          title: "Lanjutkan Quiz?",
+          text: `${namaQuiz} belum selesai, mau lanjutkan?`,
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Ya, lanjutkan",
+          cancelButtonText: "Batal"
+        }).then(result => {
+          if (result.isConfirmed) {
+            navigate(`/exam/${quizId}?id_hasil=${data.id_hasil}`);
+          }
+        });
+      } else {
+        // quiz sudah selesai → tawarkan ulang
+        Swal.fire({
+          title: "Sudah pernah mengerjakan",
+          text: `Skor sebelumnya: ${data.score}. Ulangi ${namaQuiz}?`,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Ya, ulangi",
+          cancelButtonText: "Batal"
+        }).then(result => {
+          if (result.isConfirmed) {
+            fetch("http://localhost:5000/api/soal/hasil/start", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id_user, id_quiz: quizId, ulang: true })
+            })
+              .then(res => res.json())
+              .then(newData => {
+                navigate(`/exam/${quizId}?id_hasil=${newData.id_hasil}`);
+              });
+          }
+        });
+      }
+    });
+};
+
 
     //asidebar
     const [asidebarLeft, setAsidebarLeft] = useState('left-0');
@@ -112,6 +204,8 @@ function MateriBelajarPage(){
             return { ...prev, subbab: newSubbab };
         });
     }
+    // bikin array gambar
+   const images = ["/img/video1.png", "/img/video2.png"];
     
 
     return(
@@ -155,13 +249,15 @@ function MateriBelajarPage(){
                             return asideItems.map((materi, index) => {
                                 const keyId = materi.id_subbab ?? materi.id_bab ?? `aside-${index}`;
                                 const title = materi.judul_bab ?? materi.judul_subbab ?? 'Judul';
+                                // Pilih random image untuk setiap item
+                                const randomImg = images[Math.floor(Math.random() * images.length)];
                                 return (
                                     <div
                                         key={keyId}
                                         className="border border-[#025584] mt-20 w-[90%] active:ms-5 transition-all duration-150 ease-out cursor-pointer bg-white rounded-xl flex flex-col items-center relative"
                                         onClick={() => setSelectedBab(materi.id_bab)} 
                                     >
-                                        <div className="w-[60%] absolute -top-20 "><img src={materi.img || '/img/default.png'} alt="thumbnail" className="rounded-lg"/></div>
+                                        <div className="w-[60%] absolute -top-20 "> <img src={materi.img || randomImg} alt="thumbnail" className="rounded-lg"/></div>
                                         <div className="h-8 bg-[#025584] w-full rounded-t-lg "></div>
                                         <img src="/img/ikonAdapto.png" alt="" className="w-20 absolute top-5"/>
                                         <div className="px-2 text-center pt-5 pb-3">{title}</div>
@@ -170,14 +266,38 @@ function MateriBelajarPage(){
                                             <div className="flex gap-2 items-center"><img src="/img/ikonGold.png" alt="GOLD" className="w-7"/><div>{materi.point_gold ?? 0}</div></div>
                                         </div>
                                         <div className="p-2 w-full">
-                                            <div className="border-gray-300 border rounded-lg p-2 flex gap-1 items-center justify-between hover:bg-gray-100 transition-colors duration-150">
-                                                <img src="/img/ikonKuis.png" alt="" className="w-9 h-9"/>
-                                                <div className="w-20 truncate">{title}</div>
-                                                <div className="flex gap-1">
-                                                    <div className="flex gap-1 items-center"><img src="/img/ikonXp.png" alt="XP" className="w-7"/><div>{materi.point_xp ?? 0}</div></div>
-                                                    <div className="flex gap-1 items-center"><img src="/img/ikonGold.png" alt="GOLD" className="w-7"/><div>{materi.point_gold ?? 0}</div></div>
+                                            {materi.quiz && materi.quiz.length > 0 ? (
+                                        <button
+                                            className="border-gray-300 border rounded-lg p-2 flex gap-1 items-center justify-between hover:bg-gray-100 transition-colors duration-150"
+                                            onClick={() => handleQuizClick(materi.quiz[0].id_quiz, materi.quiz[0].nama_quiz)}
+                                        >
+                                            <img src="/img/ikonKuis.png" alt="" className="w-9 h-9" />
+                                            <div className="w-20 truncate">{materi.quiz[0].nama_quiz}</div>
+
+                                            <div className="flex gap-1">
+                                            {hasilMap[materi.quiz[0].id_quiz]?.id_hasil ? (
+                                                <span className="text-green-600 font-bold">
+                                                Score: {hasilMap[materi.quiz[0].id_quiz].score}
+                                                </span>
+                                            ) : (
+                                                <>
+                                                <div className="flex gap-1 items-center">
+                                                    <img src="/img/ikonXp.png" alt="XP" className="w-7" />
+                                                    <div>{materi.point_xp ?? 0}</div>
                                                 </div>
+                                                <div className="flex gap-1 items-center">
+                                                    <img src="/img/ikonGold.png" alt="GOLD" className="w-7" />
+                                                    <div>{materi.point_gold ?? 0}</div>
+                                                </div>
+                                                </>
+                                            )}
                                             </div>
+                                        </button>
+                                        ) : (
+                                        <div className="border border-gray-300 rounded-lg p-2 text-center text-gray-500">
+                                            Belum ada quiz
+                                        </div>
+                                        )}
                                         </div>
                                     </div>
                                 );

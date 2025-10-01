@@ -37,7 +37,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/fitur/:id" element={<FiturPopuler />} />
         <Route path="/fitur/:id/curriculum" element={<Curriculum />} />
         <Route path="/profile" element={<Profil />} />
-        <Route path="/exam" element={<ExamPage />} />
+        <Route path="/exam/:id" element={<ExamPage />} />
         <Route path="/exam/pembahasan" element={<PembahasanExam />} />  
       </Routes>
     </BrowserRouter>
