@@ -1,48 +1,95 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Users() {
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      username: "dimas",
-      email: "dimas@gmail.com",
-      role: "admin",
-      password: "password"
-    },
-    {
-      id: 2,
-      username: "suhel",
-      email: "suhel@gmail.com",
-      role: "user",
-      password: "password"
-    },
-  ]);
-
+  const [users, setUsers] = useState([]);
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({ username: '', email: '', role: '', password: '' });
 
-  // Open modal and set data
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/users");
+      const data = await res.json();
+      setUsers(data);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  };
+
   const handleEdit = (user) => {
-    setEditId(user.id);
-    setEditData({ username: user.username, email: user.email, role: user.role, password: user.password  }); 
+    setEditId(user.id_user);
+    setEditData({ username: user.username, email: user.email, role: user.role, password: '' });
   };
 
-  // Close modal
-  const closeModal = () => {
-    setEditId(null);
-  };
-
-  // Handle form change
   const handleChange = (e) => {
     setEditData({ ...editData, [e.target.name]: e.target.value });
   };
 
-  // Save changes (dummy, just close modal)
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
-    setUsers(users.map(u => u.id === editId ? { ...u, ...editData } : u));
-    setEditId(null);
+    try {
+      const res = await fetch(`http://localhost:5000/api/users/${editId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editData)
+      });
+
+      if (res.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: "User berhasil diupdate",
+          timer: 1500,
+          showConfirmButton: false
+        });
+        setEditId(null);
+        fetchUsers();
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: "Terjadi kesalahan saat update user"
+        });
+      }
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.message
+      });
+    }
   };
+
+  const handleDelete = async (id) => {
+    Swal.fire({
+      title: "Yakin?",
+      text: "Data user akan dihapus permanen!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(`http://localhost:5000/api/users/${id}`, {
+            method: "DELETE"
+          });
+          if (res.ok) {
+            Swal.fire("Terhapus!", "User berhasil dihapus", "success");
+            fetchUsers();
+          } else {
+            Swal.fire("Gagal!", "Tidak bisa menghapus user", "error");
+          }
+        } catch (err) {
+          Swal.fire("Error!", err.message, "error");
+        }
+      }
+    });
+  };
+
 
   return (
     <div className="p-1 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base">
@@ -94,7 +141,7 @@ export default function Users() {
             </thead>
             <tbody>
               {users.map((user, index) => (
-                <tr key={user.id} className="hover:bg-gray-50">
+                <tr key={user.id_user} className="hover:bg-gray-50">
                   <td className="p-1 sm:p-3 border border-gray-300 text-sm sm:text-lg text-center">{index + 1}</td>
                   <td className="p-1 sm:p-3 border border-gray-300 text-sm sm:text-lg">{user.username}</td>
                   <td className="p-1 sm:p-3 border border-gray-300 text-sm sm:text-lg">{user.email}</td>
@@ -126,29 +173,52 @@ export default function Users() {
       {editId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm">
           <div className="bg-white rounded-lg shadow-lg p-4 w-[90vw] max-w-xs sm:max-w-md relative">
-            <button onClick={closeModal} className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl">&times;</button>
-            <h2 className="text-lg font-semibold mb-4">Edit User</h2>
             <form onSubmit={handleSave} className="flex flex-col gap-3">
-              <label className="flex flex-col gap-1">
-                <span className="text-xs text-gray-500">Username</span>
-                <input name="username" value={editData.username} onChange={handleChange} className="border rounded px-2 py-1" required />
-              </label>
-              <label className="flex flex-col gap-1">
-                <span className="text-xs text-gray-500">Email</span>
-                <input name="email" value={editData.email} onChange={handleChange} className="border rounded px-2 py-1" required />
-              </label>
-              <label className="flex flex-col gap-1">
-                <span className="text-xs text-gray-500">Role</span>
-                <select name="role" value={editData.role} onChange={handleChange} className="border rounded px-2 py-1">
-                  <option value="admin">admin</option>
-                  <option value="user">user</option>
-                </select>
-              </label>
-              <label className="flex flex-col gap-1">
-                <span className="text-xs text-gray-500">Password</span>
-                <input name="password" type="text" value={editData.password} onChange={handleChange} className="border rounded px-2 py-1" required />
-              </label>
-              <button type="submit" className="bg-blue-600 text-white rounded px-3 py-1 mt-2 hover:bg-blue-700">Simpan</button>
+              <input
+                name="username"
+                value={editData.username}
+                onChange={handleChange}
+                placeholder="Username"
+                className="border px-2 py-1"
+                required
+              />
+              <input
+                name="email"
+                value={editData.email}
+                onChange={handleChange}
+                placeholder="Email"
+                className="border px-2 py-1"
+                required
+              />
+              <select
+                name="role"
+                value={editData.role}
+                onChange={handleChange}
+                className="border px-2 py-1"
+              >
+                <option value="admin">admin</option>
+                <option value="user">user</option>
+              </select>
+              <input
+                name="password"
+                type="text"
+                value={editData.password}
+                onChange={handleChange}
+                placeholder="Password (kosong = tidak ganti)"
+                className="border px-2 py-1"
+              />
+              <div className="flex gap-2 justify-end mt-2">
+                <button type="submit" className="bg-green-600 text-white px-3 py-1 rounded">
+                  Simpan
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditId(null)}
+                  className="bg-gray-400 text-white px-3 py-1 rounded"
+                >
+                  Batal
+                </button>
+              </div>
             </form>
           </div>
         </div>
