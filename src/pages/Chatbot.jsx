@@ -307,7 +307,7 @@ function Chatbot() {
                                         - {currentUser.username}
                                     </span>
                                 )}
-                                <span><img src="/img/arrowDown.png" alt="show all" width={'20px'} /></span>
+                                {/* <span><img src="/img/arrowDown.png" alt="show all" width={'20px'} /></span> */}
                             </span>
 
                             <span className="rounded-full flex items-center pt-15 relative ">
