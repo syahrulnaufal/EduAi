@@ -64,7 +64,12 @@ function LoginPage(){
         text: data.message || "Login sukses",
         confirmButtonText: "OK",
       }).then(() => {
-        window.location.href = "http://localhost:5173/";
+        // cek role user
+        if (data.user.role === "admin") {
+          window.location.href = "http://localhost:5173/admin.html#";
+        } else {
+          window.location.href = "http://localhost:5173/";
+        }
       });
     } else {
       Swal.fire({
@@ -82,6 +87,7 @@ function LoginPage(){
     });
   }
 };
+
 
 const getCurrentUser = async () => {
   try {
@@ -147,7 +153,7 @@ background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 25
                 <div className="w-100 h-fit rounded-2xl flex flex-col bg-white" style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'}}>
                     
                     {/* text ungu */}
-                    <div className="w-full text-center py-4 bg-[#5852AB] rounded-t-2xl font-bold text-2xl text-white">Daftar Akun Baru</div>
+                    <div className="w-full text-center py-4 bg-[#5852AB] rounded-t-2xl font-bold text-2xl text-white">Login</div>
                     
                     <div className="flex flex-col p-6 px-8 gap-4">
 
