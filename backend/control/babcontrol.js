@@ -71,12 +71,82 @@ export const getBabAndProgresByPelajaran = async (req, res) => {
 export const getallbab = async (req, res) => {
   try {
     const { id_pelajaran } = req.query;
-    const [rows] = await db.execute("SELECT * FROM bab WHERE id_pelajaran = ?", [id_pelajaran]);
-    res.json(rows);
+
+    // Ambil semua bab
+    const [babRows] = await db.execute(
+      "SELECT * FROM bab WHERE id_pelajaran = ?",
+      [id_pelajaran]
+    );
+
+    if (babRows.length === 0) {
+      return res.json([]);
+    }
+
+    // Ambil semua quiz untuk id_bab yang ada di babRows
+    const idBabs = babRows.map(b => b.id_bab);
+    const [quizRows] = await db.query(
+      "SELECT * FROM quiz WHERE id_bab IN (?)",
+      [idBabs]
+    );
+
+    // Gabungkan quiz ke dalam setiap bab
+    const result = babRows.map(b => {
+      const quizForBab = quizRows.filter(q => q.id_bab === b.id_bab);
+      return {
+        ...b,
+        quiz: quizForBab // array quiz untuk bab ini
+      };
+    });
+
+    res.json(result);
   } catch (err) {
+    console.error("DB ERROR getallbab:", err);
     res.status(500).json({ error: err.message });
   }
 };
+
+export const checkHasil = async (req, res) => {
+  try {
+    const { id_user, id_quiz } = req.body;
+
+    // ambil hasil terakhir user untuk quiz ini
+    const [rows] = await db.query(
+      "SELECT id_hasil, score FROM hasil WHERE id_user=? AND id_quiz=? ORDER BY id_hasil DESC LIMIT 1",
+      [id_user, id_quiz]
+    );
+
+    if (rows.length === 0) {
+      return res.json(null);
+    }
+
+    const { id_hasil, score } = rows[0];
+
+    // hitung jumlah soal
+    const [[{ total_soal }]] = await db.query(
+      "SELECT COUNT(*) AS total_soal FROM soal WHERE id_quiz=?",
+      [id_quiz]
+    );
+
+    // hitung jumlah jawaban user (distinct biar 1 soal nggak keitung dobel)
+    const [[{ total_jawaban }]] = await db.query(
+      "SELECT COUNT(DISTINCT id_soal) AS total_jawaban FROM jawaban_user WHERE id_hasil=?",
+      [id_hasil]
+    );
+
+    // quiz dianggap selesai kalau semua soal sudah dijawab
+    const selesai = total_jawaban >= total_soal;
+
+    res.json({
+      id_hasil,
+      score,
+      selesai
+    });
+  } catch (err) {
+    console.error("DB ERROR checkHasil:", err);
+    res.status(500).json({ message: "Gagal cek hasil", error: err.message });
+  }
+};
+
 
 // ================== READ ==================
 // Semua bab + pelajaran + jenjang (untuk admin)
@@ -180,4 +250,4 @@ export const deleteBab = async (req, res) => {
 };
 
 
-export default { getBabAndProgresByPelajaran, getallbab, getBabByPelajaran, addBab, updateBab, deleteBab };
+export default { getBabAndProgresByPelajaran, getallbab, getBabByPelajaran, addBab, updateBab, deleteBab,checkHasil };

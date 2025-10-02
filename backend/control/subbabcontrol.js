@@ -9,22 +9,32 @@ export const getSubbabByBab = async (req, res) => {
       return res.status(400).json({ message: "id_bab wajib diisi" });
     }
 
+    // ✅ Ambil bab
     const [babRow] = await db.execute("SELECT * FROM bab WHERE id_bab = ?", [id_bab]);
     if (babRow.length === 0) {
       return res.status(404).json({ message: "Bab tidak ditemukan" });
     }
 
+    // ✅ Ambil subbab
     const [subbabRows] = await db.execute("SELECT * FROM subbab WHERE id_bab = ?", [id_bab]);
+
+    // ✅ Ambil quiz berdasarkan id_bab
+    const [quizRows] = await db.execute(
+      "SELECT id_quiz, nama_quiz, rating FROM quiz WHERE id_bab = ?",
+      [id_bab]
+    );
 
     res.json({
       bab: babRow[0],
       subbab: subbabRows,
+      quiz: quizRows, // akan berisi array quiz dengan id_quiz, nama_quiz, rating
     });
   } catch (err) {
     console.error("DB ERROR getSubbabByBab:", err);
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Tambah SubBab
 export const createSubbab = async (req, res) => {

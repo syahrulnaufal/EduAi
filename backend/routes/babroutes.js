@@ -5,13 +5,14 @@ import { getBabAndProgresByPelajaran,
     getBabByPelajaran, 
     addBab, 
     updateBab, 
-    deleteBab } from '../control/babcontrol.js';
+    deleteBab, checkHasil } from '../control/babcontrol.js';
 
 const router = express.Router();
 
 // GET /api/bab-progres?id_pelajaran=2
 router.get("/bab-progres", getBabAndProgresByPelajaran);
 router.get("/bab-all", getallbab);
+router.post('/check-hasil', checkHasil);
 
 // CRUD Bab untuk Admin
 router.get("/pelajaran/:id_pelajaran", getBabByPelajaran);

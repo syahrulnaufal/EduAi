@@ -39,7 +39,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/fitur/:id" element={<ProtectedRoute><FiturPopuler /></ProtectedRoute>} />
         <Route path="/fitur/:id/curriculum" element={<ProtectedRoute><Curriculum /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profil /></ProtectedRoute>} />
-        <Route path="/exam" element={<ProtectedRoute><ExamPage /></ProtectedRoute>} />
+        <Route path="/exam/:id" element={<ProtectedRoute><ExamPage /></ProtectedRoute>} />
         <Route path="/exam/pembahasan" element={<ProtectedRoute><PembahasanExam /></ProtectedRoute>} />  
       </Routes>
     </BrowserRouter>

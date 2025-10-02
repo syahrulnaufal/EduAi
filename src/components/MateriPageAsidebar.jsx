@@ -26,7 +26,7 @@ export default function MateriPageAsidebar({ onNewChat, children }) {
 		<div className="for-scroll">
 
 			<div className="flex gap-3 w-full justify-center mt-40">
-				<NavLink to="/exam">
+				{/* <NavLink to="/exam">
 					<div className="bg-white rounded-xl p-3 flex flex-col gap-2 items-center w-30 cursor-pointer hover:bg-indigo-100 transition-colors duration-150">
 						<img src="/img/ikonKuisAkhir.png" alt="" className="w-10"/>
 						<div>Kuis Akhir</div>
@@ -35,7 +35,7 @@ export default function MateriPageAsidebar({ onNewChat, children }) {
 				<div className="bg-white rounded-xl p-3 flex flex-col gap-2 items-center w-30 cursor-pointer hover:bg-indigo-100 transition-colors duration-150">
 					<img src="/img/ikonRangkuman.png" alt="" className="w-10"/>
 					<div>Rangkuman</div>
-				</div>
+				</div> */}
 			</div>
 			
 			{elements[0]}

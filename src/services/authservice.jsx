@@ -97,4 +97,3 @@ export async function logout() {
     // Even if there's an error, redirect to homepage
     window.location.href = "/";
   }
-}
