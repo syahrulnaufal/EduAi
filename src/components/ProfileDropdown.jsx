@@ -27,10 +27,29 @@ const ProfileDropdown = ({ onEditProfile, onLogout }) => {
     setIsOpen(false);
   };
 
-  const handleLogout = () => {
-    onLogout();
-    setIsOpen(false);
-  };
+ const handleLogout = async () => {
+  try {
+    // 1. hapus data dari localStorage
+    localStorage.removeItem("user");
+
+    // 2. hapus juga dari sessionStorage (jaga-jaga)
+    sessionStorage.clear();
+
+    // 3. kalau kamu masih pakai backend session, logout juga di server
+    await fetch("http://localhost:5000/api/auth/logout", {
+      method: "POST",
+      credentials: "include", // kirim cookie biar session dihapus
+    }).catch(() => {});
+
+    // 4. redirect ke halaman login
+    window.location.href = "http://localhost:5173/login";
+  } catch (err) {
+    console.error("Logout error:", err);
+    window.location.href = "http://localhost:5173/login";
+  }
+};
+
+
 
   return (
     <div className="relative z-50" ref={dropdownRef}>

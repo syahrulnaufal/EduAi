@@ -66,8 +66,8 @@ export const signinUser = async (req, res) => {
     const hashedPassword = await argon2.hash(password);
 
     const [result] = await db.query(
-      'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-      [username, email, hashedPassword]
+      'INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)',
+      [username, email, hashedPassword, 'user']
     );
 
     return res.status(201).json({ message: 'User berhasil ditambahkan', id: result.insertId });

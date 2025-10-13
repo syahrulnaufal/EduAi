@@ -1,9 +1,10 @@
 import Topbar from "../components/Topbar";
-import { useState } from "react";
 import '../style.css'; 
 import Sidebar from "../components/Sidebar";
 import BurgerMenu from "../components/BurgerMenu";
 import { NavLink,useNavigate } from "react-router";
+import { useState, useEffect } from "react";
+
 function LoginPage(){
     // Sidebar 
     const [left, setLeft] = useState('-left-70') 
@@ -127,6 +128,42 @@ const getCurrentUser = async () => {
   }
 };
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5000/auth/google";
+  };
+
+  // ✅ CEK QUERY STRING setelah redirect dari Google
+ useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const id_user = params.get("id_user");
+  const username = params.get("username");
+  const email = params.get("email");
+  const role = params.get("role");
+
+  if (id_user && username && email) {
+    const userData = { id_user, username, email, role };
+    localStorage.setItem("user", JSON.stringify(userData));
+
+    // hapus query string biar rapi
+    window.history.replaceState({}, document.title, "/login");
+
+    Swal.fire({
+      icon: "success",
+      title: "Login Google Berhasil!",
+      text: `Selamat datang, ${username}`,
+      confirmButtonText: "OK",
+    }).then(() => {
+      if (role === "admin") {
+        window.location.href = "http://localhost:5173/admin.html#";
+      } else {
+        window.location.href = "http://localhost:5173/";
+      }
+    });
+  }
+}, []);
+
+
+
 
 
     return(
@@ -190,9 +227,9 @@ background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 25
                         </div>
 
                         {/* daftar dengan google */}
-                        <div className="w-full border border-gray-400 rounded-sm relative text-center p-2 mb-4 cursor-pointer hover:bg-gray-50">
+                        <div onClick={handleGoogleLogin} className="w-full border border-gray-400 rounded-sm relative text-center p-2 mb-4 cursor-pointer hover:bg-gray-50">
                             <img src="/img/google.png" alt="Daftar dengan Google" className="w-8 ps-2 absolute" />
-                            Daftar dengan Google
+                            Login dengan Google
                         </div>
 
                         <div className="text-sm">Belum punya akun? <span className="text-[#1C58B4] hover:text-[#3f6bad] cursor-pointer">

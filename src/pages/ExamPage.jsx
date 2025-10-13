@@ -11,7 +11,7 @@ function ExamPage() {
   const { id: id_quiz } = useParams();
 
   const user = JSON.parse(localStorage.getItem("user"));
-  const id_user = user?.id;
+  const id_user = user?.id || user?.id_user;
   const [idHasil, setIdHasil] = useState(null);
 
   const [examData, setExamData] = useState([]);
