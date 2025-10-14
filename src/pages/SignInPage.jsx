@@ -151,7 +151,7 @@ background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 25
                     {/* text ungu */}
                     <div className="w-full text-center py-4 bg-[#5852AB] rounded-t-2xl font-bold text-2xl text-white">Daftar Akun Baru</div>
                     
-                    <div className="flex flex-col p-6 px-8 gap-4">
+                    <form onSubmit={handleSignin} className="flex flex-col p-6 px-8 gap-4">
 
                         {/* nama, email dan passsword */}
                         <div className="flex gap-2 border border-gray-400 rounded-sm">
@@ -196,7 +196,7 @@ background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 25
                             <NavLink to="/login">Masuk</NavLink>
                         </span></div>
 
-                    </div>
+                    </form>
                 </div>
                 
                 <div className="h-20"></div>
