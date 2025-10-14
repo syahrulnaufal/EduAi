@@ -13,6 +13,7 @@ import Soal from "./pages/soal";
 import Course from "./pages/course";
 import Guru from "./pages/guru";
 import Pembelian from "./pages/pembayaran";
+import AdminRoute from "./components/Adminroutes";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -27,18 +28,95 @@ function App() {
         <div className="flex-1 min-h-screen bg-gray-100">
           <Navbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
           <Routes>
-            <Route path="/" element={<Beranda />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/kelas" element={<Kelas />} />
-            <Route path="/pelajaran" element={<Pelajaran />} />
-            <Route path="/pelajaran/:jenjangId/:pelajaranId" element={<Bab />} />
-            <Route path="/pelajaran/:jenjangId/:pelajaranId/:babId" element={<SubBab />} />
-            <Route path="/quiz/:pelajaranId/:babId" element={<Quiz />} />
-            <Route path="/quiz/:pelajaranId/:babId/:quizId" element={<Soal />} />
-            <Route path="/guru" element={<Guru />} />
-            <Route path="/course" element={<Course />} />
-            <Route path="/pembelian" element={<Pembelian />} />
-          </Routes>
+      <Route
+        path="/"
+        element={
+          <AdminRoute>
+            <Beranda />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <AdminRoute>
+            <Users />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/kelas"
+        element={
+          <AdminRoute>
+            <Kelas />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/pelajaran"
+        element={
+          <AdminRoute>
+            <Pelajaran />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/pelajaran/:jenjangId/:pelajaranId"
+        element={
+          <AdminRoute>
+            <Bab />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/pelajaran/:jenjangId/:pelajaranId/:babId"
+        element={
+          <AdminRoute>
+            <SubBab />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/quiz/:pelajaranId/:babId"
+        element={
+          <AdminRoute>
+            <Quiz />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/quiz/:pelajaranId/:babId/:quizId"
+        element={
+          <AdminRoute>
+            <Soal />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/guru"
+        element={
+          <AdminRoute>
+            <Guru />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/course"
+        element={
+          <AdminRoute>
+            <Course />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/pembelian"
+        element={
+          <AdminRoute>
+            <Pembelian />
+          </AdminRoute>
+        }
+      />
+    </Routes>
         </div>
       </div>
     </HashRouter>

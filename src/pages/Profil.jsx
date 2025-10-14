@@ -1,9 +1,12 @@
 import React from "react";
 import Topbar from "../components/Topbar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import '../style.css'; 
 import Sidebar from "../components/Sidebar";
 import BurgerMenu from "../components/BurgerMenu";
+import { getCurrentUser, logout, updateUserProfile, updateUserPassword } from "../services/authservice";
+import EditProfileModal from "../components/EditProfileModal";
+import ProfileDropdown from "../components/ProfileDropdown";
 
 // --- Helper Icons ---
 const SearchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>;
@@ -11,6 +14,11 @@ const OptionsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5
 
 
 function Profil(){
+    // User state
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    
     // Sidebar state
     const [left, setLeft] = useState('-left-70') 
     const [bg, setBg] = useState('bg-transparent -z-10')
@@ -19,6 +27,43 @@ function Profil(){
     const menuButton = <svg xmlns="http://www.w3.org/2000/svg" id='menu' height={iconSize} viewBox="0 -960 960 960" width={iconSize} className="fill-my-text dark:fill-my-text-dark"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
     const closeButton = <svg xmlns="http://www.w3.org/2000/svg" id='close' height={iconSize} viewBox="0 -960 960 960" width={iconSize} className="fill-my-text dark:fill-my-text-dark"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>;
     const [menuIcon, setMenuIcon] = useState(isSidebarHidden? menuButton : closeButton)
+    
+    // Load user data when component mounts
+    useEffect(() => {
+        loadUserData();
+    }, []);
+
+    const loadUserData = async () => {
+        try {
+            const userData = await getCurrentUser();
+            if (userData) {
+                setUser(userData);
+            }
+        } catch (error) {
+            console.error("Error loading user data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Get user initials for default avatar
+    const getUserInitials = (username) => {
+        if (!username) return "U";
+        const names = username.split(' ');
+        if (names.length >= 2) {
+            return names[0][0].toUpperCase() + names[1][0].toUpperCase();
+        }
+        return username[0].toUpperCase();
+    };
+
+    // Get greeting based on time
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) return "Selamat Pagi";
+        if (hour < 17) return "Selamat Siang";
+        if (hour < 20) return "Selamat Sore";
+        return "Selamat Malam";
+    };
     
     // Function to hide sidebar
     function hideSidebar (){
@@ -34,6 +79,138 @@ function Profil(){
             setMenuIcon(menuButton)
         }
     }
+
+    // Handle button clicks
+    const handleJoinNow = () => {
+        // Navigate to course selection or registration
+        console.log("Join Now clicked");
+    };
+
+    const handleShowDetails = (mentorName) => {
+        console.log("Show details for:", mentorName);
+        // Navigate to mentor details page
+    };
+
+    const handleFollowMentor = (mentorName) => {
+        console.log("Follow mentor:", mentorName);
+        // Add follow logic
+    };
+
+    const handleSeeAllMentors = () => {
+        console.log("See all mentors clicked");
+        // Navigate to mentors page
+    };
+
+    const handleSeeAllLearning = () => {
+        console.log("See all learning videos clicked");
+        // Navigate to learning videos page
+    };
+
+    // Handle edit profile
+    const handleEditProfile = () => {
+        setIsEditModalOpen(true);
+    };
+
+    // Handle logout
+    const handleLogout = async () => {
+        const result = await Swal.fire({
+            icon: 'question',
+            title: 'Konfirmasi Logout',
+            text: 'Apakah Anda yakin ingin keluar?',
+            showCancelButton: true,
+            confirmButtonColor: '#8B5CF6',
+            cancelButtonColor: '#6B7280',
+            confirmButtonText: 'Ya, Logout',
+            cancelButtonText: 'Batal'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await logout();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Logout Berhasil',
+                    text: 'Anda telah berhasil logout',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            } catch (error) {
+                console.error("Logout error:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Logout Gagal',
+                    text: 'Terjadi kesalahan saat logout',
+                    confirmButtonColor: '#8B5CF6'
+                });
+            }
+        }
+    };
+
+    // Handle save profile
+    const handleSaveProfile = async (formData, tabType) => {
+        try {
+            if (tabType === 'password') {
+                // Handle password update
+                const passwordData = {
+                    currentPassword: formData.currentPassword,
+                    newPassword: formData.newPassword
+                };
+                await updateUserPassword(passwordData);
+            } else {
+                // Handle profile update
+                const profileData = {
+                    username: formData.username,
+                    email: formData.email
+                };
+                
+                // Handle profile image with enhanced error handling and validation
+                if (formData.profileImage) {
+                    try {
+                        // File size validation (max 2MB for base64 overhead)
+                        if (formData.profileImage.size > 2 * 1024 * 1024) {
+                            throw new Error('Ukuran file terlalu besar. Maksimal 2MB.');
+                        }
+                        
+                        // File type validation
+                        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                        if (!allowedTypes.includes(formData.profileImage.type)) {
+                            throw new Error('Format file tidak didukung. Gunakan JPG, PNG, atau GIF.');
+                        }
+                        
+                        // Convert file to base64 with error handling
+                        const reader = new FileReader();
+                        const base64 = await new Promise((resolve, reject) => {
+                            reader.onload = () => resolve(reader.result);
+                            reader.onerror = () => reject(new Error('Gagal membaca file gambar'));
+                            reader.readAsDataURL(formData.profileImage);
+                        });
+                        
+                        // Check final base64 size (should be under 3MB when encoded)
+                        if (base64.length > 3 * 1024 * 1024) {
+                            throw new Error('File terlalu besar setelah diproses. Coba gunakan gambar yang lebih kecil.');
+                        }
+                        
+                        profileData.profileImage = base64;
+                    } catch (fileError) {
+                        console.error('File processing error:', fileError);
+                        throw fileError; // This will be caught by the outer try-catch
+                    }
+                }
+                
+                const result = await updateUserProfile(profileData);
+                
+                // Update local user state with new data
+                if (result && result.user) {
+                    setUser(result.user);
+                    // Dispatch event to notify other components of profile update
+                    window.dispatchEvent(new CustomEvent('profileUpdated'));
+                }
+            }
+        } catch (error) {
+            console.error("Error saving profile:", error);
+            throw error; // Re-throw to let the modal handle the error display
+        }
+    };
 
     // --- Dummy Data ---
     const progressCourses = [
@@ -60,6 +237,17 @@ function Profil(){
         { name: "Syahrull", role: "Software Developer", avatar: "/img/photoFrame4.png" },
         { name: "Rizal Jago", role: "Software Developer", avatar: "/img/photoFrame5.png" },
     ];
+
+    if (loading) {
+        return (
+            <div className="bg-[#F4F7FE] min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-500"></div>
+                    <p className="mt-4 text-gray-600">Loading profile...</p>
+                </div>
+            </div>
+        );
+    }
 
     return(
         <div className="bg-[#F4F7FE] min-h-screen">
@@ -93,7 +281,12 @@ function Profil(){
                         <div>
                             <div className="text-lg mb-2 font-light">Online Course</div>
                             <h2 className="text-xl md:text-2xl font-bold">Asah Keterampilan Anda dengan <br/> Kursus Online Profesional</h2>
-                            <button className="mt-4 bg-white text-purple-600 font-semibold py-2 px-6 rounded-lg">Join Now</button>
+                            <button 
+                                onClick={handleJoinNow}
+                                className="mt-4 bg-white text-purple-600 font-semibold py-2 px-6 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                            >
+                                Join Now
+                            </button>
                         </div>
                     </div>
                     
@@ -109,7 +302,9 @@ function Profil(){
                                         <p className="text-sm text-gray-500">{course.progress}</p>
                                     </div>
                                 </div>
-                                <OptionsIcon />
+                                <button className="hover:bg-gray-100 p-2 rounded-full transition-colors duration-200">
+                                    <OptionsIcon />
+                                </button>
                             </div>
                         ))}
                     </div>
@@ -118,13 +313,17 @@ function Profil(){
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-xl font-bold text-gray-800">Melanjutkan Vidio Pembelajaran</h3>
                             <div className="flex space-x-2">
-                                <button className="bg-white p-2 rounded-full shadow-sm"><img src="/img/arrow-left.svg" alt="" className="w-5"/></button>
-                                <button className="bg-white p-2 rounded-full shadow-sm"><img src="/img/arrow-left.svg" alt="" className="w-5 rotate-180"/></button>
+                                <button className="bg-white p-2 rounded-full shadow-sm hover:bg-gray-50 transition-colors duration-200">
+                                    <img src="/img/arrow-left.svg" alt="" className="w-5"/>
+                                </button>
+                                <button className="bg-white p-2 rounded-full shadow-sm hover:bg-gray-50 transition-colors duration-200">
+                                    <img src="/img/arrow-left.svg" alt="" className="w-5 rotate-180"/>
+                                </button>
                             </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {learningVideos.map((video, index) => (
-                                <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden">
+                                <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200 cursor-pointer">
                                     <img src={video.thumbnail} alt={video.title} className="w-full h-40 object-cover" />
                                     <div className="p-4">
                                         <span className="text-xs font-semibold text-purple-600 bg-purple-100 py-1 px-2 rounded-md">{video.category}</span>
@@ -139,7 +338,12 @@ function Profil(){
                     <div>
                         <div className="flex justify-between items-center mb-4">
                              <h3 className="text-xl font-bold text-gray-800">Your Mentor</h3>
-                             <a href="#" className="text-sm font-semibold text-purple-600">See All</a>
+                             <button 
+                                onClick={handleSeeAllMentors}
+                                className="text-sm font-semibold text-purple-600 hover:text-purple-800 transition-colors duration-200"
+                             >
+                                See All
+                             </button>
                         </div>
                         <div className="bg-transparent sm:bg-white sm:p-4 rounded-xl shadow-sm">
                             {/* ✅ Header diubah ke 'md:grid' */}
@@ -168,7 +372,12 @@ function Profil(){
                                             <p className="text-sm text-gray-700 mt-3 md:mt-0">{mentor.courseTitle}</p>
                                             <div className="mt-4 md:mt-0">
                                                 {/* ✅ Lebar tombol diubah menjadi responsif */}
-                                                <button className="w-full text-blue-600 bg-blue-100 text-sm font-semibold py-2 px-4 rounded-lg">SHOW DETAILS</button>
+                                                <button 
+                                                    onClick={() => handleShowDetails(mentor.name)}
+                                                    className="w-full text-blue-600 bg-blue-100 text-sm font-semibold py-2 px-4 rounded-lg hover:bg-blue-200 transition-colors duration-200"
+                                                >
+                                                    SHOW DETAILS
+                                                </button>
                                             </div>
                                         </div>
                                     ))}
@@ -186,7 +395,12 @@ function Profil(){
                                         </div>
                                         <span className="font-semibold text-sm py-2 px-4 bg-purple-100 text-purple-600 rounded-full w-fit">{mentor.courseType}</span>
                                         <p className="text-sm text-gray-700">{mentor.courseTitle}</p>
-                                        <button className=" text-blue-600 bg-blue-100 text-sm font-semibold py-2 px-4 rounded-lg w-fit">SHOW DETAILS</button>
+                                        <button 
+                                            onClick={() => handleShowDetails(mentor.name)}
+                                            className=" text-blue-600 bg-blue-100 text-sm font-semibold py-2 px-4 rounded-lg w-fit hover:bg-blue-200 transition-colors duration-200"
+                                        >
+                                            SHOW DETAILS
+                                        </button>
                                     </div>
                                 ))}
                             </div>
@@ -197,7 +411,10 @@ function Profil(){
                 <aside className="w-full lg:w-96 bg-white p-6 space-y-6">
                     <div className="flex justify-between items-center">
                         <h3 className="font-bold text-lg">Your Profile</h3>
-                        <OptionsIcon />
+                        <ProfileDropdown 
+                            onEditProfile={handleEditProfile}
+                            onLogout={handleLogout}
+                        />
                     </div>
                     <div className="text-center">
                         <div
@@ -205,13 +422,21 @@ function Profil(){
                             style={{ background: 'conic-gradient(#8B5CF6 65%, #E5E7EB 0)' }}
                         >
                             <div className="absolute w-[104px] h-[104px] bg-white rounded-full"></div>
-                            <img 
-                                src="/img/photoFrame1.png" 
-                                alt="Syarif" 
-                                className="w-24 h-24 rounded-full relative z-10"
-                            />
+                            {user?.profile_image ? (
+                                <img 
+                                    src={user.profile_image} 
+                                    alt={user.username} 
+                                    className="w-24 h-24 rounded-full relative z-10 object-cover"
+                                />
+                            ) : (
+                                <div className="w-24 h-24 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold relative z-10">
+                                    {getUserInitials(user?.username)}
+                                </div>
+                            )}
                         </div>
-                        <h4 className="mt-4 font-bold text-gray-800">Selamat Pagi Syarif</h4>
+                        <h4 className="mt-4 font-bold text-gray-800">
+                            {getGreeting()} {user?.username || 'User'}
+                        </h4>
                         <p className="text-sm text-gray-500">Lanjutkan Perjalananmu Dan Raih Targetmu</p>
                     </div>
 
@@ -232,7 +457,7 @@ function Profil(){
                     <div>
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="font-bold text-lg">Your Mentor</h3>
-                            <button className="bg-gray-100 p-1 rounded-md">+</button>
+                            <button className="bg-gray-100 p-1 rounded-md hover:bg-gray-200 transition-colors duration-200">+</button>
                         </div>
                         <div className="space-y-4">
                             {profileMentors.map((mentor, index) => (
@@ -244,14 +469,32 @@ function Profil(){
                                             <p className="text-xs text-gray-500">{mentor.role}</p>
                                         </div>
                                     </div>
-                                    <button className="bg-purple-100 text-purple-600 text-xs font-semibold py-1 px-4 rounded-full">Follow</button>
+                                    <button 
+                                        onClick={() => handleFollowMentor(mentor.name)}
+                                        className="bg-purple-100 text-purple-600 text-xs font-semibold py-1 px-4 rounded-full hover:bg-purple-200 transition-colors duration-200"
+                                    >
+                                        Follow
+                                    </button>
                                 </div>
                             ))}
                         </div>
-                        <button className="mt-8 w-full bg-gray-100 text-gray-700 font-semibold py-2 rounded-lg cursor-pointer hover:bg-gray-200 transition-colors duration-150">See All</button>
+                        <button 
+                            onClick={handleSeeAllMentors}
+                            className="mt-8 w-full bg-gray-100 text-gray-700 font-semibold py-2 rounded-lg cursor-pointer hover:bg-gray-200 transition-colors duration-150"
+                        >
+                            See All
+                        </button>
                     </div>
                 </aside>
             </div>
+            
+            {/* Edit Profile Modal */}
+            <EditProfileModal 
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                user={user}
+                onSave={handleSaveProfile}
+            />
         </div>
     );
 }

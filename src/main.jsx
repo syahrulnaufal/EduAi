@@ -24,21 +24,23 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path='*' element={<Beranda/>}/>
         <Route path="/" index element={<Beranda />} />
-        <Route path="/ruang-belajar" element={<RuangBelajar/>} />
-        <Route path='/ruang-belajar/:id' element={<RuangMateri/>} />
-        <Route path='/ruang-belajar/:id/:materi' element={<MateriBelajarPage/>} />
-        <Route path='/ruang-belajar/:id/:materi/:subbab' element={<WatchMateriVideo/>} />
-        <Route path="/ruang-kelas" element={<ProtectedRoute><RuangKelas /></ProtectedRoute>} />
-        <Route path="/chatbot" element={<Chatbot />} />
-        <Route path="/brain-academy" element={<BrainAcademy />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/sign-in" element={<SignInPage />} />
-        <Route path="/math-course/:id" element={<MathCoursePage />} />
-        <Route path="/fitur/:id" element={<FiturPopuler />} />
-        <Route path="/fitur/:id/curriculum" element={<Curriculum />} />
-        <Route path="/profile" element={<Profil />} />
-        <Route path="/exam" element={<ExamPage />} />
-        <Route path="/exam/pembahasan" element={<PembahasanExam />} />  
+        
+        {/* Protected Routes - Require Authentication */}
+        <Route path="/ruang-belajar" element={<ProtectedRoute><RuangBelajar/></ProtectedRoute>} />
+        <Route path='/ruang-belajar/:id' element={<ProtectedRoute><RuangMateri/></ProtectedRoute>} />
+        <Route path='/ruang-belajar/:id/:materi' element={<ProtectedRoute><MateriBelajarPage/></ProtectedRoute>} />
+        <Route path='/ruang-belajar/:id/:materi/:subbab' element={<ProtectedRoute><WatchMateriVideo/></ProtectedRoute>} />
+        <Route path="/ruang-kelas" element={<ProtectedRoute><RuangKelas /></ProtectedRoute>} />
+        <Route path="/chatbot" element={<ProtectedRoute><Chatbot /></ProtectedRoute>} />
+        <Route path="/brain-academy" element={<ProtectedRoute><BrainAcademy /></ProtectedRoute>} />
+        <Route path="/math-course/:id" element={<ProtectedRoute><MathCoursePage /></ProtectedRoute>} />
+        <Route path="/fitur/:id" element={<ProtectedRoute><FiturPopuler /></ProtectedRoute>} />
+        <Route path="/fitur/:id/curriculum" element={<ProtectedRoute><Curriculum /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profil /></ProtectedRoute>} />
+        <Route path="/exam/:id" element={<ProtectedRoute><ExamPage /></ProtectedRoute>} />
+        <Route path="/exam/pembahasan" element={<ProtectedRoute><PembahasanExam /></ProtectedRoute>} />  
       </Routes>
     </BrowserRouter>
 )

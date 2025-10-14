@@ -182,12 +182,11 @@ export default function Asidebar({ onNewChat, children, conversations = [], acti
 		if (convList.length === 0) return null;
 
 		return (
-			<div className="flex-1 overflow-y-auto pb-6 border-b border-gray-200 h-fit mb-5">
+			<div className="flex-1 overflow-y-auto pb-6 border-b border-gray-200 h-fit mb-5 overflow-x-visible">
 				<div className='py-2 tracking-wider font-semibold transition-colors duration-300 flex justify-between items-center px-5 dark:text-gray-400'>
 					<span className="text-lg">{title}</span>
 					<span className="text-my-text/50 text-sm flex gap-2 items-center p-1 px-2 rounded-sm hover:bg-indigo-100 cursor-pointer transition-colors duration-200 hover:text-my-text/80">
 						{convList.length} total
-						{/* <span><img src="/img/arrowDown.png" alt="show all" width={'15px'}/></span> */}
 					</span>
 				</div>
 				
@@ -225,32 +224,40 @@ export default function Asidebar({ onNewChat, children, conversations = [], acti
 							
 							{/* Dropdown menu */}
 							{openDropdown === conv.id_conversation && (
-								<div className="dropdown-menu absolute right-2 top-10 w-48 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl shadow-2xl z-50 py-2 border border-gray-200 dark:border-gray-600">
-									<button
-										onClick={(e) => {
-											e.stopPropagation();
-											openRenameModal(conv.id_conversation, conv.title);
-										}}
-										className="w-full text-left px-4 py-2.5 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 flex items-center gap-3 transition-colors"
-									>
-										<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-										</svg>
-										Ganti nama
-									</button>
-									<button
-										onClick={(e) => {
-											e.stopPropagation();
-											handleDeleteConversation(conv.id_conversation);
-										}}
-										className="w-full text-left px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-600 hover:text-red-700 dark:hover:text-red-300 flex items-center gap-3 transition-colors"
-									>
-										<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-										</svg>
-										Hapus
-									</button>
-								</div>
+								<>
+									{/* Backdrop for clicking outside */}
+									<div 
+										className="fixed inset-0 z-[9998]" 
+										onClick={() => setOpenDropdown(null)}
+									/>
+									{/* Dropdown content */}
+									<div className="dropdown-menu absolute right-2 top-10 w-48 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl shadow-2xl z-[9999] py-2 border border-gray-200 dark:border-gray-600">
+										<button
+											onClick={(e) => {
+												e.stopPropagation();
+												openRenameModal(conv.id_conversation, conv.title);
+											}}
+											className="w-full text-left px-4 py-2.5 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 flex items-center gap-3 transition-colors"
+										>
+											<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+											</svg>
+											Ganti nama
+										</button>
+										<button
+											onClick={(e) => {
+												e.stopPropagation();
+												handleDeleteConversation(conv.id_conversation);
+											}}
+											className="w-full text-left px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-600 hover:text-red-700 dark:hover:text-red-300 flex items-center gap-3 transition-colors"
+										>
+											<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+											</svg>
+											Hapus
+										</button>
+									</div>
+								</>
 							)}
 						</li>
 					))}
@@ -262,7 +269,7 @@ export default function Asidebar({ onNewChat, children, conversations = [], acti
 	
 	return (
 		<>
-			<aside className='w-72 h-full backdrop-blur-md shadow-2xl rounded-t-3xl flex flex-col border transition-colors duration-300 overflow-y-auto
+			<aside className='w-72 h-full backdrop-blur-md shadow-2xl rounded-t-3xl flex flex-col border transition-colors duration-300 overflow-y-auto overflow-x-visible
 			dark:bg-gray-800/60 dark:border-gray-600/30
 			bg-surface border-white/30'
 			>
@@ -277,8 +284,6 @@ export default function Asidebar({ onNewChat, children, conversations = [], acti
 						</div>
 					</div>
 
-					{/* <img src="/img/edit.png" alt="edit" width={'25px'}/> */}
-					
 					{elements[0]}
 				
 				</div>
@@ -303,14 +308,14 @@ export default function Asidebar({ onNewChat, children, conversations = [], acti
 
 			{/* Rename Modal */}
 			{renameModal.open && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-					<div className="bg-white dark:bg-gray-800 rounded-lg p-4 w-80 max-w-sm mx-4 shadow-xl">
-						<h3 className="text-base font-semibold mb-3 dark:text-white">Ganti Nama Percakapan</h3>
+				<div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in-0 duration-200">
+					<div className="bg-white dark:bg-gray-800 rounded-2xl p-6 w-80 max-w-sm mx-4 shadow-2xl transform transition-all duration-300 animate-in zoom-in-95 slide-in-from-bottom-4">
+						<h3 className="text-lg font-bold mb-4 dark:text-white text-gray-900">Ganti Nama Percakapan</h3>
 						<input
 							type="text"
 							value={newTitle}
 							onChange={(e) => setNewTitle(e.target.value)}
-							className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+							className="w-full px-4 py-3 text-sm border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white bg-gray-50 dark:bg-gray-700/50 transition-all duration-200 focus:bg-white dark:focus:bg-gray-700"
 							placeholder="Masukkan nama percakapan"
 							maxLength={255}
 							autoFocus
@@ -323,19 +328,19 @@ export default function Asidebar({ onNewChat, children, conversations = [], acti
 								}
 							}}
 						/>
-						<div className="flex gap-2 mt-3 justify-end">
+						<div className="flex gap-3 mt-6 justify-end">
 							<button
 								onClick={() => {
 									setRenameModal({ open: false, conversationId: null, currentTitle: '' });
 									setNewTitle('');
 								}}
-								className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+								className="px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all duration-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600/50"
 							>
 								Batal
 							</button>
 							<button
 								onClick={handleRenameConversation}
-								className="px-3 py-1.5 text-sm bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors"
+								className="px-4 py-2.5 text-sm font-medium bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-lg hover:from-indigo-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
 							>
 								Simpan
 							</button>

@@ -2,9 +2,8 @@ import React, { useRef, useState, useLayoutEffect, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
-  const wrapperRef = useRef(null); // pembungkus sidebar
-  const menuRefs = useRef([]); // simpan referensi menu
-    // posisi awal garis ungu (top: 236)
+  const wrapperRef = useRef(null); 
+  const menuRefs = useRef([]); 
   const [indicator, setIndicator] = useState({ top: 236, height: 32, opacity: 1 });
   const location = useLocation();
 
@@ -20,10 +19,45 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     { label: "Logout", path: "/logout", isLogout: true },
   ];
 
-  // hitung posisi garis ungu di samping menu aktif
+  const handleLogout = async () => {
+  Swal.fire({
+    title: "Yakin mau logout?",
+    text: "Kamu akan keluar dari sesi ini.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Ya, logout",
+    cancelButtonText: "Batal",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        await fetch("http://localhost:5000/api/auth/logout", {
+          method: "POST",
+          credentials: "include",
+        });
+      } catch (err) {
+        console.error("Logout error:", err);
+      }
+
+      localStorage.clear();
+
+      Swal.fire({
+        icon: "success",
+        title: "Logout berhasil",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        window.location.href = "http://localhost:5173/login";
+      });
+    }
+  });
+};
+
+
+  // hitung posisi garis ungu
   const measureIndicator = () => {
     if (!wrapperRef.current) return;
-    // Cari NavLink yang aktif
     const navLinks = wrapperRef.current.querySelectorAll("a");
     const activeNav = Array.from(navLinks).find((el) => el.classList.contains("active"));
     if (activeNav) {
@@ -39,12 +73,10 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     }
   };
 
-  // jalankan saat route berpindah atau sidebar dibuka
   useLayoutEffect(() => {
     measureIndicator();
   }, [location.pathname, isOpen]);
 
-  // update posisi garis ungu ketika resize window
   useEffect(() => {
     window.addEventListener("resize", measureIndicator);
     return () => window.removeEventListener("resize", measureIndicator);
@@ -55,7 +87,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
       ref={wrapperRef}
       className={`fixed md:static top-0 left-0 h-screen bg-white shadow-md transition-all duration-300 overflow-hidden z-50
       ${isOpen ? "w-3/4 md:w-72" : "w-0"}`}
-      style={{maxWidth: isOpen ? undefined : 0}}
+      style={{ maxWidth: isOpen ? undefined : 0 }}
     >
       {isOpen && (
         <div className="relative flex h-full">
@@ -70,12 +102,13 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
               }}
             ></span>
           </div>
-          {/* Tombol close di bottom sidebar, tampil di semua ukuran layar */}
+
+          {/* Tombol close */}
           <button
             className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-full p-3 shadow-lg transition"
             onClick={toggleSidebar}
             aria-label="Tutup Sidebar"
-            style={{zIndex: 20}}
+            style={{ zIndex: 20 }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -85,17 +118,17 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
           {/* isi sidebar */}
           <div className="flex-1 overflow-auto">
             {/* header/logo */}
-             <div className="flex flex-col items-center justify-center p-4" style={{height:236}}>
-               <img
-                 src="../logo.png"
-                 alt="Logo"
-                 className="mb-4 object-contain"
-                 style={{ height: 100, width: 100 }}
-               />
-               <div className="font-extrabold text-gray-500 text-2xl text-center">
-                 Edu AI Admin
-               </div>
-             </div>
+            <div className="flex flex-col items-center justify-center p-4" style={{ height: 236 }}>
+              <img
+                src="../logo.png"
+                alt="Logo"
+                className="mb-4 object-contain"
+                style={{ height: 100, width: 100 }}
+              />
+              <div className="font-extrabold text-gray-500 text-2xl text-center">
+                Edu AI Admin
+              </div>
+            </div>
 
             {/* menu navigasi */}
             <nav className="flex flex-col gap-2 px-4 mt-2">
@@ -105,22 +138,31 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                   ref={(el) => (menuRefs.current[idx] = el)}
                   className="relative"
                 >
-                  <NavLink
-                    to={menu.path}
-                    className={({ isActive }) =>
-                      `block p-3 ml-6 rounded font-medium ${
-                        isActive
-                          ? "bg-purple-100 text-purple-700 font-bold active"
-                          : "hover:bg-indigo-50 text-gray-700"
-                      }`
-                    }
-                    end={menu.path === "/admin"}
-                    onClick={() => {
-                      if (window.innerWidth < 768) toggleSidebar();
-                    }}
-                  >
-                    {menu.label}
-                  </NavLink>
+                  {menu.isLogout ? (
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left p-3 ml-6 rounded font-medium hover:bg-red-50 text-red-600"
+                    >
+                      {menu.label}
+                    </button>
+                  ) : (
+                    <NavLink
+                      to={menu.path}
+                      className={({ isActive }) =>
+                        `block p-3 ml-6 rounded font-medium ${
+                          isActive
+                            ? "bg-purple-100 text-purple-700 font-bold active"
+                            : "hover:bg-indigo-50 text-gray-700"
+                        }`
+                      }
+                      end={menu.path === "/admin"}
+                      onClick={() => {
+                        if (window.innerWidth < 768) toggleSidebar();
+                      }}
+                    >
+                      {menu.label}
+                    </NavLink>
+                  )}
                 </div>
               ))}
             </nav>
