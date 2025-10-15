@@ -262,7 +262,7 @@ function Profil(){
                 <div className="w-10">{/* Placeholder */}</div>
             </Topbar>
             
-            <div className="flex flex-col lg:flex-row">
+            <div className="flex flex-col-reverse lg:flex-row">
                 <div className="flex-1 p-4 md:p-8 space-y-8">
                     <div className="w-full flex justify-center ">
                         <div className="relative w-full ">

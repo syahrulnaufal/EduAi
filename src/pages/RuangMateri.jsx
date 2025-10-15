@@ -184,7 +184,7 @@ useEffect(() => {
         </div>
 
         {/* semua bab */}
-        <div className="h-full w-screen flex justify-center">
+        <div className="h-full pb-30 w-screen flex justify-center">
             <div className="max-w-full h-full w-fit sm:max-w-[80%] md:max-w-[90%] flex-col flex items-start pt-5">
                 <div className="text-lg font-semibold text-my-text mb-3 ps-2">Semua Bab</div>
                 <div className="w-full h-max grid grid-cols-1 md:grid-cols-2 gap-5">

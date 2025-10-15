@@ -1,10 +1,57 @@
 import React from "react";
 import { Children } from "react";
 import { NavLink } from "react-router";
+import { useState, useEffect } from "react";
 
 const Sidebar = ({children, bg, left, hideSidebar}) => {
 
     const result = Children.toArray(children);
+    const [user, setUser] = useState(null);
+
+    const fetchUser = async () => {
+        try {
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+        } catch (error) {
+        console.error("Error fetching user:", error);
+        setUser(null);
+        } finally {
+        setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchUser();
+    }, []);
+
+    // handle logout available to this component
+      const handleLogout = async () => {
+        const result = await Swal.fire({
+          icon: "question",
+          title: "Yakin mau logout?",
+          showCancelButton: true,
+          confirmButtonText: "Ya, Logout",
+          cancelButtonText: "Batal",
+          confirmButtonColor: '#8B5CF6'
+        });
+    
+        if (result.isConfirmed) {
+          try {
+            await logout(); // This will redirect to homepage
+            
+            Swal.fire({
+              icon: "success",
+              title: "Berhasil logout!",
+              timer: 1500,
+              showConfirmButton: false,
+            });
+          } catch (error) {
+            console.error("Logout error:", error);
+            // Even if API fails, redirect to homepage
+            window.location.href = "/";
+          }
+        }
+      };
 
     return(
         <div className={`
@@ -53,6 +100,23 @@ const Sidebar = ({children, bg, left, hideSidebar}) => {
                     {/* darkmode button */}
                     <div className="text-2xl font-medium">
                         {result[1]}
+                        {user ? (
+                            <button
+                                onClick={handleLogout}
+                                className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                            >
+                                Sign Out
+                            </button>
+                        ) : (
+                            <div className="mb-5">    
+                                <NavLink
+                                    to='/login'
+                                    className="w-full text-left px-4 py-2 text-blue-600 hover:bg-gray-100"
+                                    >
+                                    Login
+                                </NavLink>
+                            </div>
+                        )}
                     </div>
 
                 </div>
