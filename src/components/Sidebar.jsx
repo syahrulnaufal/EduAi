@@ -32,17 +32,17 @@ const Sidebar = ({children, bg, left, hideSidebar}) => {
                         <NavLink to='/ruang-belajar'>
                             <div className='hover:text-primary dark:hover:text-primary-dark'>Ruang Belajar</div>
                         </NavLink>
-                        <NavLink to='/brain-academy'>
+                        {/* <NavLink to='/brain-academy'>
                             <div className='hover:text-primary dark:hover:text-primary-dark'>Brain Academy</div>
-                        </NavLink>
+                        </NavLink> */}
                         <NavLink to='/ruang-kelas'>
                             <div className='hover:text-primary dark:hover:text-primary-dark'>Ruang Kelas</div>
                         </NavLink>
                         <NavLink to='/chatbot'>
                             <div className='hover:text-primary dark:hover:text-primary-dark'>ChatBot</div>
                         </NavLink>
-                        <NavLink to='/tentang'>
-                            <div className='hover:text-primary dark:hover:text-primary-dark'>Tentang</div>
+                        <NavLink to='/profile'>
+                            <div className='hover:text-primary dark:hover:text-primary-dark'>Profile</div>
                         </NavLink>
                     </div>
 

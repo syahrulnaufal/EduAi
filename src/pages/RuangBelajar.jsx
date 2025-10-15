@@ -17,7 +17,7 @@ import { NavLink } from "react-router";
 //     name: 'Syahrul',
 // }
 
-// // list materi belajar
+
 // const listMateri = [
 //     {
 //         id: 1,
@@ -133,6 +133,10 @@ function RuangBelajar() {
     const [listMateri, setListMateri] = useState([]);
     const [user, setUser] = useState("hi");
 
+    const filteredMateri = listMateri.filter(materi =>
+        materi.label.toLowerCase().includes(debounceSearchTerm.toLowerCase())
+    );
+
   useEffect(() => {
     fetch("http://localhost:5000/api/jenjang")
       .then((res) => res.json())
@@ -142,9 +146,18 @@ function RuangBelajar() {
           label: j.nama_jenjang,
         }));
         setOptions(formatted);
+        // Cari opsi default dari data yang sudah diformat
+        const defaultOption = formatted.find(
+          (option) => option.label === 'Kelas 10 MA/SMA/SMK'
+        );
+
+        // Jika ditemukan, atur sebagai state 'selected'
+        if (defaultOption) {
+          setSelected(defaultOption);
+        }
       })
       .catch((err) => console.error(err));
-  }, []);
+    }, []);
 
    useEffect(() => {
         if (selected) {
@@ -152,28 +165,24 @@ function RuangBelajar() {
                 .then(res => res.json())
                 .then(data => setListMateri(data))
                 .catch(err => setListMateri([]));
+            console.log(listMateri)
         } else {
             setListMateri([]);
         }
     }, [selected]);
+
     useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    console.log("User dari localStorage:", user);
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+        const storedUser = localStorage.getItem("user");
+        console.log("User dari localStorage:", user);
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
 
 
-  // Debounce search
-    useDebounce(() => setDebounceSearchTerm(searchTerm), 500, [searchTerm]);
+    // Debounce search
+    useDebounce(() => setDebounceSearchTerm(searchTerm), 100, [searchTerm]);
 
-    // check change of seaerch term every 500ms
-    useDebounce(() => setDebounceSearchTerm(searchTerm), 500, [searchTerm])
-    // function run every search term change
-    useEffect(() => {
-        // function(debounceSearchTerm)
-    }, [debounceSearchTerm])
 
     // Function to hide the sidebar
     function hideSidebar() {
@@ -189,12 +198,13 @@ function RuangBelajar() {
             setMenuIcon(menuButton)
         }
     }
+
     const iconMap = {
-    Matematika: "/img/mtk.png",
-    "Bahasa Indonesia": "/img/ikonKelasBahasaIndo.png",
-    IPA: "/img/ipa.png",
-    IPS: "/img/ips.png",
-    default: "/img/default.png"
+        Matematika: "/img/mtk.png",
+        "Bahasa Indonesia": "/img/ikonKelasBahasaIndo.png",
+        IPA: "/img/ipa.png",
+        IPS: "/img/ips.png",
+        default: "/img/default.png"
     };
         
 
@@ -224,19 +234,22 @@ function RuangBelajar() {
                 {/* search bar */}
                 <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} >
                     <div className="w-65">
-                        <Select options={options} value={selected} onChange={setSelected} placeholder="Pilih Jenjang" />
+                        <Select defaultValue={'Kelas 10 MA/SMA/SMK'} options={options} value={selected} onChange={setSelected} placeholder="Pilih Jenjang" />
                     </div>
                 </Search>
 
                 {/* list kelas */}
                 <div className="w-full bg-white rounded-xl mt-5 p-5 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 2xl:grid-cols-12 gap-y-2 mb-20"
                     style={{ boxShadow: '0px 6px 20px 4px rgba(113, 130, 164, 0.10)' }}>
-                        {listMateri.length === 0 && (
-                        <div className="col-span-full text-center text-gray-400">
-                            {selected ? "Tidak ada materi untuk jenjang ini." : "Silakan pilih jenjang terlebih dahulu."}
+                    {filteredMateri.length === 0 && (
+                        <div className="col-span-full text-center text-gray-500 py-10">
+                            {debounceSearchTerm
+                                ? `Tidak ada hasil untuk "${debounceSearchTerm}".`
+                                : (selected ? "Tidak ada materi untuk jenjang ini." : "Silakan pilih jenjang terlebih dahulu.")
+                            }
                         </div>
                     )}
-                    {listMateri.map((materi) => {
+                    {filteredMateri.map((materi) => {
                         const ikonSrc = materi.ikon || iconMap[materi.label] || iconMap.default;
                         return (
                         <NavLink key={materi.id} className="w-full" to={`/ruang-belajar/${materi.id}`} >

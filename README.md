@@ -20,10 +20,6 @@ terdapat beberapa folder utama :
 - src/main.jsx file utama
 - style.css untuk css
 
-# Walisongo Science Competition (WSC)
-
-This project is a web application for the Walisongo Science Competition (WSC). It provides a platform for students to learn, practice, and compete in various science subjects. The application features a chatbot for assistance, different learning spaces, and user authentication.
-
 ## Tech Stack
 
 *   **Framework:** [React.js](https://react.dev/)
@@ -43,6 +39,7 @@ The project is organized into the following main directories:
     *   `pages/`: The main pages of the application, each corresponding to a specific route.
     *   `main.jsx`: The entry point of the application where the React root is created and the main routes are defined.
     *   `style.css`: Global styles and Tailwind CSS configuration.
+* `backend/`: This folder contains backend code written by our backend dev.
 
 ## Getting Started
 
@@ -61,6 +58,12 @@ To run this project locally, follow these steps:
     npm run dev
     ```
     This will start the application on `http://localhost:5173` by default.
+
+4.  **Run the backend server:**
+    ```bash
+    cd backend
+    npm run start
+    ```
 
 ## Features
 
