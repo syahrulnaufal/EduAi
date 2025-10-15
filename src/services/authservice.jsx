@@ -1,4 +1,3 @@
-// src/services/authService.js
 export async function getCurrentUser() {
   try {
     const response = await fetch("http://localhost:5000/api/auth/me", {
@@ -20,6 +19,7 @@ export async function getCurrentUser() {
     return null;
   }
 }
+
 
 export async function updateUserProfile(userData) {
   try {
@@ -83,18 +83,23 @@ export async function updateUserPassword(passwordData) {
 
 export async function logout() {
   try {
+    // 🔥 hapus data di browser
+    localStorage.removeItem("user");
+    sessionStorage.clear();
+
+    // 🔥 coba hapus session di backend (kalau masih pakai express-session)
     const response = await fetch("http://localhost:5000/api/auth/logout", {
       method: "POST",
-      credentials: "include"
+      credentials: "include", // kirim cookie biar session ikut
     });
-    
-    if (response.ok) {
-      // Redirect to homepage instead of login page
-      window.location.href = "/";
+
+    if (!response.ok) {
+      console.warn("Logout server gagal atau session sudah hilang.");
     }
   } catch (error) {
     console.error("Logout error:", error);
-    // Even if there's an error, redirect to homepage
-    window.location.href = "/";
+  } finally {
+    // ✅ selalu redirect meskipun server gagal
+    window.location.href = "/login";
   }
 }

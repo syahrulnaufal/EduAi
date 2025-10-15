@@ -12,24 +12,33 @@ import { verifyUser, adminOnly } from "../middleware/auth.js";
 
 const router = express.Router();
 
+
+
 // POST /api/auth/login
 router.post('/login', loginUser);
 // POST /api/auth/signin
 router.post('/signin', signinUser);
 
 // POST /api/auth/logout
-router.post("/logout", verifyUser, (req, res) => {
-  req.session.destroy(err => {
-    if (err) {
-      console.error("Logout error:", err);
-      return res.status(500).json({ message: "Logout gagal" });
-    }
-    res.clearCookie("connect.sid"); // hapus cookie session
-    return res.json({ message: "Logout berhasil" });
-  });
+router.post("/logout", (req, res) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Gagal hapus session:", err);
+        return res.status(500).json({ message: "Gagal logout" });
+      }
+      res.clearCookie("connect.sid"); // cookie session default express-session
+      return res.json({ message: "Logout berhasil" });
+    });
+  } else {
+    return res.json({ message: "Tidak ada session untuk dihapus" });
+  }
 });
 
-router.get("/me", verifyUser, (req, res) => {
+router.get("/me", (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: "Silakan login dulu" });
+  }
   res.json({ user: req.session.user });
 });
 

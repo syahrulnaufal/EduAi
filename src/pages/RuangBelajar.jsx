@@ -226,7 +226,7 @@ function RuangBelajar() {
 
             {/* background gradasi biru hijau */}
             <div className="w-screen h-max bg-linear-90 from-[#52A9BC] to-[#7060D1] absolute z-1 text-white p-4 px-11 sm:px-21 pb-10 text-lg font-semibold rounded-b-2xl">
-                Hi, {user.username} <br /><span className="text-base font-normal">Mau belajar apa hari ini ?</span>
+                Hi, {user.username || user.name} <br /><span className="text-base font-normal">Mau belajar apa hari ini ?</span>
             </div>
 
             {/* main */}
