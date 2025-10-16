@@ -19,22 +19,32 @@ export default function SubBab() {
     id_bab: babId,
   });
 
-  // === Fetch data SubBab ===
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/subbab/admin/${babId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setSubbab(data);
-        if (data.length > 0) {
-          setPelajaranInfo({
-            nama_pelajaran: data[0].nama_pelajaran,
-            nama_jenjang: data[0].nama_jenjang,
-            judul_bab: data[0].judul_bab,
-          });
-        }
-      })
-      .catch(console.error);
-  }, [babId]);
+  // === Pagination ===
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+// === Fetch data SubBab ===
+useEffect(() => {
+  fetch(`http://localhost:5000/api/subbab/admin/${babId}`)
+    .then((res) => res.json())
+    .then((data) => {
+      setSubbab(data);
+
+      if (data.length > 0) {
+        setPelajaranInfo({
+          nama_pelajaran: data[0].nama_pelajaran,
+          nama_jenjang: data[0].nama_jenjang,
+          judul_bab: data[0].judul_bab,
+        });
+      } else {
+        // 🟢 kalau kosong, langsung buka modal tambah SubBab
+        setIsEdit(false);
+        setShowModal(true);
+      }
+    })
+    .catch(console.error);
+}, [babId]);
+
 
   // === Tambah SubBab ===
   const openAddModal = () => {
@@ -120,13 +130,25 @@ export default function SubBab() {
     }
   };
 
+  // === Filter & Pagination ===
   const filteredSubbab = subbab.filter((s) =>
     s.judul_subbab.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const totalPages = Math.ceil(filteredSubbab.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = filteredSubbab.slice(startIndex, startIndex + itemsPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage((p) => p + 1);
+  };
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage((p) => p - 1);
+  };
+
   return (
-    <div className="p-2 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base overflow-hidden">
-      <div className="max-w-[95%] lg:max-w-[85%] mx-auto">
+    <div className="p-3 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base w-full overflow-x-hidden">
+      <div className="w-full overflow-hidden px-2 sm:px-6">
         {/* === Header === */}
         {pelajaranInfo && (
           <nav className="flex flex-wrap items-center gap-2 text-base sm:text-2xl font-bold text-gray-800 mb-6">
@@ -159,7 +181,10 @@ export default function SubBab() {
               placeholder="Cari SubBab..."
               className="px-2 py-2 outline-none w-full text-sm"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
             />
           </div>
           <button
@@ -175,29 +200,19 @@ export default function SubBab() {
           <table className="min-w-full border-collapse text-[11px] sm:text-sm md:text-base">
             <thead className="bg-gray-100">
               <tr>
-                <th className="p-2 sm:p-3 border border-gray-300 text-center">
-                  No
-                </th>
-                <th className="p-2 sm:p-3 border border-gray-300 text-left">
-                  Nama SubBab
-                </th>
-                <th className="p-2 sm:p-3 border border-gray-300 text-left">
-                  Link Video
-                </th>
-                <th className="p-2 sm:p-3 border border-gray-300 text-center">
-                  Urutan
-                </th>
-                <th className="p-2 sm:p-3 border border-gray-300 text-center">
-                  Aksi
-                </th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">No</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-left">Nama SubBab</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-left">Link Video</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">Urutan</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              {filteredSubbab.length > 0 ? (
-                filteredSubbab.map((s, i) => (
+              {currentItems.length > 0 ? (
+                currentItems.map((s, i) => (
                   <tr key={s.id_subbab} className="hover:bg-gray-50">
                     <td className="p-2 sm:p-3 border border-gray-300 text-center">
-                      {i + 1}
+                      {startIndex + i + 1}
                     </td>
                     <td className="p-2 sm:p-3 border border-gray-300 break-words">
                       {s.judul_subbab}
@@ -230,16 +245,42 @@ export default function SubBab() {
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan="5"
-                    className="text-center py-4 text-gray-500 italic"
-                  >
+                  <td colSpan="5" className="text-center py-4 text-gray-500 italic">
                     Tidak ada SubBab ditemukan.
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+
+          {/* === Pagination mirip Users === */}
+          {filteredSubbab.length > 0 && (
+            <div className="flex justify-center items-center py-4 border-t border-gray-200 bg-gray-50">
+              <button
+                onClick={prevPage}
+                className={`px-4 py-2 mx-2 rounded-md shadow-sm border transition-all ${
+                  currentPage === 1
+                    ? "bg-gray-200 text-gray-500"
+                    : "bg-purple-600 text-white hover:bg-purple-700"
+                }`}
+              >
+                Previous
+              </button>
+              <span className="text-gray-700 mx-2 text-sm sm:text-base font-medium">
+                Halaman {currentPage} dari {totalPages || 1}
+              </span>
+              <button
+                onClick={nextPage}
+                className={`px-4 py-2 mx-2 rounded-md shadow-sm border transition-all ${
+                  currentPage === totalPages
+                    ? "bg-gray-200 text-gray-500"
+                    : "bg-purple-600 text-white hover:bg-purple-700"
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

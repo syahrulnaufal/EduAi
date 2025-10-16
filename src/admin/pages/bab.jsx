@@ -24,15 +24,17 @@ export default function DetailPelajaran() {
     id_pelajaran: pelajaranId,
   });
 
-  // Ambil semua pelajaran untuk dropdown
+  // === Pagination ===
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   useEffect(() => {
     fetch("http://localhost:5000/api/pelajaran")
       .then((res) => res.json())
-      .then((data) => setPelajaranList(data))
+      .then(setPelajaranList)
       .catch(console.error);
   }, []);
 
-  // Fetch data bab sesuai pelajaranId
   useEffect(() => {
     fetch(`http://localhost:5000/api/bab/pelajaran/${selectedPelajaran}`)
       .then((res) => res.json())
@@ -44,12 +46,31 @@ export default function DetailPelajaran() {
             icon: data[0].icon_pelajaran,
             nama_jenjang: data[0].nama_jenjang,
           });
-        }
+        } else setPelajaranInfo(null);
       })
       .catch(console.error);
   }, [selectedPelajaran]);
 
-  // Modal Add/Edit
+  const handleSearchChange = (e) => setSearchTerm(e.target.value.toLowerCase());
+  const filteredBab = bab.filter((b) =>
+    b.judul_bab.toLowerCase().includes(searchTerm)
+  );
+
+  // === Pagination Logic ===
+  const totalPages = Math.ceil(filteredBab.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = filteredBab.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage((p) => p + 1);
+  };
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage((p) => p - 1);
+  };
+
   const openAddModal = () => {
     setIsEdit(false);
     setFormData({
@@ -82,7 +103,6 @@ export default function DetailPelajaran() {
     setShowModal(true);
   };
 
-  // Simpan data
   const handleSave = async () => {
     try {
       const url = isEdit
@@ -90,11 +110,9 @@ export default function DetailPelajaran() {
         : "http://localhost:5000/api/bab";
       const method = isEdit ? "PUT" : "POST";
       const body = new FormData();
-
       Object.entries(formData).forEach(([key, value]) => {
         if (key !== "id_bab") body.append(key, value);
       });
-
       if (formData.icon instanceof File) body.append("icon", formData.icon);
 
       const res = await fetch(url, { method, body });
@@ -104,7 +122,7 @@ export default function DetailPelajaran() {
       Swal.fire("Sukses", data.message, "success");
       setShowModal(false);
       fetch(`http://localhost:5000/api/bab/pelajaran/${selectedPelajaran}`)
-        .then((res) => res.json())
+        .then((r) => r.json())
         .then(setBab);
     } catch (err) {
       Swal.fire("Error", err.message, "error");
@@ -135,128 +153,117 @@ export default function DetailPelajaran() {
     });
   };
 
-  const handleSearchChange = (e) => setSearchTerm(e.target.value.toLowerCase());
-  const filteredBab = bab.filter((b) =>
-    b.judul_bab.toLowerCase().includes(searchTerm)
-  );
-
   return (
-    <div className="p-1 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base overflow-hidden">
-      <div className="max-w-[90%] lg:max-w-[85%] mx-auto">
-        {/* Header */}
+    <div className="p-3 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base w-full overflow-x-hidden">
+      <div className="w-full overflow-hidden px-2 sm:px-6">
+        {/* === Header === */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-          <h1 className="text-xl font-bold mb-4 sm:mb-0">
+          <nav className="flex flex-wrap items-center gap-2 text-base sm:text-2xl font-bold text-gray-800">
             {pelajaranInfo && (
-              <nav className="flex items-center gap-2 text-lg sm:text-2xl font-bold text-black whitespace-nowrap">
+              <>
                 <span>{pelajaranInfo.nama_jenjang}</span>
                 <span>/</span>
                 <button
-                  className="hover:underline focus:outline-none"
+                  className="hover:underline text-purple-600"
                   onClick={() => navigate("/pelajaran")}
                 >
                   {pelajaranInfo.nama_pelajaran}
                 </button>
-              </nav>
+              </>
             )}
-          </h1>
+          </nav>
+        </div>
 
-          {/* Search + Filter */}
-          <div className="flex flex-col items-end w-full sm:w-auto">
-            <div className="relative mb-2 w-full sm:w-80">
-              <input
-                type="text"
-                placeholder="Cari bab..."
-                className="border p-2 rounded w-full pl-10"
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <i className="fa-solid fa-magnifying-glass"></i>
-              </span>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-2">
-              <select
-                className="border p-2 rounded w-full sm:w-40"
-                value={selectedPelajaran}
-                onChange={(e) => setSelectedPelajaran(e.target.value)}
-              >
-                {pelajaranList.map((p) => (
-                  <option key={p.id_pelajaran} value={p.id_pelajaran}>
-                    {p.nama_pelajaran}
-                  </option>
-                ))}
-              </select>
-              <button
-                className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 w-full sm:w-40"
-                onClick={openAddModal}
-              >
-                + Tambah Bab
-              </button>
-            </div>
+        {/* === Search + Tambah === */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-2 mb-6">
+          <div className="flex items-center border rounded-md overflow-hidden w-full sm:w-80">
+            <i className="fa-solid fa-magnifying-glass text-gray-400 px-2"></i>
+            <input
+              type="text"
+              placeholder="Cari Bab..."
+              className="px-2 py-2 outline-none w-full text-sm"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </div>
+          <div className="flex gap-2 w-full sm:w-auto">
+            <select
+              className="border rounded-md px-3 py-2 w-full sm:w-auto"
+              value={selectedPelajaran}
+              onChange={(e) => setSelectedPelajaran(e.target.value)}
+            >
+              {pelajaranList.map((p) => (
+                <option key={p.id_pelajaran} value={p.id_pelajaran}>
+                  {p.nama_pelajaran}
+                </option>
+              ))}
+            </select>
+            <button
+              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded w-full sm:w-[210px]"
+              onClick={openAddModal}
+            >
+              + Tambah Bab
+            </button>
           </div>
         </div>
 
-        {/* Table */}
-        <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
-          <table className="table-auto w-full border-collapse text-[11px] sm:text-base">
+        {/* === Table === */}
+        <div className="bg-white rounded-lg shadow border border-gray-200 overflow-x-auto">
+          <table className="min-w-full border-collapse text-[11px] sm:text-sm md:text-base">
             <thead className="bg-gray-100">
               <tr>
-                <th className="p-3 border border-gray-200 text-center w-14">No</th>
-                <th className="p-3 border border-gray-200 text-left w-1/5">Nama Bab</th>
-                <th className="p-3 border border-gray-200 text-left w-2/5">Deskripsi</th>
-                <th className="p-3 border border-gray-200 text-center w-16">SubBab</th>
-                <th className="p-3 border border-gray-200 text-center w-16">Soal</th>
-                <th className="p-3 border border-gray-200 text-center w-20">XP</th>
-                <th className="p-3 border border-gray-200 text-center w-64">Aksi</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center w-10">No</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-left">Nama Bab</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-left">Deskripsi</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">SubBab</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">Soal</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">XP</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              {filteredBab.length > 0 ? (
-                filteredBab.map((b, i) => (
-                  <tr key={b.id_bab} className="hover:bg-gray-50">
-                    <td className="p-3 border border-gray-200 text-center">{i + 1}</td>
-                    <td className="p-3 border border-gray-200">
+              {currentItems.length > 0 ? (
+                currentItems.map((b, i) => (
+                  <tr key={b.id_bab} className="hover:bg-gray-50 text-center">
+                    <td className="p-2 sm:p-3 border border-gray-300">{startIndex + i + 1}</td>
+                    <td className="p-2 sm:p-3 border border-gray-300 text-left">
                       <div className="flex items-center gap-2">
                         {b.icon ? (
-                          <img
-                            src={b.icon}
-                            alt="ikon"
-                            className="w-8 h-8 object-cover rounded"
-                            onError={(e) => (e.currentTarget.style.display = "none")}
-                          />
+                          <img src={b.icon} alt="icon" className="w-8 h-8 object-cover rounded" />
                         ) : (
-                          <div className="w-8 h-8 rounded bg-gray-200 grid place-items-center">-</div>
+                          <div className="w-8 h-8 bg-gray-200 rounded grid place-items-center">-</div>
                         )}
-                        <span>{b.judul_bab}</span>
+                        <span className="break-words">{b.judul_bab}</span>
                       </div>
                     </td>
-                    <td className="p-3 border border-gray-200 text-sm">{b.detail}</td>
-                    <td className="p-3 border border-gray-200 text-center">{b.total_subbab}</td>
-                    <td className="p-3 border border-gray-200 text-center">{b.total_quiz}</td>
-                    <td className="p-3 border border-gray-200 text-center">{b.point_xp}</td>
-                    <td className="p-3 border border-gray-200 text-center">
+                    <td className="p-2 sm:p-3 border border-gray-300 text-left">{b.detail || "-"}</td>
+                    <td className="p-2 sm:p-3 border border-gray-300">{b.total_subbab}</td>
+                    <td className="p-2 sm:p-3 border border-gray-300">{b.total_quiz}</td>
+                    <td className="p-2 sm:p-3 border border-gray-300">{b.point_xp}</td>
+                    <td className="p-2 sm:p-3 border border-gray-300">
                       <div className="flex flex-wrap justify-center gap-2">
                         <button
-                          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm flex items-center gap-1"
-                          onClick={() => navigate(`/pelajaran/${jenjangId}/${selectedPelajaran}/${b.id_bab}`)}
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm"
+                          onClick={() =>
+                            navigate(`/pelajaran/${jenjangId}/${selectedPelajaran}/${b.id_bab}`)
+                          }
                         >
                           <i className="fa-solid fa-layer-group"></i> SubBab
                         </button>
                         <button
-                          className="bg-blue-400 text-white px-3 py-1 rounded hover:bg-blue-500 text-sm flex items-center gap-1"
+                          className="bg-blue-400 hover:bg-blue-500 text-white px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm"
                           onClick={() => navigate(`/quiz/${selectedPelajaran}/${b.id_bab}`)}
                         >
                           <i className="fa-solid fa-list-check"></i> Soal
                         </button>
                         <button
-                          className="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-sm flex items-center gap-1"
+                          className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm"
                           onClick={() => openEditModal(b)}
                         >
                           <i className="fa-solid fa-pen-to-square"></i> Edit
                         </button>
                         <button
-                          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm flex items-center gap-1"
+                          className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm"
                           onClick={() => handleDelete(b.id_bab)}
                         >
                           <i className="fa-solid fa-trash"></i> Hapus
@@ -274,13 +281,42 @@ export default function DetailPelajaran() {
               )}
             </tbody>
           </table>
+
+          {/* === Pagination mirip Users === */}
+          {filteredBab.length > 0 && (
+            <div className="flex justify-center items-center py-4 border-t border-gray-200 bg-gray-50">
+              <button
+                onClick={prevPage}
+                className={`px-4 py-2 mx-2 rounded-md shadow-sm border transition-all ${
+                  currentPage === 1
+                    ? "bg-gray-200 text-gray-500"
+                    : "bg-purple-600 text-white hover:bg-purple-700"
+                }`}
+              >
+                Previous
+              </button>
+              <span className="text-gray-700 mx-2 text-sm sm:text-base font-medium">
+                Halaman {currentPage} dari {totalPages || 1}
+              </span>
+              <button
+                onClick={nextPage}
+                className={`px-4 py-2 mx-2 rounded-md shadow-sm border transition-all ${
+                  currentPage === totalPages
+                    ? "bg-gray-200 text-gray-500"
+                    : "bg-purple-600 text-white hover:bg-purple-700"
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Modal */}
+      {/* === Modal Tambah/Edit === */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white p-6 rounded-lg w-[90vw] max-w-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white p-6 rounded-lg shadow w-[90vw] max-w-md">
             <h2 className="text-lg font-bold mb-4">
               {isEdit ? "Edit Bab" : "Tambah Bab"}
             </h2>
@@ -289,37 +325,46 @@ export default function DetailPelajaran() {
               <input
                 type="text"
                 value={formData.judul_bab}
-                onChange={(e) => setFormData({ ...formData, judul_bab: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, judul_bab: e.target.value })
+                }
                 className="border p-2 rounded"
               />
-
               <label>Point XP</label>
               <input
                 type="number"
                 value={formData.point_xp}
-                onChange={(e) => setFormData({ ...formData, point_xp: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, point_xp: e.target.value })
+                }
                 className="border p-2 rounded"
               />
-
               <label>Detail</label>
               <textarea
+                rows="3"
                 value={formData.detail}
-                onChange={(e) => setFormData({ ...formData, detail: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, detail: e.target.value })
+                }
                 className="border p-2 rounded"
               />
-
               <label>Harga</label>
               <input
                 type="number"
                 value={formData.harga}
-                onChange={(e) => setFormData({ ...formData, harga: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, harga: e.target.value })
+                }
                 className="border p-2 rounded"
               />
-
               <label>Icon (PNG)</label>
               {previewIcon && (
                 <img
-                  src={formData.icon instanceof File ? URL.createObjectURL(formData.icon) : previewIcon}
+                  src={
+                    formData.icon instanceof File
+                      ? URL.createObjectURL(formData.icon)
+                      : previewIcon
+                  }
                   alt="preview"
                   className="w-16 h-16 object-cover rounded border mb-1"
                 />
@@ -341,11 +386,12 @@ export default function DetailPelajaran() {
                 }}
                 className="border p-2 rounded"
               />
-
               <label>Pindah Pelajaran</label>
               <select
                 value={formData.id_pelajaran}
-                onChange={(e) => setFormData({ ...formData, id_pelajaran: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, id_pelajaran: e.target.value })
+                }
                 className="border p-2 rounded"
               >
                 {pelajaranList.map((p) => (
@@ -355,12 +401,17 @@ export default function DetailPelajaran() {
                 ))}
               </select>
             </div>
-
             <div className="flex justify-end gap-2 mt-4">
-              <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={() => setShowModal(false)}>
+              <button
+                className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded"
+                onClick={() => setShowModal(false)}
+              >
                 Batal
               </button>
-              <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={handleSave}>
+              <button
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                onClick={handleSave}
+              >
                 Simpan
               </button>
             </div>

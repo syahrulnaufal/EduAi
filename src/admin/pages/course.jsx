@@ -132,8 +132,8 @@ export default function Course() {
   );
 
   return (
-    <div className="p-2 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base overflow-hidden">
-      <div className="max-w-[95%] lg:max-w-[85%] mx-auto">
+    <div className="p-3 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base w-full overflow-x-hidden">
+      <div className="w-full overflow-hidden px-2 sm:px-6">
         {/* === Header === */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-0">

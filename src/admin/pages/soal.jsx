@@ -8,6 +8,9 @@ export default function Soal() {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // ✅ hanya 5 per halaman
+
   const [formData, setFormData] = useState({
     id_soal: null,
     pertanyaan: "",
@@ -22,19 +25,25 @@ export default function Soal() {
   const [judulBab, setJudulBab] = useState("");
   const [namaQuiz, setNamaQuiz] = useState("");
 
-  // === Fetch data Soal ===
   useEffect(() => {
-    fetch(`http://localhost:5000/api/soal/${quizId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setSoal(Array.isArray(data.soal) ? data.soal : []);
-        setJudulBab(data.judul_bab || "");
-        setNamaQuiz(data.nama_quiz || "");
-      })
-      .catch(console.error);
-  }, [quizId]);
+  fetch(`http://localhost:5000/api/soal/${quizId}`)
+    .then((res) => res.json())
+    .then((data) => {
+      const soalData = Array.isArray(data.soal) ? data.soal : [];
+      setSoal(soalData);
+      setJudulBab(data.judul_bab || "");
+      setNamaQuiz(data.nama_quiz || "");
 
-  // === Modal handlers ===
+      // 🟢 otomatis buka modal kalau belum ada soal
+      if (soalData.length === 0) {
+        setIsEdit(false);
+        setShowModal(true);
+      }
+    })
+    .catch(console.error);
+}, [quizId]);
+
+
   const openAddModal = () => {
     setIsEdit(false);
     setFormData({
@@ -55,7 +64,6 @@ export default function Soal() {
     setShowModal(true);
   };
 
-  // === Simpan data ===
   const handleSave = async () => {
     try {
       const url = isEdit
@@ -74,7 +82,6 @@ export default function Soal() {
       Swal.fire("Sukses", data.message, "success");
       setShowModal(false);
 
-      // Refresh data
       fetch(`http://localhost:5000/api/soal/${quizId}`)
         .then((r) => r.json())
         .then((d) => {
@@ -87,7 +94,6 @@ export default function Soal() {
     }
   };
 
-  // === Hapus Soal ===
   const handleDelete = (id) => {
     Swal.fire({
       title: "Hapus Soal?",
@@ -111,13 +117,26 @@ export default function Soal() {
     });
   };
 
+  // === Pagination ===
   const filteredSoal = soal.filter((s) =>
     s.pertanyaan?.toLowerCase().includes(search.toLowerCase())
   );
 
+  const totalPages = Math.ceil(filteredSoal.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentSoal = filteredSoal.slice(startIndex, startIndex + itemsPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
   return (
-    <div className="p-2 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base overflow-hidden">
-      <div className="max-w-[95%] lg:max-w-[85%] mx-auto">
+    <div className="p-3 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base w-full overflow-x-hidden">
+      <div className="w-full overflow-hidden px-2 sm:px-6">
         {/* === Header === */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
           <nav className="flex flex-wrap items-center gap-2 text-base sm:text-2xl font-bold text-gray-800">
@@ -143,7 +162,10 @@ export default function Soal() {
               placeholder="Cari Soal..."
               className="px-2 py-2 outline-none w-full text-sm"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setCurrentPage(1);
+              }}
             />
           </div>
           <button
@@ -170,10 +192,12 @@ export default function Soal() {
               </tr>
             </thead>
             <tbody>
-              {filteredSoal.length > 0 ? (
-                filteredSoal.map((s, i) => (
+              {currentSoal.length > 0 ? (
+                currentSoal.map((s, i) => (
                   <tr key={s.id_soal} className="hover:bg-gray-50 text-center">
-                    <td className="p-2 sm:p-3 border border-gray-300">{i + 1}</td>
+                    <td className="p-2 sm:p-3 border border-gray-300">
+                      {(currentPage - 1) * itemsPerPage + i + 1}
+                    </td>
                     <td className="p-2 sm:p-3 border border-gray-300 break-words text-left">
                       {s.pertanyaan}
                     </td>
@@ -206,20 +230,48 @@ export default function Soal() {
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan="8"
-                    className="text-center py-4 text-gray-500 italic"
-                  >
+                  <td colSpan="8" className="text-center py-4 text-gray-500 italic">
                     Tidak ada soal.
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+
+          {/* === Pagination mirip Users === */}
+          {filteredSoal.length > 0 && (
+            <div className="flex justify-center items-center py-4 border-t border-gray-200 bg-gray-50">
+              <button
+                onClick={prevPage}
+                className={`px-4 py-2 mx-2 rounded-md shadow-sm border transition-all ${
+                  currentPage === 1
+                    ? "bg-gray-200 text-gray-500"
+                    : "bg-purple-600 text-white hover:bg-purple-700"
+                }`}
+              >
+                Previous
+              </button>
+
+              <span className="text-gray-700 mx-2 text-sm sm:text-base font-medium">
+                Halaman {currentPage} dari {totalPages || 1}
+              </span>
+
+              <button
+                onClick={nextPage}
+                className={`px-4 py-2 mx-2 rounded-md shadow-sm border transition-all ${
+                  currentPage === totalPages
+                    ? "bg-gray-200 text-gray-500"
+                    : "bg-purple-600 text-white hover:bg-purple-700"
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* === Modal Tambah/Edit === */}
+      {/* === Modal === */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="bg-white p-6 rounded-lg shadow w-[90vw] max-w-md">
@@ -239,45 +291,19 @@ export default function Soal() {
                 placeholder="Tuliskan pertanyaan..."
               ></textarea>
 
-              <label>Opsi A</label>
-              <input
-                type="text"
-                value={formData.opsi_a}
-                onChange={(e) =>
-                  setFormData({ ...formData, opsi_a: e.target.value })
-                }
-                className="border p-2 rounded"
-              />
-
-              <label>Opsi B</label>
-              <input
-                type="text"
-                value={formData.opsi_b}
-                onChange={(e) =>
-                  setFormData({ ...formData, opsi_b: e.target.value })
-                }
-                className="border p-2 rounded"
-              />
-
-              <label>Opsi C</label>
-              <input
-                type="text"
-                value={formData.opsi_c}
-                onChange={(e) =>
-                  setFormData({ ...formData, opsi_c: e.target.value })
-                }
-                className="border p-2 rounded"
-              />
-
-              <label>Opsi D</label>
-              <input
-                type="text"
-                value={formData.opsi_d}
-                onChange={(e) =>
-                  setFormData({ ...formData, opsi_d: e.target.value })
-                }
-                className="border p-2 rounded"
-              />
+              {["a", "b", "c", "d"].map((opt) => (
+                <div key={opt}>
+                  <label>Opsi {opt.toUpperCase()}</label>
+                  <input
+                    type="text"
+                    value={formData[`opsi_${opt}`]}
+                    onChange={(e) =>
+                      setFormData({ ...formData, [`opsi_${opt}`]: e.target.value })
+                    }
+                    className="border p-2 rounded"
+                  />
+                </div>
+              ))}
 
               <label>Jawaban Benar</label>
               <input

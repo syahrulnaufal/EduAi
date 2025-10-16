@@ -11,7 +11,6 @@ export default function Pelajaran() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editingData, setEditingData] = useState(null);
-
   const [formData, setFormData] = useState({
     nama_pelajaran: "",
     icon: null,
@@ -20,9 +19,14 @@ export default function Pelajaran() {
   const [previewIcon, setPreviewIcon] = useState("");
   const [fileInputKey, setFileInputKey] = useState(Date.now());
 
+  // === Pagination ===
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const getJenjangName = (id) =>
     jenjang.find((j) => j.id === parseInt(id))?.nama || "-";
 
+  // === Load data ===
   useEffect(() => {
     fetch(`${API_BASE}/api/jenjang`)
       .then((r) => r.json())
@@ -37,7 +41,8 @@ export default function Pelajaran() {
       .catch(() => Swal.fire("Error", "Gagal memuat pelajaran", "error"));
   }, []);
 
-  const visiblePelajaran = pelajaran.filter((p) => {
+  // === Filter pencarian & jenjang ===
+  const filteredPelajaran = pelajaran.filter((p) => {
     const cocokJenjang =
       selectedJenjang === 0 || Number(p.id_jenjang) === selectedJenjang;
     const cocokSearch = p.nama_pelajaran
@@ -46,6 +51,22 @@ export default function Pelajaran() {
     return cocokJenjang && cocokSearch;
   });
 
+  // === Pagination Logic ===
+  const totalPages = Math.ceil(filteredPelajaran.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = filteredPelajaran.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage((p) => p + 1);
+  };
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage((p) => p - 1);
+  };
+
+  // === Modal ===
   const openAddModal = () => {
     setEditingData(null);
     setFormData({ nama_pelajaran: "", icon: null, id_jenjang: "" });
@@ -74,6 +95,7 @@ export default function Pelajaran() {
     setFileInputKey(Date.now());
   };
 
+  // === Simpan ===
   const handleSave = async () => {
     if (!formData.nama_pelajaran || !formData.id_jenjang) {
       Swal.fire("Error", "Nama Pelajaran dan Jenjang wajib diisi!", "error");
@@ -105,6 +127,7 @@ export default function Pelajaran() {
     }
   };
 
+  // === Hapus ===
   const handleDelete = async (id) => {
     Swal.fire({
       title: "Yakin Hapus?",
@@ -133,8 +156,8 @@ export default function Pelajaran() {
     navigate(`/pelajaran/${jenjangId}/${pelajaranId}`);
 
   return (
-    <div className="p-3 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base">
-      <div className="max-w-[1200px] mx-auto">
+    <div className="p-3 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base w-full overflow-x-hidden">
+      <div className="w-full overflow-hidden px-2 sm:px-6">
         {/* === HEADER === */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-3 sm:mb-0">
@@ -149,7 +172,10 @@ export default function Pelajaran() {
                 placeholder="Cari Pelajaran..."
                 className="border p-2 rounded w-full pl-10 text-sm"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
               />
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                 <i className="fa-solid fa-magnifying-glass"></i>
@@ -161,7 +187,10 @@ export default function Pelajaran() {
               <select
                 className="border p-2 rounded text-sm w-full sm:w-44"
                 value={selectedJenjang}
-                onChange={(e) => setSelectedJenjang(Number(e.target.value))}
+                onChange={(e) => {
+                  setSelectedJenjang(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
               >
                 <option value={0}>Semua Jenjang</option>
                 {jenjang.map((j) => (
@@ -182,9 +211,9 @@ export default function Pelajaran() {
         </div>
 
         {/* === TABEL === */}
-        <div className="bg-white rounded-lg shadow border border-gray-200">
-          <div className="overflow-x-auto">
-            <table className="min-w-[950px] w-full border-collapse text-[11px] sm:text-sm md:text-base">
+        <div className="bg-white rounded-lg shadow border border-gray-200 w-full overflow-x-auto">
+          <div className="min-w-full sm:min-w-[950px]">
+            <table className="w-full border-collapse text-[11px] sm:text-sm md:text-base">
               <thead className="bg-gray-100">
                 <tr>
                   <th className="p-2 sm:p-3 border border-gray-200 text-center whitespace-nowrap">No</th>
@@ -195,11 +224,11 @@ export default function Pelajaran() {
                 </tr>
               </thead>
               <tbody>
-                {visiblePelajaran.length > 0 ? (
-                  visiblePelajaran.map((p, i) => (
+                {currentItems.length > 0 ? (
+                  currentItems.map((p, i) => (
                     <tr key={p.id_pelajaran} className="hover:bg-gray-50">
                       <td className="p-2 sm:p-3 border border-gray-200 text-center">
-                        {i + 1}
+                        {startIndex + i + 1}
                       </td>
                       <td className="p-2 sm:p-3 border border-gray-200 whitespace-nowrap">
                         <div className="flex items-center gap-2">
@@ -254,16 +283,42 @@ export default function Pelajaran() {
                   ))
                 ) : (
                   <tr>
-                    <td
-                      colSpan="5"
-                      className="text-center py-4 text-gray-500 italic"
-                    >
+                    <td colSpan="5" className="text-center py-4 text-gray-500 italic">
                       Tidak ada data pelajaran.
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
+
+            {/* === Pagination mirip Users === */}
+            {filteredPelajaran.length > 0 && (
+              <div className="flex justify-center items-center py-4 border-t border-gray-200 bg-gray-50">
+                <button
+                  onClick={prevPage}
+                  className={`px-4 py-2 mx-2 rounded-md shadow-sm border transition-all ${
+                    currentPage === 1
+                      ? "bg-gray-200 text-gray-500"
+                      : "bg-purple-600 text-white hover:bg-purple-700"
+                  }`}
+                >
+                  Previous
+                </button>
+                <span className="text-gray-700 mx-2 text-sm sm:text-base font-medium">
+                  Halaman {currentPage} dari {totalPages || 1}
+                </span>
+                <button
+                  onClick={nextPage}
+                  className={`px-4 py-2 mx-2 rounded-md shadow-sm border transition-all ${
+                    currentPage === totalPages
+                      ? "bg-gray-200 text-gray-500"
+                      : "bg-purple-600 text-white hover:bg-purple-700"
+                  }`}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]); // hasil filter
+  const [filterRole, setFilterRole] = useState("all"); // semua, admin, user
+
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({
     username: "",
@@ -10,15 +13,30 @@ export default function Users() {
     password: "",
   });
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    // setiap kali filter berubah, apply filter ulang
+    if (filterRole === "all") {
+      setFilteredUsers(users);
+    } else {
+      setFilteredUsers(users.filter((u) => u.role === filterRole));
+    }
+    setCurrentPage(1); // reset halaman ke 1 setelah filter
+  }, [filterRole, users]);
 
   const fetchUsers = async () => {
     try {
       const res = await fetch("http://localhost:5000/api/users");
       const data = await res.json();
       setUsers(data);
+      setFilteredUsers(data);
     } catch (err) {
       console.error("Fetch error:", err);
     }
@@ -100,6 +118,20 @@ export default function Users() {
     });
   };
 
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevious = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
   return (
     <div className="p-1 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base">
       {/* Header */}
@@ -117,18 +149,20 @@ export default function Users() {
 
       {/* Filter & Add */}
       <div className="flex flex-col sm:flex-row gap-2 sm:justify-end mb-4 sm:mb-6">
-        <div className="relative w-full sm:w-40">
-          <select className="border rounded-md px-3 py-2 text-gray-700 w-full appearance-none bg-white">
-            <option value="" disabled selected>
-              Filter
-            </option>
-            <option>A - Z</option>
-            <option>Z - A</option>
-            <option>Terbaru</option>
-            <option>Terlama</option>
+        {/* Filter Role */}
+        <div className="relative w-full sm:w-48">
+          <select
+            className="border rounded-md px-3 py-2 text-gray-700 w-full appearance-none bg-white"
+            value={filterRole}
+            onChange={(e) => setFilterRole(e.target.value)}
+          >
+            <option value="all">Semua Role</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
           </select>
           <i className="fa-solid fa-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none"></i>
         </div>
+
         <button className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition w-full sm:w-40">
           + Tambah User
         </button>
@@ -149,20 +183,14 @@ export default function Users() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
+            {currentUsers.map((user, index) => (
               <tr key={user.id_user} className="hover:bg-gray-50">
                 <td className="p-2 sm:p-3 border border-gray-200 text-center">
-                  {index + 1}
+                  {indexOfFirstItem + index + 1}
                 </td>
-                <td className="p-2 sm:p-3 border border-gray-200">
-                  {user.username}
-                </td>
-                <td className="p-2 sm:p-3 border border-gray-200">
-                  {user.email}
-                </td>
-                <td className="p-2 sm:p-3 border border-gray-200 text-center">
-                  {user.role}
-                </td>
+                <td className="p-2 sm:p-3 border border-gray-200">{user.username}</td>
+                <td className="p-2 sm:p-3 border border-gray-200">{user.email}</td>
+                <td className="p-2 sm:p-3 border border-gray-200 text-center">{user.role}</td>
                 <td className="p-2 sm:p-3 border border-gray-200 text-center">
                   <div className="flex justify-center gap-2 flex-wrap sm:flex-nowrap">
                     <button
@@ -183,27 +211,56 @@ export default function Users() {
                 </td>
               </tr>
             ))}
-            {users.length === 0 && (
+            {filteredUsers.length === 0 && (
               <tr>
                 <td
                   colSpan="5"
                   className="text-center text-gray-500 py-4 italic text-sm"
                 >
-                  Belum ada data user
+                  Tidak ada data {filterRole === "all" ? "user" : filterRole}
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+
+        {/* Pagination di tengah bawah tabel */}
+        {filteredUsers.length > 0 && (
+          <div className="flex justify-center items-center py-4 border-t border-gray-200 bg-gray-50">
+            <button
+              onClick={handlePrevious}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 mx-2 rounded-md ${
+                currentPage === 1
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-purple-600 text-white hover:bg-purple-700"
+              }`}
+            >
+              Previous
+            </button>
+            <span className="text-gray-700 mx-2 text-sm sm:text-base">
+              Halaman {currentPage} dari {totalPages || 1}
+            </span>
+            <button
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+              className={`px-4 py-2 mx-2 rounded-md ${
+                currentPage === totalPages
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-purple-600 text-white hover:bg-purple-700"
+              }`}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Modal Edit */}
       {editId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm animate-fadeIn">
           <div className="bg-white rounded-lg shadow-lg p-5 w-[90vw] max-w-xs sm:max-w-md relative">
-            <h3 className="text-lg font-semibold mb-3 text-gray-800">
-              Edit User
-            </h3>
+            <h3 className="text-lg font-semibold mb-3 text-gray-800">Edit User</h3>
             <form onSubmit={handleSave} className="flex flex-col gap-3">
               <input
                 name="username"

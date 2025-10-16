@@ -16,28 +16,39 @@ export default function Quiz() {
     rating: 0,
   });
 
-  // === Fetch Quiz ===
-  const fetchQuiz = () => {
-    fetch(`http://localhost:5000/api/quiz/admin/${babId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setQuiz(Array.isArray(data) ? data : []);
-        if (data.length > 0) {
-          setInfo({
-            nama_jenjang: data[0].nama_jenjang,
-            nama_pelajaran: data[0].nama_pelajaran,
-            judul_bab: data[0].judul_bab,
-          });
-        }
-      })
-      .catch(console.error);
-  };
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  useEffect(() => {
-    fetchQuiz();
-  }, [babId]);
+ // === Fetch Quiz ===
+const fetchQuiz = () => {
+  fetch(`http://localhost:5000/api/quiz/admin/${babId}`)
+    .then((res) => res.json())
+    .then((data) => {
+      const quizData = Array.isArray(data) ? data : [];
+      setQuiz(quizData);
 
-  // === Modal Handlers ===
+      if (quizData.length > 0) {
+        setInfo({
+          nama_jenjang: quizData[0].nama_jenjang,
+          nama_pelajaran: quizData[0].nama_pelajaran,
+          judul_bab: quizData[0].judul_bab,
+        });
+      } else {
+        // 🟢 kalau kosong, langsung buka modal tambah quiz
+        setIsEdit(false);
+        setShowModal(true);
+      }
+    })
+    .catch(console.error);
+};
+
+useEffect(() => {
+  fetchQuiz();
+}, [babId]);
+
+
+  // === Modal handlers ===
   const openAddModal = () => {
     setIsEdit(false);
     setFormData({ id_quiz: null, nama_quiz: "", rating: 0 });
@@ -50,14 +61,14 @@ export default function Quiz() {
     setShowModal(true);
   };
 
-  // === Simpan Quiz ===
+  // === Save data ===
   const handleSave = async () => {
     try {
       const url = isEdit
         ? `http://localhost:5000/api/quiz/${formData.id_quiz}`
         : `http://localhost:5000/api/quiz`;
-
       const method = isEdit ? "PUT" : "POST";
+
       const body = JSON.stringify({
         nama_quiz: formData.nama_quiz,
         rating: formData.rating,
@@ -69,8 +80,8 @@ export default function Quiz() {
         headers: { "Content-Type": "application/json" },
         body,
       });
-
       const data = await res.json();
+
       if (!res.ok) throw new Error(data.message);
 
       Swal.fire("Sukses", data.message, "success");
@@ -109,10 +120,25 @@ export default function Quiz() {
     q.nama_quiz?.toLowerCase().includes(search.toLowerCase())
   );
 
+  // === Pagination logic ===
+  const totalPages = Math.ceil(filteredQuiz.length / itemsPerPage);
+  const paginatedQuiz = filteredQuiz.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePrev = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
   return (
-    <div className="p-2 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base overflow-hidden">
-      <div className="max-w-[95%] lg:max-w-[85%] mx-auto">
-        {/* === Header === */}
+    <div className="p-3 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base w-full overflow-x-hidden">
+      <div className="w-full overflow-hidden px-2 sm:px-6">
+        {/* Header */}
         {info && (
           <nav className="flex flex-wrap items-center gap-2 text-base sm:text-2xl font-bold text-gray-800 mb-6">
             <span>{info.nama_jenjang}</span>
@@ -135,7 +161,7 @@ export default function Quiz() {
           </nav>
         )}
 
-        {/* === Search + Tambah === */}
+        {/* Search & Tambah */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-2 mb-6">
           <div className="flex items-center border rounded-md overflow-hidden w-full sm:w-80">
             <i className="fa-solid fa-magnifying-glass text-gray-400 px-2"></i>
@@ -144,7 +170,10 @@ export default function Quiz() {
               placeholder="Cari Quiz..."
               className="px-2 py-2 outline-none w-full text-sm"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setCurrentPage(1);
+              }}
             />
           </div>
           <button
@@ -155,34 +184,24 @@ export default function Quiz() {
           </button>
         </div>
 
-        {/* === Table === */}
+        {/* Table */}
         <div className="bg-white rounded-lg shadow border border-gray-200 overflow-x-auto">
           <table className="min-w-full border-collapse text-[11px] sm:text-sm md:text-base">
             <thead className="bg-gray-100">
               <tr>
-                <th className="p-2 sm:p-3 border border-gray-300 text-center">
-                  No
-                </th>
-                <th className="p-2 sm:p-3 border border-gray-300 text-left">
-                  Nama Quiz
-                </th>
-                <th className="p-2 sm:p-3 border border-gray-300 text-center">
-                  Jumlah Soal
-                </th>
-                <th className="p-2 sm:p-3 border border-gray-300 text-center">
-                  Rating
-                </th>
-                <th className="p-2 sm:p-3 border border-gray-300 text-center">
-                  Aksi
-                </th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">No</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-left">Nama Quiz</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">Jumlah Soal</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">Rating</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              {filteredQuiz.length > 0 ? (
-                filteredQuiz.map((q, i) => (
+              {paginatedQuiz.length > 0 ? (
+                paginatedQuiz.map((q, i) => (
                   <tr key={q.id_quiz} className="hover:bg-gray-50 text-center">
                     <td className="p-2 sm:p-3 border border-gray-300">
-                      {i + 1}
+                      {(currentPage - 1) * itemsPerPage + i + 1}
                     </td>
                     <td className="p-2 sm:p-3 border border-gray-300 text-left break-words">
                       {q.nama_quiz}
@@ -196,27 +215,24 @@ export default function Quiz() {
                     <td className="p-2 sm:p-3 border border-gray-300 text-center">
                       <div className="flex flex-wrap justify-center gap-2">
                         <button
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm flex items-center gap-1"
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs sm:text-sm"
                           onClick={() =>
                             navigate(`/quiz/${pelajaranId}/${babId}/${q.id_quiz}`)
                           }
                         >
                           <i className="fa-solid fa-eye"></i>
-                          <span className="hidden sm:inline">View</span>
                         </button>
                         <button
-                          className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm flex items-center gap-1"
+                          className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 rounded text-xs sm:text-sm"
                           onClick={() => openEditModal(q)}
                         >
                           <i className="fa-solid fa-pen-to-square"></i>
-                          <span className="hidden sm:inline">Edit</span>
                         </button>
                         <button
-                          className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm flex items-center gap-1"
+                          className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs sm:text-sm"
                           onClick={() => handleDelete(q.id_quiz)}
                         >
                           <i className="fa-solid fa-trash"></i>
-                          <span className="hidden sm:inline">Hapus</span>
                         </button>
                       </div>
                     </td>
@@ -224,10 +240,7 @@ export default function Quiz() {
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan="5"
-                    className="text-center py-4 text-gray-500 italic"
-                  >
+                  <td colSpan="5" className="text-center py-4 text-gray-500 italic">
                     Belum ada quiz.
                   </td>
                 </tr>
@@ -235,6 +248,39 @@ export default function Quiz() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {filteredQuiz.length > 0 && (
+          <div className="flex justify-center items-center gap-4 mt-6 text-sm sm:text-base">
+            <button
+              onClick={handlePrev}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 rounded-md ${
+                currentPage === 1
+                  ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                  : "bg-purple-600 text-white hover:bg-purple-700"
+              }`}
+            >
+              Previous
+            </button>
+
+            <span className="text-gray-700">
+              Halaman {currentPage} dari {totalPages || 1}
+            </span>
+
+            <button
+              onClick={handleNext}
+              disabled={currentPage === totalPages || totalPages === 0}
+              className={`px-4 py-2 rounded-md ${
+                currentPage === totalPages || totalPages === 0
+                  ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                  : "bg-purple-600 text-white hover:bg-purple-700"
+              }`}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
 
       {/* === Modal Tambah/Edit === */}

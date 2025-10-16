@@ -8,6 +8,10 @@ export default function Kelas() {
   const [isEdit, setIsEdit] = useState(false);
   const [formData, setFormData] = useState({ id_jenjang: null, nama_jenjang: "" });
 
+  // === Pagination State ===
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   // === Fetch Kelas ===
   const fetchKelas = async (keyword = "") => {
     try {
@@ -18,6 +22,7 @@ export default function Kelas() {
       if (!res.ok) return setKelas([]);
       const data = await res.json();
       setKelas(Array.isArray(data) ? data : []);
+      setCurrentPage(1); // reset ke halaman 1 saat cari
     } catch {
       Swal.fire("Error", "Gagal mengambil data kelas", "error");
     }
@@ -97,9 +102,22 @@ export default function Kelas() {
     });
   };
 
+  // === Pagination Logic ===
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = kelas.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(kelas.length / itemsPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
   return (
-    <div className="p-2 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base overflow-hidden">
-      <div className="max-w-[95%] lg:max-w-[85%] mx-auto">
+    <div className="p-3 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base w-full overflow-x-hidden">
+      <div className="w-full overflow-hidden px-2 sm:px-6">
         {/* === Header === */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-0">
@@ -132,27 +150,19 @@ export default function Kelas() {
           <table className="min-w-full border-collapse text-[11px] sm:text-sm md:text-base">
             <thead className="bg-gray-100 sticky top-0 z-10">
               <tr>
-                <th className="p-2 sm:p-3 border border-gray-300 text-center w-[10%]">
-                  No
-                </th>
-                <th className="p-2 sm:p-3 border border-gray-300 text-left">
-                  Nama Kelas
-                </th>
-                <th className="p-2 sm:p-3 border border-gray-300 text-center w-[20%]">
-                  Aksi
-                </th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center w-[10%]">No</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-left">Nama Kelas</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center w-[20%]">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              {kelas.length > 0 ? (
-                kelas.map((k, i) => (
+              {currentItems.length > 0 ? (
+                currentItems.map((k, i) => (
                   <tr key={k.id_jenjang} className="hover:bg-gray-50">
                     <td className="p-2 sm:p-3 border border-gray-300 text-center">
-                      {i + 1}
+                      {indexOfFirstItem + i + 1}
                     </td>
-                    <td className="p-2 sm:p-3 border border-gray-300">
-                      {k.nama_jenjang}
-                    </td>
+                    <td className="p-2 sm:p-3 border border-gray-300">{k.nama_jenjang}</td>
                     <td className="p-2 sm:p-3 border border-gray-300 text-center">
                       <div className="flex flex-wrap justify-center gap-2">
                         <button
@@ -183,6 +193,37 @@ export default function Kelas() {
             </tbody>
           </table>
         </div>
+
+        {/* === Pagination Buttons === */}
+        {kelas.length > itemsPerPage && (
+          <div className="flex justify-center items-center gap-3 mt-4">
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 rounded text-white ${
+                currentPage === 1
+                  ? "bg-purple-300 cursor-not-allowed"
+                  : "bg-purple-600 hover:bg-purple-700"
+              }`}
+            >
+              Previous
+            </button>
+            <span className="text-gray-700 text-sm font-medium">
+              Halaman {currentPage} dari {totalPages}
+            </span>
+            <button
+              onClick={nextPage}
+              disabled={currentPage === totalPages}
+              className={`px-4 py-2 rounded text-white ${
+                currentPage === totalPages
+                  ? "bg-purple-300 cursor-not-allowed"
+                  : "bg-purple-600 hover:bg-purple-700"
+              }`}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
 
       {/* === Modal Tambah/Edit === */}
