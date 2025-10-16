@@ -1,215 +1,240 @@
 import React, { useState, useEffect } from "react";
 
-const Kelas = () => {
-
-  // State daftar kelas
+export default function Kelas() {
   const [kelas, setKelas] = useState([]);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-
-  // 🔹 Fungsi fetch dinamis (kalau ada keyword → search, kalau kosong → semua)
-  const fetchKelas = async (keyword = "") => {
-    try {
-      let url = "http://localhost:5000/api/jenjang";
-      if (keyword) {
-        url = `http://localhost:5000/api/jenjang/nama/${keyword}`;
-      }
-
-      const res = await fetch(url);
-      if (!res.ok) {
-        setKelas([]); // kosongkan kalau tidak ada hasil
-        return;
-      }
-
-      const data = await res.json();
-      setKelas(data);
-    } catch (err) {
-      console.error("Gagal fetch data:", err);
-    }
-  };
-
-  // 🔹 Debounce search (tunggu 500ms setelah user berhenti mengetik)
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearch(search);
-    }, 500);
-
-    return () => clearTimeout(handler);
-  }, [search]);
-
-  // 🔹 Fetch data ketika pertama kali load & saat search berubah
-  useEffect(() => {
-    fetchKelas(debouncedSearch);
-  }, [debouncedSearch]);
-
-
-  // State modal
   const [showModal, setShowModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [formData, setFormData] = useState({ id_jenjang: null, nama_jenjang: "" });
 
-  // Tambah kelas
+  // === Pagination State ===
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // === Fetch Kelas ===
+  const fetchKelas = async (keyword = "") => {
+    try {
+      const url = keyword
+        ? `http://localhost:5000/api/jenjang/nama/${keyword}`
+        : "http://localhost:5000/api/jenjang";
+      const res = await fetch(url);
+      if (!res.ok) return setKelas([]);
+      const data = await res.json();
+      setKelas(Array.isArray(data) ? data : []);
+      setCurrentPage(1); // reset ke halaman 1 saat cari
+    } catch {
+      Swal.fire("Error", "Gagal mengambil data kelas", "error");
+    }
+  };
+
+  // === Debounce Search ===
+  useEffect(() => {
+    const delay = setTimeout(() => setDebouncedSearch(search), 500);
+    return () => clearTimeout(delay);
+  }, [search]);
+
+  useEffect(() => {
+    fetchKelas(debouncedSearch);
+  }, [debouncedSearch]);
+
+  // === Modal Add/Edit ===
   const openAddModal = () => {
     setIsEdit(false);
     setFormData({ id_jenjang: null, nama_jenjang: "" });
     setShowModal(true);
   };
 
-  // Edit kelas
   const openEditModal = (k) => {
     setIsEdit(true);
     setFormData(k);
     setShowModal(true);
   };
 
-  // Simpan kelas
-
-   const handleSaveKelas = async () => {
+  // === Simpan Kelas ===
+  const handleSaveKelas = async () => {
     if (!formData.nama_jenjang) {
       Swal.fire("Error", "Nama kelas wajib diisi!", "error");
       return;
     }
 
     try {
-      if (isEdit) {
-        // Update
-        await fetch(`http://localhost:5000/api/jenjang/${formData.id_jenjang}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nama_jenjang: formData.nama_jenjang }),
-        });
-        Swal.fire("Berhasil", "Kelas berhasil diperbarui!", "success");
-      } else {
-        // Tambah
-        await fetch("http://localhost:5000/api/jenjang", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nama_jenjang: formData.nama_jenjang }),
-        });
-        Swal.fire("Berhasil", "Kelas berhasil ditambahkan!", "success");
-      }
+      const method = isEdit ? "PUT" : "POST";
+      const url = isEdit
+        ? `http://localhost:5000/api/jenjang/${formData.id_jenjang}`
+        : "http://localhost:5000/api/jenjang";
 
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nama_jenjang: formData.nama_jenjang }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+
+      Swal.fire("Sukses", data.message || "Kelas disimpan!", "success");
       setShowModal(false);
-      fetchKelas(); // refresh data
-    } catch (err) {
-      console.error(err);
-      Swal.fire("Error", "Terjadi kesalahan!", "error");
+      fetchKelas();
+    } catch {
+      Swal.fire("Error", "Terjadi kesalahan saat menyimpan!", "error");
     }
   };
 
-
-  // Hapus kelas
-  const handleDelete = async (id) => {
+  // === Hapus Kelas ===
+  const handleDelete = (id) => {
     Swal.fire({
-      title: "Yakin ingin menghapus?",
-      text: "Data kelas akan hilang permanen!",
+      title: "Hapus Kelas?",
+      text: "Data ini tidak bisa dikembalikan!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Ya, Hapus!",
+      confirmButtonText: "Ya, hapus!",
       cancelButtonText: "Batal",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await fetch(`http://localhost:5000/api/jenjang/${id}`, {
-            method: "DELETE",
-          });
-          Swal.fire("Terhapus!", "Kelas berhasil dihapus.", "success");
-          fetchKelas(); // refresh data
-        } catch (err) {
-          console.error(err);
-          Swal.fire("Error", "Gagal menghapus kelas!", "error");
-        }
+    }).then(async (res) => {
+      if (!res.isConfirmed) return;
+      try {
+        await fetch(`http://localhost:5000/api/jenjang/${id}`, { method: "DELETE" });
+        Swal.fire("Terhapus!", "Kelas berhasil dihapus.", "success");
+        fetchKelas();
+      } catch {
+        Swal.fire("Error", "Gagal menghapus kelas!", "error");
       }
     });
   };
 
+  // === Pagination Logic ===
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = kelas.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(kelas.length / itemsPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
   return (
-    <div className="p-1 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-        <h1 className="text-xl font-bold mb-4 sm:mb-0">Manajemen Kelas</h1>
-      </div>
-
-      {/* Search kiri, tambah kanan */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-2">
-        <div className="flex items-center border rounded-md overflow-hidden w-full sm:w-80">
-          <i className="fa-solid fa-magnifying-glass text-gray-400 px-2 text-sm"></i>
-          <input
-            type="text"
-            placeholder="Cari Kelas..."
-            onChange={(e) => setSearch(e.target.value)}
-            className="px-2 py-2 outline-none w-full"
-          />
+    <div className="p-3 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base w-full overflow-x-hidden">
+      <div className="w-full overflow-hidden px-2 sm:px-6">
+        {/* === Header === */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-0">
+            Manajemen Kelas
+          </h1>
         </div>
-        <button
-          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded w-full sm:w-[300px]"
-          onClick={openAddModal}
-        >
-          + Tambah Kelas
-        </button>
+
+        {/* === Search + Tambah === */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-2 mb-6">
+          <div className="flex items-center border rounded-md overflow-hidden w-full sm:w-80">
+            <i className="fa-solid fa-magnifying-glass text-gray-400 px-2"></i>
+            <input
+              type="text"
+              placeholder="Cari Kelas..."
+              className="px-2 py-2 outline-none w-full text-sm"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+          <button
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded w-full sm:w-[210px]"
+            onClick={openAddModal}
+          >
+            + Tambah Kelas
+          </button>
+        </div>
+
+        {/* === Tabel === */}
+        <div className="bg-white rounded-lg shadow border border-gray-200 overflow-x-auto">
+          <table className="min-w-full border-collapse text-[11px] sm:text-sm md:text-base">
+            <thead className="bg-gray-100 sticky top-0 z-10">
+              <tr>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center w-[10%]">No</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-left">Nama Kelas</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center w-[20%]">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentItems.length > 0 ? (
+                currentItems.map((k, i) => (
+                  <tr key={k.id_jenjang} className="hover:bg-gray-50">
+                    <td className="p-2 sm:p-3 border border-gray-300 text-center">
+                      {indexOfFirstItem + i + 1}
+                    </td>
+                    <td className="p-2 sm:p-3 border border-gray-300">{k.nama_jenjang}</td>
+                    <td className="p-2 sm:p-3 border border-gray-300 text-center">
+                      <div className="flex flex-wrap justify-center gap-2">
+                        <button
+                          className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm flex items-center gap-1"
+                          onClick={() => openEditModal(k)}
+                        >
+                          <i className="fa-solid fa-pen-to-square"></i>
+                          <span className="hidden sm:inline">Edit</span>
+                        </button>
+                        <button
+                          className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm flex items-center gap-1"
+                          onClick={() => handleDelete(k.id_jenjang)}
+                        >
+                          <i className="fa-solid fa-trash"></i>
+                          <span className="hidden sm:inline">Hapus</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" className="text-center py-4 text-gray-500 italic">
+                    Tidak ada data kelas.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* === Pagination Buttons === */}
+        {kelas.length > itemsPerPage && (
+          <div className="flex justify-center items-center gap-3 mt-4">
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 rounded text-white ${
+                currentPage === 1
+                  ? "bg-purple-300 cursor-not-allowed"
+                  : "bg-purple-600 hover:bg-purple-700"
+              }`}
+            >
+              Previous
+            </button>
+            <span className="text-gray-700 text-sm font-medium">
+              Halaman {currentPage} dari {totalPages}
+            </span>
+            <button
+              onClick={nextPage}
+              disabled={currentPage === totalPages}
+              className={`px-4 py-2 rounded text-white ${
+                currentPage === totalPages
+                  ? "bg-purple-300 cursor-not-allowed"
+                  : "bg-purple-600 hover:bg-purple-700"
+              }`}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Tabel */}
-      <div className="relative w-full h-150 overflow-y-auto">
-      <table className="min-w-full border border-gray-200 rounded-lg shadow-sm border-collapse">
-        <thead className="sticky top-0 bg-gray-100 z-10 border-b border-gray-300">
-          <tr>
-            <th className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg bg-gray-100">
-              No
-            </th>
-            <th className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg bg-gray-100">
-              Nama Kelas
-            </th>
-            <th className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg bg-gray-100">
-              Aksi
-            </th>
-          </tr>
-        </thead>
-
-    <tbody>
-      {kelas.map((k, index) => (
-        <tr key={k.id_jenjang} className="hover:bg-gray-50 text-center">
-          <td className="p-1 sm:p-3 border border-gray-300 text-sm sm:text-lg">
-            {index + 1}
-          </td>
-          <td className="p-1 sm:p-3 border border-gray-300 text-sm sm:text-lg">
-            {k.nama_jenjang}
-          </td>
-          <td className="p-3 border border-gray-300">
-            <div className="flex justify-center gap-2">
-              <button
-                className="bg-yellow-400 text-white px-3 py-2 sm:px-4 sm:py-2 rounded hover:bg-yellow-500 min-w-[60px] sm:min-w-[80px] inline-flex items-center justify-center gap-1"
-                onClick={() => openEditModal(k)}
-              >
-                <i className="fa-solid fa-pen"></i>
-                <span className="hidden sm:inline">Edit</span>
-              </button>
-              <button
-                className="bg-red-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded hover:bg-red-600 min-w-[60px] sm:min-w-[80px] inline-flex items-center justify-center gap-1"
-                onClick={() => handleDelete(k.id_jenjang)}
-              >
-                <i className="fa-solid fa-trash"></i>
-                <span className="hidden sm:inline">Hapus</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-
-
-      {/* Modal Tambah/Edit Kelas */}
+      {/* === Modal Tambah/Edit === */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="bg-white p-6 rounded-lg shadow w-96">
+          <div className="bg-white p-6 rounded-lg shadow w-[90vw] max-w-md">
             <h2 className="text-lg font-bold mb-4">
               {isEdit ? "Edit Kelas" : "Tambah Kelas"}
             </h2>
-            <div className="flex flex-col gap-2">
+
+            <div className="flex flex-col gap-2 text-sm">
               <input
                 type="text"
                 placeholder="Nama Kelas"
@@ -220,15 +245,16 @@ const Kelas = () => {
                 }
               />
             </div>
+
             <div className="flex justify-end gap-2 mt-4">
               <button
-                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded"
                 onClick={() => setShowModal(false)}
               >
                 Batal
               </button>
               <button
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
                 onClick={handleSaveKelas}
               >
                 Simpan
@@ -239,6 +265,4 @@ const Kelas = () => {
       )}
     </div>
   );
-};
-
-export default Kelas;
+}
