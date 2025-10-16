@@ -1,28 +1,43 @@
 import React, { useState, useEffect } from "react";
 
-const Pembelian = () => {
+export default function Pembelian() {
   const [pembelian, setPembelian] = useState([]);
+  const [filtered, setFiltered] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     id_pembelian: null,
     status_pembayaran: "",
   });
 
-  useEffect(() => {
-    getPembelian();
-  }, []);
-
+  // === Fetch data pembelian ===
   const getPembelian = async () => {
     try {
       const res = await fetch("http://localhost:5000/api/pembelian");
       const data = await res.json();
-      setPembelian(data);
-    } catch (err) {
-      console.error(err);
+      setPembelian(Array.isArray(data) ? data : []);
+      setFiltered(Array.isArray(data) ? data : []);
+    } catch {
       Swal.fire("Error", "Gagal mengambil data pembelian", "error");
     }
   };
 
+  useEffect(() => {
+    getPembelian();
+  }, []);
+
+  // === Search tanpa hapus data asli ===
+  const handleSearch = (e) => {
+    const val = e.target.value.toLowerCase();
+    if (!val) return setFiltered(pembelian);
+    const result = pembelian.filter(
+      (p) =>
+        p.username?.toLowerCase().includes(val) ||
+        p.produk?.toLowerCase().includes(val)
+    );
+    setFiltered(result);
+  };
+
+  // === Edit Status ===
   const openEditStatus = (p) => {
     setFormData({
       id_pembelian: p.id_pembelian,
@@ -44,92 +59,104 @@ const Pembelian = () => {
       Swal.fire("Berhasil!", "Status pembayaran diperbarui.", "success");
       getPembelian();
       setShowModal(false);
-    } catch (err) {
-      Swal.fire("Error", "Gagal update status", "error");
+    } catch {
+      Swal.fire("Error", "Gagal memperbarui status", "error");
     }
   };
 
   return (
-    <div className="p-4 bg-gray-50 min-h-screen">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Pembelian</h1>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2">
-          <i className="fa-solid fa-filter"></i> Filter Periode
-        </button>
-      </div>
+    <div className="p-2 sm:p-6 bg-gray-50 min-h-[calc(100vh-80px)] text-xs sm:text-base overflow-hidden">
+      <div className="max-w-[95%] lg:max-w-[85%] mx-auto">
+        {/* === Header === */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-0">
+            Manajemen Pembelian
+          </h1>
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2 text-sm sm:text-base">
+            <i className="fa-solid fa-filter"></i>
+            Filter Periode
+          </button>
+        </div>
 
-      {/* Search */}
-      <div className="flex items-center border rounded-md overflow-hidden w-full sm:w-80 mb-4">
-        <i className="fa-solid fa-magnifying-glass text-gray-400 px-2 text-sm"></i>
-        <input
-          type="text"
-          placeholder="Cari Pembelian..."
-          className="px-2 py-2 outline-none w-full"
-          onChange={(e) => {
-            const val = e.target.value.toLowerCase();
-            setPembelian((prev) =>
-              prev.filter(
-                (p) =>
-                  p.username.toLowerCase().includes(val) ||
-                  p.produk.toLowerCase().includes(val)
-              )
-            );
-          }}
-        />
-      </div>
+        {/* === Search === */}
+        <div className="flex items-center border rounded-md overflow-hidden w-full sm:w-80 mb-6">
+          <i className="fa-solid fa-magnifying-glass text-gray-400 px-2"></i>
+          <input
+            type="text"
+            placeholder="Cari Pembelian..."
+            className="px-2 py-2 outline-none w-full text-sm"
+            onChange={handleSearch}
+          />
+        </div>
 
-      {/* Tabel */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-200 rounded-lg shadow-sm text-sm">
-          <thead>
-            <tr className="bg-gray-100 text-center">
-              <th className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg">No Order</th>
-              <th className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg">Username</th>
-              <th className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg">Produk</th>
-              <th className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg">Harga</th>
-              <th className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg">Tanggal Order</th>
-              <th className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg">Status Pembayaran</th>
-              <th className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pembelian.map((p) => (
-              <tr key={p.id} className="hover:bg-gray-50 text-center">
-                <td className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg">{p.id_pembelian}</td>
-                <td className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg">{p.username}</td>
-                <td className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg">{p.produk}</td>
-                <td className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg">{p.harga}</td>
-                <td className="p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg">{p.tanggal_pembelian}</td>
-                <td
-                  className={`p-1 sm:p-3 border border-gray-300 text-center text-sm sm:text-lg font-semibold ${
-                    p.status === "Lunas"
-                      ? "text-green-600"
-                      : p.status === "Pending"
-                      ? "text-yellow-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  {p.status_pembayaran}
-                </td>
-                <td className="p-1 sm:p-3 border border-gray-300 text-center">
-                  <button
-                    className="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500"
-                    onClick={() => openEditStatus(p)}
-                  >
-                    <i className="fa-solid fa-pen"></i>
-                  </button>
-                </td>
+        {/* === Tabel === */}
+        <div className="bg-white rounded-lg shadow border border-gray-200 overflow-x-auto">
+          <table className="min-w-full border-collapse text-[11px] sm:text-sm md:text-base">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center w-[8%]">No</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">Username</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">Produk</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">Harga</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">Tanggal Order</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center">Status Pembayaran</th>
+                <th className="p-2 sm:p-3 border border-gray-300 text-center w-[10%]">Aksi</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filtered.length > 0 ? (
+                filtered.map((p, i) => (
+                  <tr key={p.id_pembelian} className="hover:bg-gray-50 text-center">
+                    <td className="p-2 sm:p-3 border border-gray-300">{i + 1}</td>
+                    <td className="p-2 sm:p-3 border border-gray-300">{p.username}</td>
+                    <td className="p-2 sm:p-3 border border-gray-300">{p.produk}</td>
+                    <td className="p-2 sm:p-3 border border-gray-300">
+                      Rp{p.harga?.toLocaleString("id-ID")}
+                    </td>
+                    <td className="p-2 sm:p-3 border border-gray-300">
+                      {p.tanggal_pembelian}
+                    </td>
+                    <td
+                      className={`p-2 sm:p-3 border border-gray-300 font-semibold ${
+                        p.status_pembayaran === "Lunas"
+                          ? "text-green-600"
+                          : p.status_pembayaran === "Pending"
+                          ? "text-yellow-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {p.status_pembayaran}
+                    </td>
+                    <td className="p-2 sm:p-3 border border-gray-300">
+                      <button
+                        className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm flex items-center gap-1 mx-auto"
+                        onClick={() => openEditStatus(p)}
+                      >
+                        <i className="fa-solid fa-pen-to-square"></i>
+                        <span className="hidden sm:inline">Edit</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="7"
+                    className="text-center py-4 text-gray-500 italic"
+                  >
+                    Tidak ada data pembelian.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Modal Edit Status */}
+      {/* === Modal Edit Status === */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="bg-white p-6 rounded-lg shadow w-96">
+          <div className="bg-white p-6 rounded-lg shadow w-[90vw] max-w-md">
             <h2 className="text-lg font-bold mb-4">Edit Status Pembayaran</h2>
             <select
               className="border p-2 rounded w-full"
@@ -138,19 +165,21 @@ const Pembelian = () => {
                 setFormData({ ...formData, status_pembayaran: e.target.value })
               }
             >
+              <option value="">-- Pilih Status --</option>
               <option value="Lunas">Lunas</option>
               <option value="Pending">Pending</option>
               <option value="Gagal">Gagal</option>
             </select>
+
             <div className="flex justify-end gap-2 mt-4">
               <button
-                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded"
                 onClick={() => setShowModal(false)}
               >
                 Batal
               </button>
               <button
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
                 onClick={handleSaveStatus}
               >
                 Simpan
@@ -161,6 +190,4 @@ const Pembelian = () => {
       )}
     </div>
   );
-};
-
-export default Pembelian;
+}
