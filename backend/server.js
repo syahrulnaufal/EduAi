@@ -8,6 +8,9 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import db from "./db.js";
 
+// Gunakan port dari environment variable (diberikan oleh Render), atau 5000 untuk development
+const PORT = process.env.PORT || 5000;
+
 // ambil __dirname di ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,7 +42,10 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 // cors
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://eduai.ct.ws"
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
   })
@@ -153,4 +159,5 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: "Terjadi kesalahan pada server", error: err.message });
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+// app.listen(5000, () => console.log("Server running on port 5000"));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
