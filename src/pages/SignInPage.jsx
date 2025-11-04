@@ -23,7 +23,7 @@ function SignInPage(){
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+    const navigate = navigate();
     
     //password
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
