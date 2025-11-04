@@ -2,85 +2,92 @@ import Topbar from "../components/Topbar";
 import '../style.css'; 
 import Sidebar from "../components/Sidebar";
 import BurgerMenu from "../components/BurgerMenu";
-import { NavLink,useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Swal from 'sweetalert2'; // ✅ Impor Swal yang hilang
+
+// ✅ Tentukan URL API dan URL Frontend secara dinamis
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:5173';
+// Tentukan URL Admin, bisa juga dari .env jika berbeda
+const ADMIN_URL = `${BASE_URL}/admin.html#`; 
+
 
 function LoginPage(){
-    // Sidebar 
-    const [left, setLeft] = useState('-left-70') 
-    const [bg, setBg] = useState('bg-transparent -z-10')
-    const [isSidebarHidden, setIsSidebarHidden] = useState(true)
-    const iconSize = '20px'
-    const menuButton = <svg xmlns="http://www.w3.org/2000/svg" id='menu' height={iconSize} viewBox="0 -960 960 960" width={iconSize} className="fill-my-text dark:fill-my-text-dark"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
-    const closeButton = <svg xmlns="http://www.w3.org/2000/svg" id='close' height={iconSize} viewBox="0 -960 960 960" width={iconSize} className="fill-my-text dark:fill-my-text-dark"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>;
-    const [menuIcon, setMenuIcon] = useState(isSidebarHidden? menuButton : closeButton)
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+  // ... State Sidebar tidak berubah ...
+  const [left, setLeft] = useState('-left-70') 
+  const [bg, setBg] = useState('bg-transparent -z-10')
+  const [isSidebarHidden, setIsSidebarHidden] = useState(true)
+  const iconSize = '20px'
+  const menuButton = <svg xmlns="http://www.w3.org/2000/svg" id='menu' height={iconSize} viewBox="0 -960 960 960" width={iconSize} className="fill-my-text dark:fill-my-text-dark"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+  const closeButton = <svg xmlns="http://www.w3.org/2000/svg" id='close' height={iconSize} viewBox="0 -960 960 960" width={iconSize} className="fill-my-text dark:fill-my-text-dark"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>;
+  const [menuIcon, setMenuIcon] = useState(isSidebarHidden? menuButton : closeButton)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-    //password
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    
-    // function to hide unhide input password
-    function togglePasswordVisibility() {
-        setIsPasswordVisible(!isPasswordVisible);
+  //password
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  
+  // ... fungsi togglePasswordVisibility dan hideSidebar (tidak berubah) ...
+  function togglePasswordVisibility() {
+    setIsPasswordVisible(!isPasswordVisible);
+  }
+  function hideSidebar (){
+    if(isSidebarHidden){
+      setLeft('left-0')
+      setBg('bg-my-bg-dark/70 z-20')
+      setIsSidebarHidden(false)
+      setMenuIcon(closeButton)
+    }else{
+      setLeft('-left-70')
+      setIsSidebarHidden(true)
+      setBg('bg-transparent -z-10')
+      setMenuIcon(menuButton)
     }
-    
-    // Function to hide the sidebar
-    function hideSidebar (){
-        if(isSidebarHidden){
-            setLeft('left-0')
-            setBg('bg-my-bg-dark/70 z-20')
-            setIsSidebarHidden(false)
-            setMenuIcon(closeButton)
-          }else{
-            setLeft('-left-70')
-            setIsSidebarHidden(true)
-            setBg('bg-transparent -z-10')
-            setMenuIcon(menuButton)
-        }
+  }
+
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Mencegah submit form
+    try {
+      // ✅ Ganti URL
+      const res = await fetch(`${API_URL}/api/auth/login`, {
+      method: "POST",
+      headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+    credentials: "include", 
+  });
+
+  const data = await res.json();
+  console.log("Login response body:", data);
+
+  if (res.ok) {
+    if (data.user) {
+      localStorage.setItem("user", JSON.stringify(data.user));
     }
 
-    const handleLogin = async (e) => {
-      e.preventDefault(); // Prevent default form submission
-      try {
-        const res = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-      credentials: "include", // biar cookie session ikut
-    });
-
-    const data = await res.json();
-    console.log("Login response body:", data);
-
-    if (res.ok) {
-      if (data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil!",
+      text: data.message || "Login sukses",
+      confirmButtonText: "OK",
+    }).then(() => {
+      // ✅ Ganti URL Redirect
+      if (data.user.role === "admin") {
+        window.location.href = ADMIN_URL;
+      } else {
+        window.location.href = BASE_URL; // Redirect ke homepage
       }
-
-      Swal.fire({
-        icon: "success",
-        title: "Berhasil!",
-        text: data.message || "Login sukses",
-        confirmButtonText: "OK",
-      }).then(() => {
-        // cek role user
-        if (data.user.role === "admin") {
-          window.location.href = "http://localhost:5173/admin.html#";
-        } else {
-          window.location.href = "http://localhost:5173/";
-        }
-      });
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: data.message || "Login gagal",
-      });
-    }
+    });
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: data.message || "Login gagal",
+    });
+  }
   } catch (err) {
     console.error("Login error:", err);
     Swal.fire({
@@ -94,20 +101,19 @@ function LoginPage(){
 
 const getCurrentUser = async () => {
   try {
-    const res = await fetch("http://localhost:5000/api/auth/me", {
+    // ✅ Ganti URL
+    const res = await fetch(`${API_URL}/api/auth/me`, {
       method: "GET",
-      credentials: "include", // cookie wajib ikut
+      credentials: "include", 
     });
 
     const data = await res.json();
     console.log("User session:", data);
 
     if (res.ok) {
-      // Simpan user ke localStorage supaya UI bisa akses cepat
       localStorage.setItem("user", JSON.stringify(data.user));
       return data.user;
     } else {
-      // kalau session invalid
       localStorage.removeItem("user");
       Swal.fire({
         icon: "warning",
@@ -115,7 +121,8 @@ const getCurrentUser = async () => {
         text: "Silahkan login ulang!",
         confirmButtonText: "Login"
       }).then(() => {
-        window.location.href = "http://localhost:5173/login";
+        // ✅ Ganti URL Redirect
+        window.location.href = `${BASE_URL}/login`;
       });
       return null;
     }
@@ -130,12 +137,12 @@ const getCurrentUser = async () => {
   }
 };
 
-  const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/auth/google";
-  };
+const handleGoogleLogin = () => {
+  // ✅ Ganti URL
+  window.location.href = `${API_URL}/auth/google`;
+};
 
-  // ✅ CEK QUERY STRING setelah redirect dari Google
- useEffect(() => {
+useEffect(() => {
   const params = new URLSearchParams(window.location.search);
   const id_user = params.get("id_user");
   const username = params.get("username");
@@ -146,7 +153,6 @@ const getCurrentUser = async () => {
     const userData = { id_user, username, email, role };
     localStorage.setItem("user", JSON.stringify(userData));
 
-    // hapus query string biar rapi
     window.history.replaceState({}, document.title, "/login");
 
     Swal.fire({
@@ -155,21 +161,18 @@ const getCurrentUser = async () => {
       text: `Selamat datang, ${username}`,
       confirmButtonText: "OK",
     }).then(() => {
+      // ✅ Ganti URL Redirect
       if (role === "admin") {
-        window.location.href = "http://localhost:5173/admin.html#";
+        window.location.href = ADMIN_URL;
       } else {
-        window.location.href = "http://localhost:5173/";
+        window.location.href = BASE_URL; // Redirect ke homepage
       }
     });
   }
 }, []);
 
-
-
-
-
     return(
-        <div>
+      <div>
             <Sidebar 
                 className='absolute'
                 hideSidebar={hideSidebar} 
@@ -189,12 +192,12 @@ const getCurrentUser = async () => {
 background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(206, 158, 247, 1) 100%)'}}>
 
                 {/* box putih utama */}
-                <div className="w-100 h-fit rounded-2xl flex flex-col bg-white" style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'}}>
+          <div className="w-100 h-fit rounded-2xl flex flex-col bg-white" style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'}}>
                     
                     {/* text ungu */}
-                    <div className="w-full text-center py-4 bg-[#5852AB] rounded-t-2xl font-bold text-2xl text-white">Login</div>
-                    
-                    <form onSubmit={handleLogin} className="flex flex-col p-6 px-8 gap-4">
+            <div className="w-full text-center py-4 bg-[#5852AB] rounded-t-2xl font-bold text-2xl text-white">Login</div>
+            
+            <form onSubmit={handleLogin} className="flex flex-col p-6 px-8 gap-4">
 
                         {/*  email dan passsword */}
                         <div className="flex gap-2 border border-gray-400 rounded-sm">
@@ -215,35 +218,32 @@ background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 25
                         </div>
 
                         {/* green button */}
-                        <button 
-                        onClick={handleLogin} 
-                        className="p-2 mt-2 text-xl font-semibold text-center rounded-sm text-white bg-[#00AF34] hover:bg-[#2ca450] active:bg-[#03942e] tracking-normal cursor-pointer transition-colors duration-150">
-                        Login
-                        </button>
+              <button 
+                type="submit" // ✅ Gunakan type="submit"
+                className="p-2 mt-2 text-xl font-semibold text-center rounded-sm text-white bg-[#00AF34] hover:bg-[#2ca450] active:bg-[#03942e] tracking-normal cursor-pointer transition-colors duration-150"
+              >
+                Login
+              </button>
 
+              <div className="flex items-center justify-center w-full relative">
+                <div className=" bg-gray-400 h-[1px] w-full"></div>
+                <div className="absolute bg-white px-1 text-gray-500">atau</div>
+              </div>
 
-                        {/* text atau */}
-                        <div className="flex items-center justify-center w-full relative">
-                            <div className=" bg-gray-400 h-[1px] w-full"></div>
-                            <div className="absolute bg-white px-1 text-gray-500">atau</div>
-                        </div>
+              {/* daftar dengan google */}
+              <div onClick={handleGoogleLogin} className="w-full border border-gray-400 rounded-sm relative text-center p-2 mb-4 cursor-pointer hover:bg-gray-50">
+                <img src="/img/google.png" alt="Daftar dengan Google" className="w-8 ps-2 absolute" />
+                Login dengan Google
+              </div>
 
-                        {/* daftar dengan google */}
-                        <div onClick={handleGoogleLogin} className="w-full border border-gray-400 rounded-sm relative text-center p-2 mb-4 cursor-pointer hover:bg-gray-50">
-                            <img src="/img/google.png" alt="Daftar dengan Google" className="w-8 ps-2 absolute" />
-                            Login dengan Google
-                        </div>
-
-                        <div className="text-sm">Belum punya akun? <span className="text-[#1C58B4] hover:text-[#3f6bad] cursor-pointer">
-                            <NavLink to="/sign-in">Masuk</NavLink>
-                        </span></div>
-
-                    </form>
-                </div>
-                
-                <div className="h-20"></div>
-            </div>
+              <div className="text-sm">Belum punya akun? <span className="text-[#1C58B4] hover:text-[#3f6bad] cursor-pointer">
+                <NavLink to="/sign-in">Masuk</NavLink>
+              </span></div>
+            </form>
+          </div>
+          <div className="h-20"></div>
         </div>
+      </div>
     );
 }
 

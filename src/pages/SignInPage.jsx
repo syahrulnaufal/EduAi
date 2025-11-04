@@ -4,6 +4,12 @@ import '../style.css';
 import Sidebar from "../components/Sidebar";
 import BurgerMenu from "../components/BurgerMenu";
 import { NavLink } from "react-router";
+import Swal from 'sweetalert2';
+
+// Tentukan URL API dan URL Frontend secara dinamis
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:5173';
+const ADMIN_URL = `${BASE_URL}/admin.html#`;
 
 function SignInPage(){
     // Sidebar 
@@ -17,6 +23,7 @@ function SignInPage(){
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
     
     //password
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -28,31 +35,32 @@ function SignInPage(){
 
     // Function to hide the sidebar
     function hideSidebar (){
-        if(isSidebarHidden){
-            setLeft('left-0')
-            setBg('bg-my-bg-dark/70 z-20')
-            setIsSidebarHidden(false)
-            setMenuIcon(closeButton)
-          }else{
-            setLeft('-left-70')
-            setIsSidebarHidden(true)
-            setBg('bg-transparent -z-10')
-            setMenuIcon(menuButton)
-        }
+      if(isSidebarHidden){
+        setLeft('left-0')
+        setBg('bg-my-bg-dark/70 z-20')
+        setIsSidebarHidden(false)
+        setMenuIcon(closeButton)
+      }else{
+        setLeft('-left-70')
+        setIsSidebarHidden(true)
+        setBg('bg-transparent -z-10')
+        setMenuIcon(menuButton)
+      }
     }
     
-    const handleSignin = async () => {
-    if (!username || !email || !password) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Username, email, dan kata sandi harus diisi!',
-      });
+    const handleSignin = async (e) => {
+      e.preventDefault();
+      if (!username || !email || !password) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Username, email, dan kata sandi harus diisi!',
+        });
       return;
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/signin', {
+      const res = await fetch(`${API_URL}/api/auth/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,7 +79,7 @@ function SignInPage(){
         showConfirmButton: true, // tombol OK muncul
         confirmButtonText: "OK"
       }).then(() => {
-        window.location.href = "/login"; // langsung pindah halaman login
+        navigate('/login'); // langsung pindah halaman login
       });
 
       } else {
@@ -92,7 +100,7 @@ function SignInPage(){
   };
   
   const handleGoogleLogin = () => {
-      window.location.href = "http://localhost:5000/auth/google";
+      window.location.href = `${API_URL}/auth/google`;
     };
   
     // ✅ CEK QUERY STRING setelah redirect dari Google
@@ -117,9 +125,9 @@ function SignInPage(){
          confirmButtonText: "OK",
        }).then(() => {
          if (role === "admin") {
-           window.location.href = "http://localhost:5173/admin.html#";
+           window.location.href = ADMIN_URL;
          } else {
-           window.location.href = "http://localhost:5173/";
+           window.location.href = BASE_URL; // Redirect ke homepage
          }
        });
      }
@@ -175,7 +183,8 @@ background: 'linear-gradient(45deg, rgba(210, 188, 229, 1) 0%, rgba(255, 255, 25
                         
                         {/* green button */}
                         <button 
-                        onClick={handleSignin} 
+                        // onClick={handleSignin}
+                        type="submit" 
                         className="p-2 mt-2 text-xl font-semibold text-center rounded-sm text-white bg-[#00AF34] hover:bg-[#2ca450] active:bg-[#03942e] tracking-normal cursor-pointer transition-colors duration-150">
                         Daftar
                         </button>
