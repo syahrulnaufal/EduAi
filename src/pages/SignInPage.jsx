@@ -4,7 +4,7 @@ import '../style.css';
 import Sidebar from "../components/Sidebar";
 import BurgerMenu from "../components/BurgerMenu";
 import { NavLink } from "react-router";
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 
 // Tentukan URL API dan URL Frontend secara dinamis
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
