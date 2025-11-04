@@ -35,6 +35,7 @@ import users from "./routes/usersroutes.js";
 import googleAuthRoutes from "./routes/google_routes.js";
 
 const app = express();
+app.set('trust proxy', 1);
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
@@ -61,9 +62,9 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // true kalau https
+      secure: true, // true kalau https
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "none",
       maxAge: 1000 * 60 * 60,
     },
   })
