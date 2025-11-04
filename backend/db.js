@@ -1,30 +1,44 @@
-// db.js
 import mysql from "mysql2/promise";
 
-// Buat koneksi langsung (ingat: ini async, jadi kita tunggu di awal aplikasi)
-// const db = await mysql.createConnection({
-//   host: 'localhost',
-//   user: 'root',
-//   password: '1234', // isi password kalau ada
-//   database: 'eduai'
-// });
+// 1. Cek apakah kita sedang dalam mode produksi
+const isProduction = process.env.NODE_ENV === 'production';
 
-// // Tes koneksi
-// console.log('MySQL connected!');
+// 2. Siapkan konfigurasi koneksi
+const connectionConfig = {
+    database: process.env.DB_NAME || 'eduai',
+    
+    // Atur batas koneksi untuk pool
+    connectionLimit: 10, 
+    
+    ...(isProduction ? {
+        // --- PENGATURAN PRODUKSI (UNTUK RENDER + TiDB) ---
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        port: process.env.DB_PORT || 4000,
+        ssl: { rejectUnauthorized: true }
+    } : {
+        // --- PENGATURAN LOKAL (UNTUK KOMPUTER ANDA) ---
+        host: 'localhost',
+        user: 'root',
+        password: '1234', // Ganti dengan password MySQL lokal Anda
+        port: 5173 
+    })
+};
 
-// export default db;
+// 3. ✅ Ganti 'createConnection' menjadi 'createPool'
+const pool = mysql.createPool(connectionConfig);
 
-const db = await mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME, 
-  port: process.env.DB_PORT || 4000,
-  ssl: { // SSL WAJIB untuk TiDB Cloud
-    rejectUnauthorized: true 
-  }
-});
+// 4. (Opsional) Tes koneksi pool saat server start
+try {
+    const connection = await pool.getConnection();
+    console.log(isProduction ? 'Berhasil terhubung ke TiDB Cloud (Pool)!' : 'Berhasil terhubung ke database MySQL LOKAL (Pool)!');
+    connection.release(); // Penting: Selalu lepaskan koneksi setelah dipakai
+} catch (err) {
+    console.error("Gagal terhubung ke database pool:", err);
+}
 
-console.log('Terhubung ke TiDB Cloud (MySQL compatible)!');
-
-export default db;
+// 5. Ekspor 'pool' sebagai default
+// Kode di controller Anda (misal: await db.query(...)) akan otomatis
+// menggunakan pool ini untuk mengambil koneksi.
+export default pool;
