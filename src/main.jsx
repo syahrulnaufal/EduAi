@@ -33,8 +33,7 @@ createRoot(document.getElementById('root')).render(
         <Route path='/ruang-belajar/:id/:materi' element={<ProtectedRoute><MateriBelajarPage/></ProtectedRoute>} />
         <Route path='/ruang-belajar/:id/:materi/:subbab' element={<ProtectedRoute><WatchMateriVideo/></ProtectedRoute>} />
         <Route path="/ruang-kelas" element={<ProtectedRoute><RuangKelas /></ProtectedRoute>} />
-        {/* <Route path="/chatbot" element={<ProtectedRoute><Chatbot /></ProtectedRoute>} /> */}
-        <Route path="/chatbot" element={<Chatbot />} />
+        <Route path="/chatbot" element={<ProtectedRoute><Chatbot /></ProtectedRoute>} />
         <Route path="/brain-academy" element={<ProtectedRoute><BrainAcademy /></ProtectedRoute>} />
         <Route path="/math-course/:id" element={<ProtectedRoute><MathCoursePage /></ProtectedRoute>} />
         <Route path="/fitur/:id" element={<ProtectedRoute><FiturPopuler /></ProtectedRoute>} />
