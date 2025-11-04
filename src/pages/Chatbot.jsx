@@ -39,7 +39,7 @@ function Chatbot() {
 
     //asidebar
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-    const [asidebarLeft, setAsidebarLeft] = useState(isMobile ? '-left-100' : 'left-0');
+    const [asidebarLeft, setAsidebarLeft] = useState(isMobile ? '-left-full' : 'left-0');
 
     useEffect(() => {
         const handleResize = () => {
@@ -48,7 +48,7 @@ function Chatbot() {
             if (!mobile) {
                 setAsidebarLeft('left-0');
             } else {
-                setAsidebarLeft('-left-100');
+                setAsidebarLeft('-left-full');
             }
         };
 
@@ -59,7 +59,7 @@ function Chatbot() {
     //function to hide/unhide the asidebar
     const toggleAsidebar = useCallback(() => {
         if (isMobile) {
-            setAsidebarLeft(prev => prev === 'left-0' ? '-left-100' : 'left-0');
+            setAsidebarLeft(prev => prev === 'left-0' ? '-left-full' : 'left-0');
         }
     }, [isMobile]);
 
@@ -282,7 +282,7 @@ function Chatbot() {
                 </div>
 
                 <div className='flex h-full transition-colors duration-300 dark:bg-gray-900 bg-gray-50'>
-                    <div className={`asidebar h-screen ${asidebarLeft} transition-all duration-200 z-5`} onClick={toggleAsidebar}>
+                    <div className={`asidebar h-screen ${asidebarLeft} transition-all duration-200 z-5`} >
                         <Asidebar 
                             onNewChat={handleNewChat}
                             conversations={conversations}
@@ -290,8 +290,8 @@ function Chatbot() {
                             onSelectConversation={selectConversation}
                             onConversationsUpdate={loadConversations}
                         >
-                            <div onClick={toggleAsidebar} className="cursor-pointer hidden flexAt768 p-1 rounded-full hover:bg-indigo-50 duration-150">
-                                <img className="rotate-90" src='/img/arrowDown.png' width={'20px'} />
+                            <div className="cursor-pointer hidden flexAt768 p-1 rounded-full hover:bg-indigo-50 duration-150">
+                                <img onClick={()=>toggleAsidebar()} className="rotate-90" src='/img/arrowDown.png' width={'20px'} />
                             </div>
                         </Asidebar>
                     </div>
@@ -311,7 +311,8 @@ function Chatbot() {
                             </span>
 
                             <span className="rounded-full flex items-center pt-15 relative ">
-                                <img src="/img/dummyUser.png" alt="user" width={'40px'} className="rounded-full" />
+                                <div className="rounded-full w-[40px] h-[40px]" style={{backgroundImage: `url(${currentUser?.profile_image})`, backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
+                                {/* <img src={currentUser?.profile_image} alt="user" width={'40px'} className="rounded-full bg-contain" /> */}
                                 <div className="w-[10px] h-[10px]  bg-green-500 rounded-full bottom-0 right-0 absolute border border-surface"></div>
                             </span>
                         </div>

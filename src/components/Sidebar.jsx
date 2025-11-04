@@ -110,7 +110,7 @@ const Sidebar = ({children, bg, left, hideSidebar}) => {
                     <div className="flex flex-col gap-5">
                         <NavLink to='/'><div className='hover:text-primary dark:hover:text-primary-dark'>Beranda</div></NavLink>
                         <NavLink to='/ruang-belajar'><div className='hover:text-primary dark:hover:text-primary-dark'>Ruang Belajar</div></NavLink>
-                        <NavLink to='/ruang-kelas'><div className='hover:text-primary dark:hover:text-primary-dark'>Ruang Kelas</div></NavLink>
+                        {/* <NavLink to='/ruang-kelas'><div className='hover:text-primary dark:hover:text-primary-dark'>Ruang Kelas</div></NavLink> */}
                         <NavLink to='/chatbot'><div className='hover:text-primary dark:hover:text-primary-dark'>ChatBot</div></NavLink>
                         <NavLink to='/profile'><div className='hover:text-primary dark:hover:text-primary-dark'>Profile</div></NavLink>
                     </div>
