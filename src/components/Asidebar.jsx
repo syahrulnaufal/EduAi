@@ -1,5 +1,7 @@
 import { Children, useState, useMemo, useEffect } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 export default function Asidebar({ onNewChat, children, conversations = [], activeConversationId, onSelectConversation, onConversationsUpdate }) {
 	
 	const elements = Children.toArray(children);
@@ -55,7 +57,7 @@ export default function Asidebar({ onNewChat, children, conversations = [], acti
 
 		if (result.isConfirmed) {
 			try {
-				const response = await fetch(`http://localhost:5000/api/chat/conversations/${conversationId}`, {
+				const response = await fetch(`${API_URL}/api/chat/conversations/${conversationId}`, {
 					method: 'DELETE',
 					credentials: 'include'
 				});
@@ -109,7 +111,7 @@ export default function Asidebar({ onNewChat, children, conversations = [], acti
 		}
 
 		try {
-			const response = await fetch(`http://localhost:5000/api/chat/conversations/${renameModal.conversationId}`, {
+			const response = await fetch(`${API_URL}/api/chat/conversations/${renameModal.conversationId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
