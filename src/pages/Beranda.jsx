@@ -13,6 +13,8 @@ import FiturPopuler from "../components/FiturPopuler";
 import MathCourse from "../components/MathCourse";
 import LoginButton from "../components/LoginButton";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 // komponen
 const platformTerbaik = (
     <div className="bg-white rounded-xl flex p-1 px-4 sm:max-w-fit max-w-[200px]">
@@ -178,7 +180,7 @@ function Beranda(){
           const [selected, setSelected] = useState(null);
         
           useEffect(() => {
-            fetch("http://localhost:5000/api/jenjang")
+            fetch(`${API_URL}/api/jenjang`)
               .then((res) => res.json())
               .then((data) => {
                 const formatted = data.map((j) => ({
@@ -248,7 +250,7 @@ function Beranda(){
     useEffect(() => {
         if (selected) {
             setSubjectsLoading(true);
-            fetch(`http://localhost:5000/api/materi?jenjang=${selected.value}`)
+            fetch(`${API_URL}/api/materi?jenjang=${selected.value}`)
                 .then(res => {
                     if (!res.ok) {
                         throw new Error(`HTTP error! status: ${res.status}`);
