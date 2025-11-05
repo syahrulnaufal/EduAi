@@ -1,7 +1,7 @@
 import express from "express";
 import passport from "passport";
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
+const API_BASE = import.meta.env.FRONTEND_URL || 'http://localhost:5000';
 
 const router = express.Router();
 
@@ -28,7 +28,7 @@ router.get(
     };
 
     res.redirect(
-      `${API_BASE}/login?id_user=${encodeURIComponent(
+      `${FRONTEND_URL}/login?id_user=${encodeURIComponent(
         user.id_user
       )}&username=${encodeURIComponent(user.username)}&email=${encodeURIComponent(
         user.email
