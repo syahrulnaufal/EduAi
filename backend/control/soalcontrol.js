@@ -105,7 +105,7 @@ export const startHasil = async (req, res) => {
 
       // langsung buat hasil baru
       const [result] = await db.query(
-        "INSERT INTO hasil (skor, waktu_pengerjaan, id_quiz, id_user) VALUES (?, NOW(), ?, ?)",
+        "INSERT INTO hasil (skor, id_quiz, id_user) VALUES (?, ?, ?)",
         [0, id_quiz, id_user]
       );
       return res.json({ id_hasil: result.insertId, mode: "ulang" });
@@ -142,7 +142,7 @@ export const startHasil = async (req, res) => {
 
     // kalau belum ada hasil sama sekali → buat baru
     const [result] = await db.query(
-      "INSERT INTO hasil (skor, waktu_pengerjaan, id_quiz, id_user) VALUES (?, NOW(), ?, ?)",
+      "INSERT INTO hasil (skor, id_quiz, id_user) VALUES (?, ?, ?)",
       [0, id_quiz, id_user]
     );
 
