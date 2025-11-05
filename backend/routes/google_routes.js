@@ -1,6 +1,8 @@
 import express from "express";
 import passport from "passport";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const router = express.Router();
 
 // 1. route untuk mulai login google
@@ -26,7 +28,7 @@ router.get(
     };
 
     res.redirect(
-      `http://localhost:5173/login?id_user=${encodeURIComponent(
+      `${API_URL}/login?id_user=${encodeURIComponent(
         user.id_user
       )}&username=${encodeURIComponent(user.username)}&email=${encodeURIComponent(
         user.email
