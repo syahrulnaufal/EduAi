@@ -15,6 +15,7 @@ import {
 } from "recharts";
 
 const COLORS = ["#6366f1", "#a5b4fc", "#c7d2fe"];
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const periodeOptions = [
   { value: "minggu", label: "Minggu ini" },
@@ -36,7 +37,7 @@ export default function Beranda() {
   const getDashboard = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/dashboard?periode=${periode.value}`
+        `${API_URL}/api/dashboard?periode=${periode.value}`
       );
       const data = await res.json();
       setStats(data);

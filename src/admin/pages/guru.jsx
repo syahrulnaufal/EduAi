@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function Guru() {
   const [guru, setGuru] = useState([]);
   const [search, setSearch] = useState("");
@@ -19,7 +21,7 @@ export default function Guru() {
 
   const getGuru = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/guru");
+      const res = await fetch(`${API_URL}/api/guru`);
       const data = await res.json();
       setGuru(Array.isArray(data) ? data : []);
     } catch {
@@ -50,8 +52,8 @@ export default function Guru() {
     try {
       const method = isEdit ? "PUT" : "POST";
       const url = isEdit
-        ? `http://localhost:5000/api/guru/${formData.id_guru}`
-        : "http://localhost:5000/api/guru";
+        ? `${API_URL}/api/guru/${formData.id_guru}`
+        : `${API_URL}/api/guru`;
 
       const res = await fetch(url, {
         method,
@@ -81,7 +83,7 @@ export default function Guru() {
     }).then(async (res) => {
       if (!res.isConfirmed) return;
       try {
-        await fetch(`http://localhost:5000/api/guru/${id}`, { method: "DELETE" });
+        await fetch(`${API_URL}/api/guru/${id}`, { method: "DELETE" });
         Swal.fire("Terhapus!", "Guru berhasil dihapus.", "success");
         getGuru();
       } catch {

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function Kelas() {
   const [kelas, setKelas] = useState([]);
   const [search, setSearch] = useState("");
@@ -16,8 +18,8 @@ export default function Kelas() {
   const fetchKelas = async (keyword = "") => {
     try {
       const url = keyword
-        ? `http://localhost:5000/api/jenjang/nama/${keyword}`
-        : "http://localhost:5000/api/jenjang";
+        ? `${API_URL}/api/jenjang/nama/${keyword}`
+        : `${API_URL}/api/jenjang`;
       const res = await fetch(url);
       if (!res.ok) return setKelas([]);
       const data = await res.json();
@@ -61,8 +63,8 @@ export default function Kelas() {
     try {
       const method = isEdit ? "PUT" : "POST";
       const url = isEdit
-        ? `http://localhost:5000/api/jenjang/${formData.id_jenjang}`
-        : "http://localhost:5000/api/jenjang";
+        ? `${API_URL}/api/jenjang/${formData.id_jenjang}`
+        : `${API_URL}/api/jenjang`;
 
       const res = await fetch(url, {
         method,
@@ -93,7 +95,7 @@ export default function Kelas() {
     }).then(async (res) => {
       if (!res.isConfirmed) return;
       try {
-        await fetch(`http://localhost:5000/api/jenjang/${id}`, { method: "DELETE" });
+        await fetch(`${API_URL}/api/jenjang/${id}`, { method: "DELETE" });
         Swal.fire("Terhapus!", "Kelas berhasil dihapus.", "success");
         fetchKelas();
       } catch {

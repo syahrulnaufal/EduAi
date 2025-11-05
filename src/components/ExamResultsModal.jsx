@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function ExamResultsModal({ id_hasil, onClose, onReview }) {
   const [hasil, setHasil] = useState(null);
 
   useEffect(() => {
     if (!id_hasil) return;
-    fetch(`http://localhost:5000/api/hasil/${id_hasil}`)
+    fetch(`${API_URL}/api/hasil/${id_hasil}`)
       .then(res => res.json())
       .then(data => setHasil(data))
       .catch(err => console.error("ERROR fetch hasil:", err));

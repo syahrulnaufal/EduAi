@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_BASE_URL || "http://localhost:5173";
+
 const ProfileDropdown = ({ onEditProfile, onLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -36,16 +39,16 @@ const ProfileDropdown = ({ onEditProfile, onLogout }) => {
     sessionStorage.clear();
 
     // 3. kalau kamu masih pakai backend session, logout juga di server
-    await fetch("http://localhost:5000/api/auth/logout", {
+    await fetch(`${API_URL}/api/auth/logout`, {
       method: "POST",
       credentials: "include", // kirim cookie biar session dihapus
     }).catch(() => {});
 
     // 4. redirect ke halaman login
-    window.location.href = "http://localhost:5173/login";
+    window.location.href = `${API_BASE}/login`;
   } catch (err) {
     console.error("Logout error:", err);
-    window.location.href = "http://localhost:5173/login";
+    window.location.href = `${API_BASE}/login`;
   }
 };
 

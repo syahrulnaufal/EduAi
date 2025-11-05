@@ -3,10 +3,12 @@ import { Children } from "react";
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 // ✅ 2. Fungsi getCurrentUser yang hilang ditambahkan di sini
 const getCurrentUser = async () => {
     try {
-        const res = await fetch("http://localhost:5000/api/auth/me", {
+        const res = await fetch(`${API_URL}/api/auth/me`, {
             method: "GET",
             credentials: "include", // Penting agar cookie session terkirim
         });
@@ -31,7 +33,7 @@ const getCurrentUser = async () => {
 // ✅ 3. Fungsi logout yang hilang ditambahkan di sini
 const logout = async () => {
     try {
-        await fetch("http://localhost:5000/api/auth/logout", {
+        await fetch(`${API_URL}/api/auth/logout`, {
             method: "POST",
             credentials: "include", // Kirim cookie untuk menghapus session di backend
         });

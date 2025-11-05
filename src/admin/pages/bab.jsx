@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function DetailPelajaran() {
   const { jenjangId, pelajaranId } = useParams();
   const navigate = useNavigate();
@@ -29,14 +31,14 @@ export default function DetailPelajaran() {
   const itemsPerPage = 5;
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/pelajaran")
+    fetch(`${API_URL}/api/pelajaran`)
       .then((res) => res.json())
       .then(setPelajaranList)
       .catch(console.error);
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/bab/pelajaran/${selectedPelajaran}`)
+    fetch(`${API_URL}/api/bab/pelajaran/${selectedPelajaran}`)
       .then((res) => res.json())
       .then((data) => {
         setBab(data);
@@ -106,8 +108,8 @@ export default function DetailPelajaran() {
   const handleSave = async () => {
     try {
       const url = isEdit
-        ? `http://localhost:5000/api/bab/${formData.id_bab}`
-        : "http://localhost:5000/api/bab";
+        ? `${API_URL}/api/bab/${formData.id_bab}`
+        : `${API_URL}/api/bab`;
       const method = isEdit ? "PUT" : "POST";
       const body = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
@@ -121,7 +123,7 @@ export default function DetailPelajaran() {
 
       Swal.fire("Sukses", data.message, "success");
       setShowModal(false);
-      fetch(`http://localhost:5000/api/bab/pelajaran/${selectedPelajaran}`)
+      fetch(`${API_URL}/api/bab/pelajaran/${selectedPelajaran}`)
         .then((r) => r.json())
         .then(setBab);
     } catch (err) {
@@ -140,7 +142,7 @@ export default function DetailPelajaran() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await fetch(`http://localhost:5000/api/bab/${id}`, {
+          const res = await fetch(`${API_URL}/api/bab/${id}`, {
             method: "DELETE",
           });
           const data = await res.json();

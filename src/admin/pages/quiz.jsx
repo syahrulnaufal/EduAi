@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function Quiz() {
   const { jenjangId, pelajaranId, babId } = useParams();
   const [quiz, setQuiz] = useState([]);
@@ -22,7 +24,7 @@ export default function Quiz() {
 
  // === Fetch Quiz ===
 const fetchQuiz = () => {
-  fetch(`http://localhost:5000/api/quiz/admin/${babId}`)
+  fetch(`${API_URL}/api/quiz/admin/${babId}`)
     .then((res) => res.json())
     .then((data) => {
       const quizData = Array.isArray(data) ? data : [];
@@ -65,8 +67,8 @@ useEffect(() => {
   const handleSave = async () => {
     try {
       const url = isEdit
-        ? `http://localhost:5000/api/quiz/${formData.id_quiz}`
-        : `http://localhost:5000/api/quiz`;
+        ? `${API_URL}/api/quiz/${formData.id_quiz}`
+        : `${API_URL}/api/quiz`;
       const method = isEdit ? "PUT" : "POST";
 
       const body = JSON.stringify({
@@ -104,7 +106,7 @@ useEffect(() => {
     }).then(async (result) => {
       if (!result.isConfirmed) return;
       try {
-        const res = await fetch(`http://localhost:5000/api/quiz/${id}`, {
+        const res = await fetch(`${API_URL}/api/quiz/${id}`, {
           method: "DELETE",
         });
         const data = await res.json();

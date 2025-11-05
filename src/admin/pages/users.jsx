@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function Users() {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]); // hasil filter
@@ -33,7 +35,7 @@ export default function Users() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/users");
+      const res = await fetch(`${API_URL}/api/users`);
       const data = await res.json();
       setUsers(data);
       setFilteredUsers(data);
@@ -59,7 +61,7 @@ export default function Users() {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/api/users/${editId}`, {
+      const res = await fetch(`${API_URL}/api/users/${editId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editData),
@@ -102,7 +104,7 @@ export default function Users() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await fetch(`http://localhost:5000/api/users/${id}`, {
+          const res = await fetch(`${API_URL}/api/users/${id}`, {
             method: "DELETE",
           });
           if (res.ok) {

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function Pembelian() {
   const [pembelian, setPembelian] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -12,7 +14,7 @@ export default function Pembelian() {
   // === Fetch data pembelian ===
   const getPembelian = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/pembelian");
+      const res = await fetch(`${API_URL}/api/pembelian`);
       const data = await res.json();
       setPembelian(Array.isArray(data) ? data : []);
       setFiltered(Array.isArray(data) ? data : []);

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function Soal() {
   const { pelajaranId, babId, quizId } = useParams();
 
@@ -26,7 +28,7 @@ export default function Soal() {
   const [namaQuiz, setNamaQuiz] = useState("");
 
   useEffect(() => {
-  fetch(`http://localhost:5000/api/soal/${quizId}`)
+  fetch(`${API_URL}/api/soal/${quizId}`)
     .then((res) => res.json())
     .then((data) => {
       const soalData = Array.isArray(data.soal) ? data.soal : [];
@@ -67,8 +69,8 @@ export default function Soal() {
   const handleSave = async () => {
     try {
       const url = isEdit
-        ? `http://localhost:5000/api/soal/${formData.id_soal}`
-        : "http://localhost:5000/api/soal";
+        ? `${API_URL}/api/soal/${formData.id_soal}`
+        : `${API_URL}/api/soal`;
       const method = isEdit ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -82,7 +84,7 @@ export default function Soal() {
       Swal.fire("Sukses", data.message, "success");
       setShowModal(false);
 
-      fetch(`http://localhost:5000/api/soal/${quizId}`)
+      fetch(`${API_URL}/api/soal/${quizId}`)
         .then((r) => r.json())
         .then((d) => {
           setSoal(Array.isArray(d.soal) ? d.soal : []);
@@ -105,7 +107,7 @@ export default function Soal() {
     }).then(async (res) => {
       if (!res.isConfirmed) return;
       try {
-        const r = await fetch(`http://localhost:5000/api/soal/${id}`, {
+        const r = await fetch(`${API_URL}/api/soal/${id}`, {
           method: "DELETE",
         });
         const data = await r.json();

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function Course() {
   const [courses, setCourses] = useState([]);
   const [guruList, setGuruList] = useState([]);
@@ -27,7 +29,7 @@ export default function Course() {
 
   const getCourses = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/course");
+      const res = await fetch(`${API_URL}/api/course`);
       const data = await res.json();
       setCourses(Array.isArray(data) ? data : []);
     } catch {
@@ -37,7 +39,7 @@ export default function Course() {
 
   const getGuru = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/guru");
+      const res = await fetch(`${API_URL}/api/guru`);
       const data = await res.json();
       setGuruList(Array.isArray(data) ? data : []);
     } catch {
@@ -82,8 +84,8 @@ export default function Course() {
     try {
       const method = isEdit ? "PUT" : "POST";
       const url = isEdit
-        ? `http://localhost:5000/api/course/${formData.id_course}`
-        : "http://localhost:5000/api/course";
+        ? `${API_URL}/api/course/${formData.id_course}`
+        : `${API_URL}/api/course`;
 
       const res = await fetch(url, {
         method,
@@ -114,7 +116,7 @@ export default function Course() {
     }).then(async (res) => {
       if (!res.isConfirmed) return;
       try {
-        await fetch(`http://localhost:5000/api/course/${id}`, {
+        await fetch(`${API_URL}/api/course/${id}`, {
           method: "DELETE",
         });
         Swal.fire("Terhapus!", "Course berhasil dihapus.", "success");

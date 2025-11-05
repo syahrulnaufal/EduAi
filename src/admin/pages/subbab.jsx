@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function SubBab() {
   const { jenjangId, pelajaranId, babId } = useParams();
 
@@ -25,7 +27,7 @@ export default function SubBab() {
 
 // === Fetch data SubBab ===
 useEffect(() => {
-  fetch(`http://localhost:5000/api/subbab/admin/${babId}`)
+  fetch(`${API_URL}/api/subbab/admin/${babId}`)
     .then((res) => res.json())
     .then((data) => {
       setSubbab(data);
@@ -84,7 +86,7 @@ useEffect(() => {
     }).then(async (result) => {
       if (!result.isConfirmed) return;
       try {
-        const res = await fetch(`http://localhost:5000/api/subbab/${id}`, {
+        const res = await fetch(`${API_URL}/api/subbab/${id}`, {
           method: "DELETE",
         });
         const data = await res.json();
@@ -100,8 +102,8 @@ useEffect(() => {
   const handleSave = async () => {
     try {
       const url = isEdit
-        ? `http://localhost:5000/api/subbab/${formData.id_subbab}`
-        : "http://localhost:5000/api/subbab";
+        ? `${API_URL}/api/subbab/${formData.id_subbab}`
+        : `${API_URL}/api/subbab`;
       const method = isEdit ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -122,7 +124,7 @@ useEffect(() => {
       setShowModal(false);
 
       // Refresh data
-      fetch(`http://localhost:5000/api/subbab/admin/${babId}`)
+      fetch(`${API_URL}/api/subbab/admin/${babId}`)
         .then((r) => r.json())
         .then(setSubbab);
     } catch (err) {
