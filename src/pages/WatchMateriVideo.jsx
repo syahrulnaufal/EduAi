@@ -6,6 +6,7 @@ import MateriPageAsidebar from "../components/MateriPageAsidebar";
 import { useState, useEffect } from "react";
 import { NavLink, useParams, useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 function WatchMateriVideo(){
     //navigasi
@@ -28,8 +29,8 @@ function WatchMateriVideo(){
 
     // ... useEffect hooks Anda (tidak ada perubahan) ...
     useEffect(() => {
-        console.log("Mengirim request ke:", `http://localhost:5000/api/bab/bab-all?id_pelajaran=${id}`);
-        fetch(`http://localhost:5000/api/bab/bab-all?id_pelajaran=${id}`)
+        console.log("Mengirim request ke:", `${API_URL}/api/bab/bab-all?id_pelajaran=${id}`);
+        fetch(`${API_URL}/api/bab/bab-all?id_pelajaran=${id}`)
         .then((res) => res.json())
         .then((result) => {
             console.log("HASIL FETCH API BAB:", result);
@@ -44,7 +45,7 @@ function WatchMateriVideo(){
         const idBab = selectedBab || materi;
         if (!idBab) return;
 
-        const url = `http://localhost:5000/api/subbab?id_bab=${idBab}`;
+        const url = `${API_URL}/api/subbab?id_bab=${idBab}`;
         console.log("Mengirim request ke:", url);
 
         fetch(url)

@@ -6,6 +6,7 @@ import MateriPageAsidebar from "../components/MateriPageAsidebar";
 import { useState, useEffect } from "react";
 import { NavLink, useParams, useNavigate } from "react-router";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 function MateriBelajarPage(){
     //navigasi
@@ -32,8 +33,8 @@ function MateriBelajarPage(){
 
 
     useEffect(() => {
-        console.log("Mengirim request ke:", `http://localhost:5000/api/bab/bab-all?id_pelajaran=${id}`);
-        fetch(`http://localhost:5000/api/bab/bab-all?id_pelajaran=${id}`)
+        console.log("Mengirim request ke:", `${API_URL}/api/bab/bab-all?id_pelajaran=${id}`);
+        fetch(`${API_URL}/api/bab/bab-all?id_pelajaran=${id}`)
         .then((res) => res.json())
         .then((result) => {
             console.log("HASIL FETCH API BAB:", result);
@@ -48,7 +49,7 @@ function MateriBelajarPage(){
         const idBab = selectedBab || materi;
         if (!idBab) return;
 
-        const url = `http://localhost:5000/api/subbab?id_bab=${idBab}`;
+        const url = `${API_URL}/api/subbab?id_bab=${idBab}`;
         console.log("Mengirim request ke:", url);
 
         fetch(url)
@@ -79,7 +80,7 @@ function MateriBelajarPage(){
     const quizId = materi.quiz?.[0]?.id_quiz;   // ambil id_quiz dari materi
     if (!quizId) return;
 
-    fetch("http://localhost:5000/api/bab/check-hasil", {
+    fetch(`${API_URL}/api/bab/check-hasil`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id_user, id_quiz: quizId })
@@ -99,7 +100,7 @@ function MateriBelajarPage(){
 
     // handle klik quiz pakai Swal
   const handleQuizClick = (quizId, namaQuiz) => {
-  fetch("http://localhost:5000/api/bab/check-hasil", {
+  fetch(`${API_URL}/api/bab/check-hasil`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id_user, id_quiz: quizId })
@@ -108,7 +109,7 @@ function MateriBelajarPage(){
     .then(data => {
       if (!data) {
         // belum pernah kerjakan → buat baru
-        fetch("http://localhost:5000/api/soal/hasil/start", {
+        fetch(`${API_URL}/api/soal/hasil/start`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id_user, id_quiz: quizId })
@@ -142,7 +143,7 @@ function MateriBelajarPage(){
           cancelButtonText: "Batal"
         }).then(result => {
           if (result.isConfirmed) {
-            fetch("http://localhost:5000/api/soal/hasil/start", {
+            fetch(`${API_URL}/api/soal/hasil/start`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ id_user, id_quiz: quizId, ulang: true })
