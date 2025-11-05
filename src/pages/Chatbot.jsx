@@ -11,6 +11,10 @@ import ChatInput from "../components/ChatInput";
 // Context untuk dark mode
 const DarkModeContext = createContext();
 
+// API and BASE URLs from environment variables
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:5173';
+
 export const useDarkMode = () => useContext(DarkModeContext);
 
 function Chatbot() {
@@ -99,7 +103,7 @@ function Chatbot() {
             };
             console.log("📤 Request body:", requestBody);
 
-            const res = await fetch("http://localhost:5000/api/chat/send", {
+            const res = await fetch(`${API_URL}/api/chat/send`, {
                 method: "POST",
                 headers: {
                     'Content-Type': "application/json",
@@ -148,7 +152,7 @@ function Chatbot() {
     // Fungsi untuk refresh chat baru (via backend)
     const handleNewChat = useCallback(async () => {
         try {
-            const res = await fetch("http://localhost:5000/api/chat/conversations", { 
+            const res = await fetch(`${API_URL}/api/chat/conversations`, { 
                 method: "POST",
                 headers: {
                     'Content-Type': "application/json",
@@ -177,7 +181,7 @@ function Chatbot() {
     const loadConversations = useCallback(async () => {
         try {
             console.log("📋 Loading conversations...");
-            const res = await fetch("http://localhost:5000/api/chat/conversations", {
+            const res = await fetch(`${API_URL}/api/chat/conversations`, {
                 credentials: "include"
             });
             
@@ -202,7 +206,7 @@ function Chatbot() {
         
         try {
             console.log(`💬 Loading messages for conversation ${conversationId}...`);
-            const res = await fetch(`http://localhost:5000/api/chat/conversations/${conversationId}/messages`, {
+            const res = await fetch(`${API_URL}/api/chat/conversations/${conversationId}/messages`, {
                 credentials: "include"
             });
             
@@ -251,7 +255,7 @@ function Chatbot() {
             } else {
                 // Jika tidak ada user, redirect ke login
                 console.log("🔒 No user found, redirecting to login");
-                window.location.href = "/login";
+                window.location.href = `${BASE_URL}/login`;
             }
         };
         loadCurrentUser();
