@@ -88,9 +88,14 @@ export const deleteSoal = async (req, res) => {
 
 // ✅ Mulai ujian: buat hasil baru / ambil hasil lama
 // POST /api/hasil/start
+function getUserIdFromSession(req) {
+  return req.user?.id_user || req.session?.user?.id_user || req.user?.id || null;
+}
+
 export const startHasil = async (req, res) => {
   try {
-    const { id_user, id_quiz, ulang } = req.body;
+    const id_user = getUserIdFromSession(req);
+    const { id_quiz, ulang } = req.body;
 
     // kalau user mau ulang, hapus hasil + jawaban sebelumnya
     if (ulang) {
