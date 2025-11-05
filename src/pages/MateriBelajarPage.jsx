@@ -136,7 +136,7 @@ function MateriBelajarPage(){
         // quiz sudah selesai → tawarkan ulang
         Swal.fire({
           title: "Sudah pernah mengerjakan",
-          text: `Skor sebelumnya: ${data.score}. Ulangi ${namaQuiz}?`,
+          text: `Skor sebelumnya: ${data.skor}. Ulangi ${namaQuiz}?`,
           icon: "warning",
           showCancelButton: true,
           confirmButtonText: "Ya, ulangi",
@@ -278,7 +278,7 @@ function MateriBelajarPage(){
                                             <div className="flex gap-1">
                                             {hasilMap[materi.quiz[0].id_quiz]?.id_hasil ? (
                                                 <span className="text-green-600 font-bold">
-                                                Score: {hasilMap[materi.quiz[0].id_quiz].score}
+                                                Score: {hasilMap[materi.quiz[0].id_quiz].skor}
                                                 </span>
                                             ) : (
                                                 <>
