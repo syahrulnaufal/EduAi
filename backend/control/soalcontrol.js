@@ -105,7 +105,7 @@ export const startHasil = async (req, res) => {
 
       // langsung buat hasil baru
       const [result] = await db.query(
-        "INSERT INTO hasil (score, waktu_pengerjaan, id_quiz, id_user) VALUES (?, NOW(), ?, ?)",
+        "INSERT INTO hasil (skor, waktu_pengerjaan, id_quiz, id_user) VALUES (?, NOW(), ?, ?)",
         [0, id_quiz, id_user]
       );
       return res.json({ id_hasil: result.insertId, mode: "ulang" });
@@ -142,7 +142,7 @@ export const startHasil = async (req, res) => {
 
     // kalau belum ada hasil sama sekali → buat baru
     const [result] = await db.query(
-      "INSERT INTO hasil (score, waktu_pengerjaan, id_quiz, id_user) VALUES (?, NOW(), ?, ?)",
+      "INSERT INTO hasil (skor, waktu_pengerjaan, id_quiz, id_user) VALUES (?, NOW(), ?, ?)",
       [0, id_quiz, id_user]
     );
 
@@ -224,16 +224,16 @@ export const submitHasil = async (req, res) => {
       }
     });
 
-    const score = (benar / userJawaban.length) * 100;
+    const skor = (benar / userJawaban.length) * 100;
 
     await db.query(
-      `UPDATE hasil SET score=?, waktu_pengerjaan=? WHERE id_hasil=?`,
-      [score, waktu_pengerjaan, id_hasil]
+      `UPDATE hasil SET skor=?, waktu_pengerjaan=? WHERE id_hasil=?`,
+      [skor, waktu_pengerjaan, id_hasil]
     );
 
     res.json({ 
       message: "Hasil disubmit", 
-      score, 
+      skor, 
       totalBenar: benar, 
       totalSoal: userJawaban.length 
     });
@@ -249,7 +249,7 @@ export const getHasilById = async (req, res) => {
 
     // Ambil hasil utama
     const [rows] = await db.query(
-      "SELECT id_hasil, score FROM hasil WHERE id_hasil=?",
+      "SELECT id_hasil, skor FROM hasil WHERE id_hasil=?",
       [id_hasil]
     );
 
@@ -273,7 +273,7 @@ export const getHasilById = async (req, res) => {
 
     res.json({
       id_hasil,
-      score: hasil.score,
+      skor: hasil.skor,
       benar,
       salah: total - benar,
       total
