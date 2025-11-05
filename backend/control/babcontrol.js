@@ -111,7 +111,7 @@ export const checkHasil = async (req, res) => {
 
     // ambil hasil terakhir user untuk quiz ini
     const [rows] = await db.query(
-      "SELECT id_hasil, score FROM hasil WHERE id_user=? AND id_quiz=? ORDER BY id_hasil DESC LIMIT 1",
+      "SELECT id_hasil, skor FROM hasil WHERE id_user=? AND id_quiz=? ORDER BY id_hasil DESC LIMIT 1",
       [id_user, id_quiz]
     );
 
@@ -119,7 +119,7 @@ export const checkHasil = async (req, res) => {
       return res.json(null);
     }
 
-    const { id_hasil, score } = rows[0];
+    const { id_hasil, skor } = rows[0];
 
     // hitung jumlah soal
     const [[{ total_soal }]] = await db.query(
@@ -138,7 +138,7 @@ export const checkHasil = async (req, res) => {
 
     res.json({
       id_hasil,
-      score,
+      skor,
       selesai
     });
   } catch (err) {
