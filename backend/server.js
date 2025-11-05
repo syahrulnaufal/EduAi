@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import session from "express-session";
+import mysqlSession from 'express-mysql-session';
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -10,6 +11,11 @@ import db from "./db.js";
 
 // Gunakan port dari environment variable (diberikan oleh Render), atau 5000 untuk development
 const PORT = process.env.PORT || 5000;
+
+const MySQLStore = mysqlSession(session);
+const sessionStore = new MySQLStore({
+    // Opsi untuk pool, biarkan kosong agar menggunakan db pool Anda
+}, db);
 
 // ambil __dirname di ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -61,11 +67,12 @@ app.use(
     secret: "rahasia-super-aman",
     resave: false,
     saveUninitialized: false,
+    store: sessionStore,
     cookie: {
       secure: true, // true kalau https
       httpOnly: true,
       sameSite: "none",
-      maxAge: 1000 * 60 * 60,
+      maxAge: 1000 * 60 * 60 * 24,
     },
   })
 );
