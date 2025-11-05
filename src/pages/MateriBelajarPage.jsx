@@ -103,7 +103,8 @@ function MateriBelajarPage(){
   fetch(`${API_URL}/api/bab/check-hasil`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id_user, id_quiz: quizId })
+    body: JSON.stringify({ id_user, id_quiz: quizId }),
+    credentials: "include"
   })
     .then(res => res.json())
     .then(data => {
