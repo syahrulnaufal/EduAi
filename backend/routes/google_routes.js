@@ -1,7 +1,7 @@
 import express from "express";
 import passport from "passport";
 
-const API_BASE = import.meta.env.FRONTEND_URL || 'http://localhost:5000';
+const API_BASE = process.meta.env.FRONTEND_URL || 'http://localhost:5000';
 
 const router = express.Router();
 
