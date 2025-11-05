@@ -83,7 +83,8 @@ function MateriBelajarPage(){
     fetch(`${API_URL}/api/bab/check-hasil`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id_user, id_quiz: quizId })
+      body: JSON.stringify({ id_user, id_quiz: quizId }),
+        credentials: "include"
     })
       .then(res => res.json())
       .then(data => {
@@ -113,7 +114,8 @@ function MateriBelajarPage(){
         fetch(`${API_URL}/api/soal/hasil/start`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id_user, id_quiz: quizId })
+          body: JSON.stringify({ id_user, id_quiz: quizId }),
+          credentials: "include"
         })
           .then(res => res.json())
           .then(newData => {
@@ -147,7 +149,8 @@ function MateriBelajarPage(){
             fetch(`${API_URL}/api/soal/hasil/start`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ id_user, id_quiz: quizId, ulang: true })
+              body: JSON.stringify({ id_user, id_quiz: quizId, ulang: true }),
+              credentials: "include"
             })
               .then(res => res.json())
               .then(newData => {
