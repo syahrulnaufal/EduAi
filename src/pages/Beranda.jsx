@@ -13,7 +13,7 @@ import FiturPopuler from "../components/FiturPopuler";
 import MathCourse from "../components/MathCourse";
 import LoginButton from "../components/LoginButton";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = process.env.VITE_API_URL || 'http://localhost:5000';
 
 // komponen
 const platformTerbaik = (
