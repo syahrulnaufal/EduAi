@@ -1,6 +1,8 @@
 import React, { useRef, useState, useLayoutEffect, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 export default function Sidebar({ isOpen, toggleSidebar }) {
   const wrapperRef = useRef(null);
   const [indicator, setIndicator] = useState({ top: 236, height: 32, opacity: 1 });
@@ -30,7 +32,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await fetch("http://localhost:5000/api/auth/logout", {
+          await fetch(`${API_URL}/api/auth/logout`, {
             method: "POST",
             credentials: "include",
           });
@@ -44,7 +46,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
-          window.location.href = "http://localhost:5173/login";
+          window.location.href = `${API_URL}/login`;
         });
       }
     });
