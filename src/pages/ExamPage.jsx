@@ -6,6 +6,8 @@ import BurgerMenu from "../components/BurgerMenu";
 import ExamResultsModal from "../components/ExamResultsModal";
 import { useNavigate, useParams } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 function ExamPage() {
   const navigate = useNavigate();
   const { id: id_quiz } = useParams();
@@ -74,12 +76,12 @@ function ExamPage() {
     const loadExam = async () => {
       try {
         // Ambil soal quiz
-        const soalRes = await fetch(`http://localhost:5000/api/soal/${id_quiz}`);
+        const soalRes = await fetch(`${API_URL}/api/soal/${id_quiz}`);
         const soalData = await soalRes.json();
         setExamData(soalData.soal || []);
 
         // Ambil jawaban user berdasarkan id_hasil
-        const jawabanRes = await fetch(`http://localhost:5000/api/soal/jawaban/${id_hasil}`);
+        const jawabanRes = await fetch(`${API_URL}/api/soal/jawaban/${id_hasil}`);
         const rows = await jawabanRes.json();
 
         const restored = {};
@@ -103,7 +105,7 @@ function ExamPage() {
     const upper = optionLetter.toUpperCase();
     setUserAnswers(prev => ({ ...prev, [id_soal]: upper }));
 
-    fetch("http://localhost:5000/api/soal/hasil/save", {
+    fetch(`${API_URL}/api/soal/hasil/save`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id_hasil: idHasil, id_soal, jawaban_dipilih: upper })
@@ -112,7 +114,7 @@ function ExamPage() {
 
   // Submit akhir
   const handleSubmit = () => {
-    fetch("http://localhost:5000/api/soal/hasil/submit", {
+    fetch(`${API_URL}/api/soal/hasil/submit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id_hasil: idHasil, waktu_pengerjaan: "00:15:00" })

@@ -4,6 +4,8 @@ import Topbar from '../components/Topbar';
 import BurgerMenu from '../components/BurgerMenu';
 import Sidebar from '../components/Sidebar';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 // --- Ikon ---
 const CorrectIcon = () => (
   <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
@@ -51,7 +53,7 @@ function PembahasanExam() {
 
     const loadPembahasan = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/soal/pembahasan/${id_quiz}/${id_hasil}`);
+        const res = await fetch(`${API_URL}/api/soal/pembahasan/${id_quiz}/${id_hasil}`);
         const data = await res.json();
 
         setQuestions(data.soal || []);
