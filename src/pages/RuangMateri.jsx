@@ -6,6 +6,8 @@ import { useDebounce } from "react-use";
 import { NavLink, useParams } from "react-router";
 // import kelas from "../data/kelas"
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const Search = ({searchTerm, setSearchTerm}) => {
 
     return(
@@ -53,8 +55,8 @@ function RuangMateri({}){
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        console.log("Mengirim request ke:", `http://localhost:5000/api/bab/bab-progres?id_pelajaran=${id}`);
-        fetch(`http://localhost:5000/api/bab/bab-progres?id_pelajaran=${id}`)
+        console.log("Mengirim request ke:", `${API_URL}/api/bab/bab-progres?id_pelajaran=${id}`);
+        fetch(`${API_URL}/api/bab/bab-progres?id_pelajaran=${id}`)
         .then((res) => res.json())
         .then((result) => {
             console.log("HASIL FETCH API BAB:", result); // Tambahkan ini untuk cek response

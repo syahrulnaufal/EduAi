@@ -109,7 +109,8 @@
 // ✅ 1. Tentukan API_URL secara dinamis
 // VITE_API_URL akan dibaca dari file .env
 // Jika tidak ada, ia akan memakai 'http://localhost:5000' sebagai fallback
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = process.env.VITE_API_URL || 'http://localhost:5000';
 
 
 export async function getCurrentUser() {
