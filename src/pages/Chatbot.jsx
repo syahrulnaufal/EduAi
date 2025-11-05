@@ -254,8 +254,8 @@ function Chatbot() {
                 }
             } else {
                 // Jika tidak ada user, redirect ke login
-                console.log("🔒 No user found, redirecting to login");
-                window.location.href = `/login`;
+                // console.log("🔒 No user found, redirecting to login");
+                // window.location.href = `/login`;
             }
         };
         loadCurrentUser();
