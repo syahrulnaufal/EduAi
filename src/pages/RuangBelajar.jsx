@@ -8,6 +8,9 @@ import BurgerMenu from "../components/BurgerMenu";
 import Search from "../components/Search";
 import Select from 'react-select';
 import { NavLink } from "react-router";
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 // import React, { useEffect, useState } from 'react';
 
 
@@ -138,7 +141,7 @@ function RuangBelajar() {
     );
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/jenjang")
+    fetch(`${API_URL}/api/jenjang`)
       .then((res) => res.json())
       .then((data) => {
         const formatted = data.map((j) => ({
@@ -161,7 +164,7 @@ function RuangBelajar() {
 
    useEffect(() => {
         if (selected) {
-            fetch(`http://localhost:5000/api/materi?jenjang=${selected.value}`)
+            fetch(`${API_URL}/api/materi?jenjang=${selected.value}`)
                 .then(res => res.json())
                 .then(data => setListMateri(data))
                 .catch(err => setListMateri([]));
