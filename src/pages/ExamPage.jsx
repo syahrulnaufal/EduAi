@@ -63,15 +63,33 @@ function ExamPage() {
 
     // ✅ Ambil id_hasil dari query param
     const params = new URLSearchParams(window.location.search);
-    const id_hasil = params.get("id_hasil");
+    // const id_hasil = params.get("id_hasil");
 
-    if (!id_hasil) {
-      console.error("❌ id_hasil tidak ditemukan di query param!");
-      navigate("/ruang-belajar"); // fallback biar ga error
+    // if (!id_hasil) {
+    //   console.error("❌ id_hasil tidak ditemukan di query param!");
+    //   navigate("/ruang-belajar"); // fallback biar ga error
+    //   return;
+    // }
+
+    // setIdHasil(id_hasil);
+    const id_hasil_str = params.get("id_hasil");
+    const id_hasil_num = parseInt(id_hasil_str, 10);
+
+    // Cek apakah itu bukan angka, atau 0, atau null/undefined
+    if (!id_hasil_num || isNaN(id_hasil_num) || id_hasil_num <= 0) {
+      console.error("❌ id_hasil tidak valid di query param:", id_hasil_str);
+      Swal.fire({
+          icon: 'error',
+          title: 'Error Memulai Kuis',
+          text: 'ID kuis tidak valid. Silakan coba lagi.',
+      }).then(() => {
+          navigate("/ruang-belajar"); // Kembalikan ke halaman sebelumnya
+      });
       return;
     }
 
-    setIdHasil(id_hasil);
+    setIdHasil(id_hasil_num);
+
 
     const loadExam = async () => {
       try {

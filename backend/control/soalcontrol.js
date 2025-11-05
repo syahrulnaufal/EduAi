@@ -97,6 +97,14 @@ export const startHasil = async (req, res) => {
     const id_user = getUserIdFromSession(req);
     const { id_quiz, ulang } = req.body;
 
+    if (!id_user) {
+      console.error("startHasil Error: User ID tidak ditemukan di sesi.");
+      return res.status(401).json({ message: "Sesi tidak valid, silakan login ulang." });
+    }
+    if (!id_quiz) {
+      return res.status(400).json({ message: "id_quiz wajib diisi." });
+    }
+
     // kalau user mau ulang, hapus hasil + jawaban sebelumnya
     if (ulang) {
       const [old] = await db.query(
