@@ -28,7 +28,7 @@ router.get(
     };
 
     res.redirect(
-      `${FRONTEND_URL}/login?id_user=${encodeURIComponent(
+      `${API_BASE}/login?id_user=${encodeURIComponent(
         user.id_user
       )}&username=${encodeURIComponent(user.username)}&email=${encodeURIComponent(
         user.email
